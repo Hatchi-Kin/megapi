@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Example login</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="grid">
+        <article
+          style="
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+            padding-left: 8%;
+            padding-right: 8%;
+          "
+        >
+          <form id="registerForm">
+            <h1>Register</h1>
+            <label for="emailInput">
+              <input
+                id="emailInput"
+                name="email"
+                placeholder="E-Mail"
+                type="email"
+              />
+            </label>
+            <label for="passwordInput">
+              <input
+                id="passwordInput"
+                name="password"
+                placeholder="Password"
+                type="password"
+              />
+            </label>
+            <input id="registerSubmit" type="submit" value="Submit" />
+          </form>
+          <pre
+            id="registerStatus"
+            style="margin-bottom: 2rem; margin-top: 2rem"
+          ></pre>
+        </article>
+
+        <article
+          style="
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+            padding-left: 8%;
+            padding-right: 8%;
+          "
+        >
+          <form id="loginForm">
+            <h1>Login</h1>
+            <label for="loginEmailInput">
+              <input
+                id="loginEmailInput"
+                name="username"
+                placeholder="E-Mail"
+                type="email"
+              />
+            </label>
+            <label for="loginPasswordInput">
+              <input
+                id="loginPasswordInput"
+                name="password"
+                placeholder="Password"
+                type="password"
+              />
+            </label>
+            <input id="loginSubmit" type="submit" value="Submit" />
+          </form>
+          <pre
+            id="loginStatus"
+            style="margin-bottom: 2rem; margin-top: 2rem"
+          ></pre>
+        </article>
+      </div>
+    </div>
+
+    <article
+      class="container"
+      style="
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+        padding-left: 8%;
+        padding-right: 8%;
+      "
+    >
+      <div>
+        <h1>Accessing private routes</h1>
+        <p>Make request to a private route:</p>
+        <button id="privateRequest">Request</button>
+      </div>
+      <pre
+        id="privateStatus"
+        style="margin-bottom: 2rem; margin-top: 2rem"
+      ></pre>
+    </article>
+  </body>
+  <script>
+    const registerSubmit = document.getElementById("registerSubmit");
+    registerSubmit.onclick = (ev) => {
+      ev.preventDefault();
+      const registerForm = document.getElementById("registerForm");
+      const data = new FormData(registerForm);
+      // convert form data to json
+      let object = {};
+      data.forEach((value, key) => (object[key] = value));
+
+      // send data to the backend route
+      fetch("/auth/register", {
+        method: "POST",
+        body: JSON.stringify(object),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const status = document.getElementById("registerStatus");
+          status.innerText = JSON.stringify(data, null, 2);
+        })
+        .catch((err) => {
+          console.log("Error: ", err);
+        });
+    };
+
+    let token = undefined;
+    const loginSubmit = document.getElementById("loginSubmit");
+    loginSubmit.onclick = (ev) => {
+      ev.preventDefault();
+      const loginForm = document.getElementById("loginForm");
+      const data = new FormData(loginForm);
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "/auth/token", true);
+
+      xhr.onload = (ev) => {
+        const status = document.getElementById("loginStatus");
+        const responseData = JSON.parse(xhr.responseText);
+        if (xhr.status === 200) {
+          const truncatedToken = responseData.access_token.slice(0, 15) + "...";
+          status.innerText = "Successfully logged in, token: " + truncatedToken;
+          token = `${responseData.token_type} ${responseData.access_token}`;
+        } else {
+          status.innerText = "Error logging in: " + responseData.detail;
+        }
+      };
+
+      xhr.send(data);
+    };
+
+    const privateRequest = document.getElementById("privateRequest");
+    privateRequest.onclick = (ev) => {
+      fetch("/auth/private", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const status = document.getElementById("privateStatus");
+          if (status.ok) {
+            status.innerText = data.detail;
+          } else {
+            status.innerText = data.detail;
+          }
+        });
+    };
+  </script>
+</html>
