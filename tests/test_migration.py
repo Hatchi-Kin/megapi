@@ -7,7 +7,7 @@ from source.models.music import MusicLibrary, Base
 class TestMusicLibrary:
     def setup_method(self, method):
         # Set up a SQLite database in memory
-        self.engine = create_engine("sqlite:///tests/test.db")
+        self.engine = create_engine('sqlite:///tests/test.db')
         SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
         self.db = SessionLocal()
 
