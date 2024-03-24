@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from source.settings.config import Base
 
 
-
 class MusicLibrary(Base):
     __tablename__ = "music_library"
 
@@ -36,3 +35,10 @@ class AddSongToMusicLibrary(BaseModel):
     tracknumber: int
     genre: str
     top_5_genres: str
+
+
+class AlbumResponse(BaseModel):
+    album_folder: str
+
+class ArtistFolderResponse(BaseModel):
+    artist_folder: str

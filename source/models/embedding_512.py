@@ -24,3 +24,7 @@ class SimilarEntitiesResponse(BaseModel):
 class EmbeddingResponse(BaseModel):
     id: str
     embedding: List[float]
+
+
+class FilePathsQuery(BaseModel):
+    paths: list
