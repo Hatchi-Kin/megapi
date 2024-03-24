@@ -35,20 +35,24 @@ docker-compose logs -f
 ├── Dockerfile
 ├── readme.md
 ├── requirements.txt
-├── source
-│   ├── data
-│   │   └── database.py
-│   │   └── populate.py
-│   │   └── music.db
-│   ├── dependencies
-│   │   └── config.py
-│   ├── models
-│   │   ├── music.py
-│   │   └── users.py
-│   ├── routes
-│   │   ├── auth.py
-│   │   └── music_library.py
-│   └── templates
-│       └── index.html
-└── tests.py
+└── source
+    ├── data
+    │   ├── migrate_data.py
+    │   ├── music.db
+    ├── __init__.py
+    ├── models
+    │   ├── embedding_512.py
+    │   ├── music.py
+    │   └── users.py
+    ├── __pycache__
+    │   └── __init__.cpython-310.pyc
+    ├── routes
+    │   ├── auth.py
+    │   ├── milvus.py
+    │   ├── music_library.py
+    ├── settings
+    │   ├── config.py
+    └── templates
+        └── index.html
+
 ```
