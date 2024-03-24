@@ -12,8 +12,7 @@ class Settings(BaseSettings):
     milvus_api_key: str = ""
 
 
-
-DEFAULT_SETTINGS = Settings(_env_file=".env")
+DEFAULT_SETTINGS = Settings(_env_file=".env") 
 
 engine = create_engine(DEFAULT_SETTINGS.database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

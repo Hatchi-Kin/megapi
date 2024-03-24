@@ -64,15 +64,12 @@ def get_similar_entities(id: str, user=Depends(manager)):
                 "title": hit.entity.title,
                 "album": hit.entity.album,
                 "artist": hit.entity.artist,
-                "top_5_genres": ','.join(hit.entity.top_5_genres),      # convert list to string
-                "embedding": ','.join(map(str, hit.entity.embedding)),  # 
+                "top_5_genres": ",".join(
+                    hit.entity.top_5_genres
+                ),  # convert list to string
+                "embedding": ",".join(map(str, hit.entity.embedding)),  #
             },
         }
         response_list.append(hit_dict)
 
     return SimilarEntitiesResponse(hits=response_list)
-        
-
-
-
-

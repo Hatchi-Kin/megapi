@@ -2,6 +2,7 @@ import sqlite3
 from source.settings.config import SessionLocal
 from source.models.music import MusicLibrary
 
+
 def migrate_data_from_sqlite_to_postgres(sqlite_path, table_name):
     # Connect to SQLite database
     conn_sqlite = sqlite3.connect(sqlite_path)
@@ -28,7 +29,7 @@ def migrate_data_from_sqlite_to_postgres(sqlite_path, table_name):
         # Replace empty strings with None because PostgreSQL does not allow empty strings for non-string columns
         row_dict = {k: v if v != "" else None for k, v in row_dict.items()}
         # force the id inserted as int
-        row_dict['id'] = int(row_dict['id'])
+        row_dict["id"] = int(row_dict["id"])
         db.add(MusicLibrary(**row_dict))
 
     # Commit once at the end
