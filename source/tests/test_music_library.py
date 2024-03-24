@@ -40,7 +40,15 @@ def setup_database():
     yield
     metadata.drop_all(engine)
 
-def test_add_row(setup_database):
+def test_add_row(postgresql):
+    # Connect to the PostgreSQL database
+    engine = create_engine(postgresql.url())
+
+    # Create a new sessionmaker for the test database
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+    # Create the table
+    Base.metadata.create_all(engine)
 
     db = SessionLocal()
     try:
