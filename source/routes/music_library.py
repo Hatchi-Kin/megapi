@@ -14,7 +14,7 @@ from source.models.music import (
     ArtistFolderResponse,
 )
 from source.settings.config import SessionLocal, login_manager, DEFAULT_SETTINGS
-from source.data.migrate_data import migrate_data_from_sqlite_to_postgres
+from source.data.setup_db import migrate_data_from_sqlite_to_postgres
 
 
 router = APIRouter(prefix="/music_library")
@@ -59,23 +59,6 @@ def get_row_by_id(id: str, user=Depends(login_manager)):
         if row is None:
             raise InvalidCredentialsException
         return {"id": id, "row": row}
-    finally:
-        db.close()
-
-
-@router.get("/migrate_data", tags=["songs"])
-def migrate_data(user=Depends(login_manager)):
-    """
-    Migrate data from the SQLite database to the PostgreSQL database.
-    """
-    db = SessionLocal()
-    try:
-        migrate_data_from_sqlite_to_postgres(
-            "source/data/music.db",
-            DEFAULT_SETTINGS.database_url,
-            DEFAULT_SETTINGS.postgre_music_table,
-        )
-        return {"message": "Data successfully migrated from SQLite to PostgreSQL"}
     finally:
         db.close()
 
