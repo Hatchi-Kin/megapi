@@ -5,14 +5,14 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends
 import bcrypt
 
-from source.models.users import User, UserCreate
-from source.settings.config import manager, SessionLocal
+from source.models.users import User, UserCreate, TokenData
+from source.settings.config import login_manager, SessionLocal
 
 
 router = APIRouter(prefix="/auth")
 
 
-@manager.user_loader()
+@login_manager.user_loader()
 def get_user(email: str):
     db = SessionLocal()
     try:
@@ -42,8 +42,11 @@ def register(user: UserCreate):
         db.close()
 
 
-@router.post("/token", tags=["users"])
+@router.post("/token", tags=["users"], response_model=TokenData)
 def login(data: OAuth2PasswordRequestForm = Depends()):
+    """
+    Authenticate a user and return an access token.
+    """
     email = data.username
     password = data.password
 
@@ -55,12 +58,15 @@ def login(data: OAuth2PasswordRequestForm = Depends()):
     ):
         raise InvalidCredentialsException
 
-    access_token = manager.create_access_token(data=dict(sub=email))
+    access_token = login_manager.create_access_token(data=dict(sub=email))
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/private", tags=["users"])
-def private_route(user=Depends(manager)):
+@router.get("/private", tags=["users"], summary="A private route that requires authentication.")
+def private_route(user=Depends(login_manager)):
+    """
+    A private route that requires authentication.
+    """
     if not user:
         raise InvalidCredentialsException(detail="Invalid credentials")
     return {"detail": f"Welcome {user.email}"}
@@ -68,5 +74,8 @@ def private_route(user=Depends(manager)):
 
 @router.get("/gui", tags=["signup / login"])
 def index():
+    """
+    Render a front-end to test signup/login page.
+    """
     with open("source/templates/index.html", "r") as f:
         return HTMLResponse(content=f.read())

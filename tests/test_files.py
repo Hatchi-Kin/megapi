@@ -1,13 +1,11 @@
 import pytest
 import os
 
-# test if necessary files exist
-
-def test_env_file():
-    assert os.path.isfile('.env_example') == True
-
-def test_gitignore_file():
-    assert os.path.isfile('.gitignore') == True
-   
-def test_music_db_file():
-    assert os.path.isfile('source/data/music.db') == True
+# Test if each file exists
+@pytest.mark.parametrize("filepath", [
+    '.env_example',
+    '.gitignore',
+    'source/data/music.db'
+])
+def test_file_exists(filepath):
+    assert os.path.isfile(filepath), f"File {filepath} does not exist"

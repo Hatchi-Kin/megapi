@@ -4,15 +4,22 @@ from fastapi_login.exceptions import InvalidCredentialsException
 from pymilvus import connections
 from pymilvus import Collection
 
-from source.settings.config import DEFAULT_SETTINGS, manager
-from source.models.embedding_512 import EmbeddingResponse, SimilarEntitiesResponse
+from source.settings.config import DEFAULT_SETTINGS, login_manager
+from source.models.embedding_512 import (
+    EmbeddingResponse,
+    SimilarEntitiesResponse,
+    FilePathsQuery,
+)
 
 
 router = APIRouter(prefix="/milvus")
 
 
 @router.get("/entity/{id}", response_model=EmbeddingResponse, tags=["milvus"])
-def get_entity_by_id(id: str, user=Depends(manager)):
+def get_entity_by_id(id: str, user=Depends(login_manager)):
+    """
+    Get the embedding of an entity by it's id.
+    """
     if not user:
         raise InvalidCredentialsException(detail="Invalid credentials")
 
@@ -31,7 +38,10 @@ def get_entity_by_id(id: str, user=Depends(manager)):
 
 
 @router.get("/similar/{id}", tags=["milvus"], response_model=SimilarEntitiesResponse)
-def get_similar_entities(id: str, user=Depends(manager)):
+def get_similar_entities(id: str, user=Depends(login_manager)):
+    """
+    Get the most 3 similar entities to the entity with the given id.
+    """
     if not user:
         raise InvalidCredentialsException(detail="Invalid credentials")
 
@@ -68,6 +78,58 @@ def get_similar_entities(id: str, user=Depends(manager)):
                     hit.entity.top_5_genres
                 ),  # convert list to string
                 "embedding": ",".join(map(str, hit.entity.embedding)),  #
+            },
+        }
+        response_list.append(hit_dict)
+
+    return SimilarEntitiesResponse(hits=response_list)
+
+
+@router.post(
+    "/similar_by_path", tags=["milvus"], response_model=SimilarEntitiesResponse
+)
+def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
+    """
+    Get the most 3 similar entities to the entity with the given file path.
+    """
+    if not user:
+        raise InvalidCredentialsException(detail="Invalid credentials")
+
+    connections.connect(
+        "default",
+        uri=DEFAULT_SETTINGS.milvus_uri,
+        token=DEFAULT_SETTINGS.milvus_api_key,
+    )
+    collection_512 = Collection(name="embeddings_512")
+
+    # get the embeddings for the given file paths
+    entities = collection_512.query(
+        expr=f"path in {query.paths}", output_fields=["embedding"]
+    )
+    embeddings = [[float(x) for x in entity["embedding"]] for entity in entities]
+
+    # get the most similar entities
+    entities = collection_512.search(
+        data=embeddings,
+        anns_field="embedding",
+        param={"nprobe": 16},
+        limit=3,
+        offset=1,
+        output_fields=["*"],
+    )
+
+    response_list = []
+    for hit in entities[0]:
+        hit_dict = {
+            "id": str(hit.id),
+            "distance": hit.distance,
+            "entity": {
+                "path": hit.entity.path,
+                "title": hit.entity.title,
+                "album": hit.entity.album,
+                "artist": hit.entity.artist,
+                "top_5_genres": ",".join(hit.entity.top_5_genres),
+                "embedding": ",".join(map(str, hit.entity.embedding)),
             },
         }
         response_list.append(hit_dict)
