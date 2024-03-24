@@ -33,9 +33,11 @@ class MusicTest(Base):
     genre = Column(String)
     top_5_genres = Column(String)
 
-metadata.create_all(engine)
+@pytest.fixture(scope='module')
+def setup_database():
+    metadata.create_all(engine)
 
-def test_add_row():
+def test_add_row(setup_database):
 
     db = SessionLocal()
     try:
@@ -66,7 +68,7 @@ def test_add_row():
         db.close()
 
 
-def test_delete_row():
+def test_delete_row(setup_database):
     db = SessionLocal()
     try:
         # Delete the row we added in the previous test
