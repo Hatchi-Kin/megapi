@@ -5,21 +5,15 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import declarative_base, sessionmaker
 
+metadata = MetaData()
+
 Base = declarative_base()
 
-# Create a new engine for the test database
 engine = create_engine(
     f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/test_db"
 )
 
-# Create a new sessionmaker for the test database
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Create a MetaData instance
-metadata = MetaData()
-
-# Use the MetaData instance to create the table
-metadata.create_all(engine)
 
 
 class MusicTest(Base):
@@ -39,6 +33,7 @@ class MusicTest(Base):
     genre = Column(String)
     top_5_genres = Column(String)
 
+metadata.create_all(engine)
 
 def test_add_row():
 
