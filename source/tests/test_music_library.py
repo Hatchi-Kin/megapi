@@ -1,14 +1,16 @@
+import os
 import pytest
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-
 Base = declarative_base()
 
 # Create a new engine for the test database
-engine = create_engine('postgresql://postgres:postgres@localhost:5432/test_db')
+engine = create_engine(
+    f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/test_db"
+)
 
 # Create a new sessionmaker for the test database
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -18,8 +20,6 @@ metadata = MetaData()
 
 # Use the MetaData instance to create the table
 metadata.create_all(engine)
-
-
 
 
 class MusicTest(Base):
