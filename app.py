@@ -1,14 +1,11 @@
-from sqlalchemy.orm import declarative_base
 from fastapi import FastAPI
-from fastapi_login import LoginManager
 
-from source.data.database import Base
 from source.routes.auth import router as auth_router
 from source.routes.music_library import router as music_router
-from source.dependencies.config import engine
+from source.routes.milvus import router as milvus_router
+from source.settings.config import Base, engine
 
 
-Base = declarative_base()
 Base.metadata.create_all(bind=engine)
 
 tags_metadata = [
@@ -18,13 +15,16 @@ tags_metadata = [
     },
     {
         "name": "songs",
-        "description": "Operations related to songs table in postgres database",
+        "description": "Operations related to music_library table in postgres database fastapi_db",
     },
     {
         "name": "milvus",
-        "description": "Operations related to Milvus",
+        "description": "Operations related to the vector Database Milvus hosted by zilliz",
     },
-    {"name": "signup / login", "description": "mini front to test signup and login"},
+    {
+        "name": "signup / login", 
+        "description": "Mini front-end to test the OAuth2 fonctionnalities"
+    },
 ]
 
 app = FastAPI(
@@ -34,10 +34,9 @@ app = FastAPI(
     openapi_tags=tags_metadata,
 )
 
-manager = LoginManager("SECRET", "/auth/token")
-
 app.include_router(auth_router)
 app.include_router(music_router)
+app.include_router(milvus_router)
 
 
 if __name__ == "__main__":

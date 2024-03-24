@@ -33,12 +33,13 @@ docker-compose logs -f
 ├── app.py
 ├── docker-compose.yaml
 ├── Dockerfile
-├── music.db
 ├── readme.md
 ├── requirements.txt
 ├── source
 │   ├── data
 │   │   └── database.py
+│   │   └── populate.py
+│   │   └── music.db
 │   ├── dependencies
 │   │   └── config.py
 │   ├── models
@@ -49,6 +50,5 @@ docker-compose logs -f
 │   │   └── music_library.py
 │   └── templates
 │       └── index.html
-├── populate.py
 └── tests.py
 ```

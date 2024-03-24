@@ -2,13 +2,15 @@ from fastapi import Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi_login.exceptions import InvalidCredentialsException
 from fastapi.security import OAuth2PasswordRequestForm
-import bcrypt
 from fastapi import APIRouter, Depends
+import bcrypt
+
 from source.models.users import User, UserCreate
-from source.dependencies.config import manager, get_user, SessionLocal
+from source.settings.config import manager, SessionLocal
 
 
 router = APIRouter(prefix="/auth")
+
 
 @manager.user_loader()
 def get_user(email: str):
@@ -17,6 +19,7 @@ def get_user(email: str):
         return db.query(User).filter(User.email == email).first()
     finally:
         db.close()
+
 
 @router.post("/register", tags=["users"])
 def register(user: UserCreate):

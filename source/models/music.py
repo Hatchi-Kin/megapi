@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float
-from source.data.database import Base
+from pydantic import BaseModel
+
+from source.settings.config import Base
 
 
 
@@ -19,3 +21,18 @@ class MusicLibrary(Base):
     tracknumber = Column(Integer)
     genre = Column(String)
     top_5_genres = Column(String)
+
+
+class AddSongToMusicLibrary(BaseModel):
+    filename: str
+    filepath: str
+    album_folder: str
+    artist_folder: str
+    filesize: float
+    title: str
+    artist: str
+    album: str
+    year: int
+    tracknumber: int
+    genre: str
+    top_5_genres: str

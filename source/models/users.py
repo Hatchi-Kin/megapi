@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
 
-from source.data.database import Base
+from source.settings.config import Base
 
 class User(Base):
     __tablename__ = "users"
