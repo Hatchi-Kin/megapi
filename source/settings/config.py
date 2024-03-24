@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     postgre_music_table: str = "music_library"
     milvus_uri: str = ""
     milvus_api_key: str = ""
+    pg_user: str = ""
+    pg_password: str = ""
 
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 

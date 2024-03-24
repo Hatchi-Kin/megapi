@@ -1,6 +1,10 @@
 import sqlite3
-from source.settings.config import SessionLocal
+from sqlalchemy.orm import Session
+from passlib.context import CryptContext
+
+from source.settings.config import SessionLocal, DEFAULT_SETTINGS
 from source.models.music import MusicLibrary
+from source.models.users import User
 
 
 def migrate_data_from_sqlite_to_postgres(sqlite_path, table_name):
@@ -34,3 +38,19 @@ def migrate_data_from_sqlite_to_postgres(sqlite_path, table_name):
         db.commit()
 
     print(f"Data successfully migrated from SQLite to PostgreSQL")
+
+
+def create_admin_if_none(engine):
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    with Session(engine) as db:
+        # Check if any users exist
+        if db.query(User).first() is None:
+            # If not, create an admin user
+            admin = User(
+                id=1,
+                email=DEFAULT_SETTINGS.pg_user,
+                hashed_password=pwd_context.hash(DEFAULT_SETTINGS.pg_password),
+                is_admin=True,
+            )
+            db.add(admin)
+            db.commit()

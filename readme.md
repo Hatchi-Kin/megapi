@@ -18,6 +18,10 @@ docker volume rm $(docker volume ls -q)
 docker network rm $(docker network ls -q)
 ```
  
+```bash
+ find . -type d -name "__pycache__" -exec rm -r {} +
+ ```
+ 
 ###################################################
 
 ```bash

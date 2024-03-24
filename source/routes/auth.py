@@ -79,3 +79,36 @@ def index():
     """
     with open("source/templates/index.html", "r") as f:
         return HTMLResponse(content=f.read())
+
+
+# route to list all users
+@router.get("/users", tags=["users"])
+def list_users(user=Depends(login_manager)):
+    if not user:
+        raise InvalidCredentialsException(detail="Invalid credentials")
+    db = SessionLocal()
+    try:
+        users = db.query(User).all()
+        users = [{"id": user.id, "email": user.email} for user in users]
+        return users
+    finally:
+        db.close()
+
+
+# route to delete a user, only let the user with the id 1 delete users   
+@router.delete("/users/{user_id}", tags=["users"])
+def delete_user(user_id: int, user=Depends(login_manager)):
+    if not user:
+        raise InvalidCredentialsException(detail="Invalid credentials")
+    if user.id != 1:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        db.delete(user)
+        db.commit()
+        return {"detail": "User deleted"}
+    finally:
+        db.close()

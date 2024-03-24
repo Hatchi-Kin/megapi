@@ -4,9 +4,11 @@ from source.routes.auth import router as auth_router
 from source.routes.music_library import router as music_router
 from source.routes.milvus import router as milvus_router
 from source.settings.config import Base, engine, tags_metadata
+from source.data.setup_db import create_admin_if_none
 
 
 Base.metadata.create_all(bind=engine)
+create_admin_if_none()
 
 app = FastAPI(
     title="Megapi",
