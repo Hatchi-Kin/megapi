@@ -33,9 +33,12 @@ class MusicTest(Base):
     genre = Column(String)
     top_5_genres = Column(String)
 
+
 @pytest.fixture(scope='module')
 def setup_database():
     metadata.create_all(engine)
+    yield
+    metadata.drop_all(engine)
 
 def test_add_row(setup_database):
 

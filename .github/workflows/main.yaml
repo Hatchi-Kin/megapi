@@ -37,6 +37,7 @@ jobs:
 
       - name: Run tests
         run: |
+          sleep 10
           pytest
         env:
           POSTGRES_HOST: postgres
