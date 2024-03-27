@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float
 from pydantic import BaseModel
 
-from source.settings.config import Base
+from core.config import Base
 
 
 class MusicLibrary(Base):
