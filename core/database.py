@@ -1,20 +1,25 @@
 import sqlite3
-from sqlalchemy.orm import Session
-from passlib.context import CryptContext
-
-from source.settings.config import SessionLocal, DEFAULT_SETTINGS
-from source.models.music import MusicLibrary
-from source.models.users import User
-
 
 from sqlalchemy.sql import exists
 
-def migrate_data_from_sqlite_to_postgres(sqlite_path, table_name):
-    # Connect to SQLite database
+from core.config import DEFAULT_SETTINGS, SessionLocal
+from models.music import MusicLibrary
+from models.users import User
+from services.auth import hash_password
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+def migrate_data_from_sqlite_to_postgres(sqlite_path):
+    # Connect to SQLite database and get the data
     conn_sqlite = sqlite3.connect(sqlite_path)
     sqlite_table_name = "songs"
-
-    # Get data from SQLite database
     cursor = conn_sqlite.cursor()
     cursor.execute(f'SELECT * FROM "{sqlite_table_name}"')
     data = cursor.fetchall()
@@ -36,19 +41,22 @@ def migrate_data_from_sqlite_to_postgres(sqlite_path, table_name):
             db.commit()
             print(f"Data successfully migrated from SQLite to PostgreSQL")
         else:
-            print(f"Table {table_name} already exists and is not empty in PostgreSQL")
+            print(f"Table already exists and is not empty in PostgreSQL")
 
 
-def create_admin_if_none(engine):
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    with Session(engine) as db:
+def create_admin_if_none():
         # Check if any users exist
-        if db.query(User).first() is None:
-            # If not, create an admin user
-            admin = User(
-                id=1,
-                email=DEFAULT_SETTINGS.pg_user,
-                hashed_password=pwd_context.hash(DEFAULT_SETTINGS.pg_password),
-            )
-            db.add(admin)
-            db.commit()
+        with SessionLocal() as db:
+            if db.query(User).first() is None:
+                # If not, create an admin user
+                admin = User(
+                    id=1,
+                    email=DEFAULT_SETTINGS.pg_email,
+                    username=DEFAULT_SETTINGS.pg_user,
+                    hashed_password=hash_password(DEFAULT_SETTINGS.pg_password),
+                )
+                db.add(admin)
+                db.commit()
+
+
+
