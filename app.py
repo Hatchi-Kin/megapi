@@ -27,4 +27,4 @@ create_admin_if_none()
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=80, reload=True)
