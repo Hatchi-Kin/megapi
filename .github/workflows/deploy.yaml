@@ -35,5 +35,5 @@ jobs:
           if docker ps | grep -q 'megapi-web-1'; then
             docker-compose restart
           else
-            docker-compose up -d
+            docker compose up -d
           fi
