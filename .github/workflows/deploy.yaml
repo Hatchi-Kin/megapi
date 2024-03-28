@@ -33,7 +33,7 @@ jobs:
           cd /home/admin/megapi
           git pull
           if docker ps | grep -q 'megapi-web-1'; then
-            docker-compose restart
+            docker compose restart
           else
             docker compose up -d
           fi
