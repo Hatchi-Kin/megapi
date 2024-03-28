@@ -4,7 +4,7 @@ from pymilvus import connections
 from pymilvus import Collection
 
 from core.config import DEFAULT_SETTINGS, login_manager
-from models.milvus import EmbeddingResponse, SimilarEntitiesResponse, FilePathsQuery, Similar_9_EntitiesResponse
+from models.milvus import EmbeddingResponse, SimilarFullEntitiesResponse, FilePathsQuery, SimilarShortEntitiesResponse
 
 
 router = APIRouter(prefix="/milvus")
@@ -19,7 +19,7 @@ def get_milvus_collection():
     return Collection(name="embeddings_512")
 
 
-def hit_to_dict(hit):
+def full_hit_to_dict(hit):
     return {
         "id": str(hit.id),
         "distance": hit.distance,
@@ -33,7 +33,7 @@ def hit_to_dict(hit):
         },
     }
 
-def hit_to_dict_9(hit):
+def short_hit_to_dict(hit):
     return {
         "title": hit.entity.title,
         "album": hit.entity.album,
@@ -53,7 +53,7 @@ def get_entity_by_id(id: str, user=Depends(login_manager)):
     return EmbeddingResponse(id=id, embedding=embedding)
 
 
-@router.get("/similar/{id}", tags=["milvus"], response_model=SimilarEntitiesResponse)
+@router.get("/similar/{id}", tags=["milvus"], response_model=SimilarFullEntitiesResponse)
 def get_similar_entities(id: str, user=Depends(login_manager)):
     """Get the most 3 similar entities to the entity with the given id."""
     collection_512 = get_milvus_collection()
@@ -71,13 +71,13 @@ def get_similar_entities(id: str, user=Depends(login_manager)):
         output_fields=["*"],
     )
 
-    response_list = [hit_to_dict(hit) for hit in entities[0]]
-    return SimilarEntitiesResponse(hits=response_list)
+    response_list = [full_hit_to_dict(hit) for hit in entities[0]]
+    return SimilarFullEntitiesResponse(hits=response_list)
 
 
-@router.post("/similar_by_path", tags=["milvus"], response_model=SimilarEntitiesResponse)
+@router.post("/similar_full_entity", tags=["milvus"], response_model=SimilarFullEntitiesResponse)
 def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
-    """Get the most 3 similar entities to the entity with the given file path."""
+    """Get the most 3 similar entities (with embeddings_512) to the entity with the given file path."""
     collection_512 = get_milvus_collection()
     entities = collection_512.query(expr=f"path in {query.paths}", output_fields=["embedding"])
     if not entities:
@@ -93,13 +93,13 @@ def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manag
         output_fields=["*"],
     )
 
-    response_list = [hit_to_dict(hit) for hit in entities[0]]
-    return SimilarEntitiesResponse(hits=response_list)
+    response_list = [short_hit_to_dict(hit) for hit in entities[0]]
+    return SimilarFullEntitiesResponse(hits=response_list)
 
 
-@router.post("/similar_9_by_path", tags=["milvus"], response_model=Similar_9_EntitiesResponse)
-def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
-    """Get the 9 most similar entities to the entity with the given file path, with only title, album and artist fields."""
+@router.post("/similar_short_entity", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
+def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
+    """Get the 9 most similar (title, artist, album)) to the entity with the given file path."""
     collection_512 = get_milvus_collection()
     entities = collection_512.query(expr=f"path in {query.paths}", output_fields=["embedding"])
     if not entities:
@@ -115,5 +115,5 @@ def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manag
         output_fields=["title", "album", "artist"],
     )
 
-    response_list = [hit_to_dict_9(hit) for hit in entities[0]]
+    response_list = [short_hit_to_dict(hit) for hit in entities[0]]
     return {"entities": response_list}

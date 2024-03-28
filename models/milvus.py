@@ -16,18 +16,18 @@ class Hit(BaseModel):
     distance: float
     entity: Entity
 
-class SimilarEntitiesResponse(BaseModel):
+class SimilarFullEntitiesResponse(BaseModel):
     hits: List[Hit]
 
 
 ###### similar_9_by_path  ######
-class Similar_9_Entity(BaseModel):
+class SimilarShortEntity(BaseModel):
     title: str
     album: str
     artist: str
 
-class Similar_9_EntitiesResponse(BaseModel):
-    entities: List[Similar_9_Entity]
+class SimilarShortEntitiesResponse(BaseModel):
+    entities: List[SimilarShortEntity]
 
 
 ###### similar_9_by_path  ######
