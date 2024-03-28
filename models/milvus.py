@@ -19,6 +19,7 @@ class Hit(BaseModel):
 class SimilarEntitiesResponse(BaseModel):
     hits: List[Hit]
 
+
 ###### similar_9_by_path  ######
 class Similar_9_Entity(BaseModel):
     title: str

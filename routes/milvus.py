@@ -110,7 +110,7 @@ def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manag
         data=embeddings,
         anns_field="embedding",
         param={"nprobe": 16},
-        limit=3,
+        limit=9,
         offset=1,
         output_fields=["title", "album", "artist"],
     )
