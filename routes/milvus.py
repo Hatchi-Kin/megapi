@@ -38,6 +38,7 @@ def short_hit_to_dict(hit):
         "title": hit.entity.title,
         "album": hit.entity.album,
         "artist": hit.entity.artist,
+        "path": hit.entity.path,
     }
 
 
