@@ -102,7 +102,7 @@ def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manag
 def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
     """Get the 9 most similar (title, artist, album)) to the entity with the given file path."""
     collection_512 = get_milvus_collection()
-    entities = collection_512.query(expr=f"path in {query.paths}", output_fields=["embedding"])
+    entities = collection_512.query(expr=f"path in {query.path}", output_fields=["embedding"])
     if not entities:
         raise HTTPException(status_code=404, detail="Entity not found")
     
