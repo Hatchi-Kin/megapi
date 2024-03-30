@@ -40,6 +40,10 @@ class AddSongToMusicLibrary(BaseModel):
 class AlbumResponse(BaseModel):
     album_folder: str
 
+class ArtistAlbumResponse(BaseModel):
+    artist: str
+    album: str
+
 
 class ArtistFolderResponse(BaseModel):
     artist_folder: str

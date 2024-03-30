@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import insert
 
-from models.music import MusicLibrary, AddSongToMusicLibrary, AlbumResponse, ArtistFolderResponse
+from models.music import MusicLibrary, AddSongToMusicLibrary, AlbumResponse, ArtistFolderResponse, ArtistAlbumResponse
 from core.config import login_manager
 from core.database import get_db
 
@@ -128,12 +128,11 @@ def list_all_songs_from_album(album_folder: AlbumResponse = None, user=Depends(l
 
 @router.post("/songs/by_artist_and_album", tags=["songs"])
 def list_all_songs_from_artist_and_album(
-    # use the name of artist and name of album to get the album folder then list all songs in that album
-    artist = None, album = None, user=Depends(login_manager), db: Session = Depends(get_db)
+    query: ArtistAlbumResponse, user=Depends(login_manager), db: Session = Depends(get_db)
 ):
     """Return a list of all songs for a given artist and album."""
-    if artist is None or album is None:
-        raise HTTPException(status_code=400, detail="Missing artist or album parameter")
+    artist = query.artist
+    album = query.album
     try:
         query = db.query(MusicLibrary.album_folder).filter(MusicLibrary.artist == artist, MusicLibrary.album == album)
         album_folder = query.first()
