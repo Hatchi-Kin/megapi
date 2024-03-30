@@ -101,9 +101,9 @@ def list_all_albums_from_artist(artist_folder: ArtistFolderResponse, user=Depend
         raise HTTPException(status_code=400, detail="Missing artist_folder parameter")
     try:
         query = (
-            db.query(MusicLibrary.album_folder, func.array_agg(MusicLibrary.album).label("albums"))
+            db.query(MusicLibrary.album)
             .filter(MusicLibrary.artist_folder == artist_folder.artist_folder)
-            .group_by(MusicLibrary.album_folder)
+            .distinct()
             .order_by(MusicLibrary.year.asc())
         )
         return [row.album for row in query.all()]
