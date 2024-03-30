@@ -34,7 +34,7 @@ docker network rm $(docker network ls -q)
 ```
 
 ```bash
-docker system prune -a -volumes
+docker system prune -a --volumes
 ```
 
 ```bash
