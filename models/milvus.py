@@ -25,6 +25,7 @@ class SimilarShortEntity(BaseModel):
     title: str
     album: str
     artist: str
+    path: str
 
 class SimilarShortEntitiesResponse(BaseModel):
     entities: List[SimilarShortEntity]
