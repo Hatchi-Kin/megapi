@@ -126,6 +126,29 @@ def list_all_songs_from_album(album_folder: AlbumResponse = None, user=Depends(l
         db.close()
 
 
+@router.post("/songs/by_artist_and_album", tags=["songs"])
+def list_all_songs_from_artist_and_album(
+    artist_folder: ArtistFolderResponse, album_folder: AlbumResponse,
+    user=Depends(login_manager), db: Session = Depends(get_db)
+):
+    """Return a list of all songs for a given artist and album."""
+    if artist_folder is None or artist_folder.artist_folder is None:
+        raise HTTPException(status_code=400, detail="Missing artist_folder parameter")
+    if album_folder is None or album_folder.album_folder is None:
+        raise HTTPException(status_code=400, detail="Missing album_folder parameter")
+    try:
+        query = db.query(MusicLibrary).filter(
+            MusicLibrary.artist_folder == artist_folder.artist_folder,
+            MusicLibrary.album_folder == album_folder.album_folder
+        )
+        return [
+            {"tracknumber": row.tracknumber, "title": row.title}
+            for row in query.order_by(MusicLibrary.tracknumber.asc()).all()
+        ]
+    finally:
+        db.close()
+
+
 @router.get("/albums", tags=["songs"])
 def list_all_albums(user=Depends(login_manager), db: Session = Depends(get_db)):
     """Return a list of all albums for a given artist in release date order."""
