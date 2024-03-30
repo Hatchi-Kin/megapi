@@ -45,5 +45,6 @@ class ArtistAlbumResponse(BaseModel):
     album: str
 
 
+
 class ArtistFolderResponse(BaseModel):
     artist_folder: str

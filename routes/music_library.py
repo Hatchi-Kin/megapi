@@ -136,12 +136,11 @@ def list_all_songs_from_artist_and_album(
     try:
         query = db.query(MusicLibrary).filter(MusicLibrary.artist == artist, MusicLibrary.album == album)
         return [
-            {"tracknumber": row.tracknumber, "title": row.title}
+            {"tracknumber": row.tracknumber, "path": row.filepath, "title": row.title}
             for row in query.order_by(MusicLibrary.tracknumber.asc()).all()
         ]
     finally:
         db.close()
-        
 
 
 @router.get("/albums", tags=["songs"])
