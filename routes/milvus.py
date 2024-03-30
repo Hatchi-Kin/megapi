@@ -112,7 +112,7 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
         param={"nprobe": 16},
         limit=9,
         offset=1,
-        output_fields=["title", "album", "artist, path"],
+        output_fields=["title", "album", "artist", "path"],
     )
 
     response_list = [short_hit_to_dict(hit) for hit in entities[0]]
