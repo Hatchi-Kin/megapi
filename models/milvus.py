@@ -38,4 +38,4 @@ class EmbeddingResponse(BaseModel):
 
 ###### entity/{id} ######
 class FilePathsQuery(BaseModel):
-    paths: list
+    path: list

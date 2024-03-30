@@ -134,18 +134,14 @@ def list_all_songs_from_artist_and_album(
     artist = query.artist
     album = query.album
     try:
-        query = db.query(MusicLibrary.album_folder).filter(MusicLibrary.artist == artist, MusicLibrary.album == album)
-        album_folder = query.first()
-        if album_folder is None:
-            raise HTTPException(status_code=404, detail="Album not found")
-        album_folder = album_folder[0]
-        query2 = db.query(MusicLibrary).filter(MusicLibrary.album_folder == album_folder)
+        query = db.query(MusicLibrary).filter(MusicLibrary.artist == artist, MusicLibrary.album == album)
         return [
             {"tracknumber": row.tracknumber, "title": row.title}
-            for row in query2.order_by(MusicLibrary.tracknumber.asc()).all()
+            for row in query.order_by(MusicLibrary.tracknumber.asc()).all()
         ]
     finally:
         db.close()
+        
 
 
 @router.get("/albums", tags=["songs"])
