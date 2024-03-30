@@ -128,22 +128,22 @@ def list_all_songs_from_album(album_folder: AlbumResponse = None, user=Depends(l
 
 @router.post("/songs/by_artist_and_album", tags=["songs"])
 def list_all_songs_from_artist_and_album(
-    artist_folder: ArtistFolderResponse, album_folder: AlbumResponse,
-    user=Depends(login_manager), db: Session = Depends(get_db)
+    # use the name of artist and name of album to get the album folder then list all songs in that album
+    artist = None, album = None, user=Depends(login_manager), db: Session = Depends(get_db)
 ):
     """Return a list of all songs for a given artist and album."""
-    if artist_folder is None or artist_folder.artist_folder is None:
-        raise HTTPException(status_code=400, detail="Missing artist_folder parameter")
-    if album_folder is None or album_folder.album_folder is None:
-        raise HTTPException(status_code=400, detail="Missing album_folder parameter")
+    if artist is None or album is None:
+        raise HTTPException(status_code=400, detail="Missing artist or album parameter")
     try:
-        query = db.query(MusicLibrary).filter(
-            MusicLibrary.artist_folder == artist_folder.artist_folder,
-            MusicLibrary.album_folder == album_folder.album_folder
-        )
+        query = db.query(MusicLibrary.album_folder).filter(MusicLibrary.artist == artist, MusicLibrary.album == album)
+        album_folder = query.first()
+        if album_folder is None:
+            raise HTTPException(status_code=404, detail="Album not found")
+        album_folder = album_folder[0]
+        query2 = db.query(MusicLibrary).filter(MusicLibrary.album_folder == album_folder)
         return [
             {"tracknumber": row.tracknumber, "title": row.title}
-            for row in query.order_by(MusicLibrary.tracknumber.asc()).all()
+            for row in query2.order_by(MusicLibrary.tracknumber.asc()).all()
         ]
     finally:
         db.close()
