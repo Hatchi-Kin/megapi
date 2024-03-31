@@ -105,7 +105,7 @@ def list_all_albums_from_artist(artist_folder: ArtistFolderResponse, user=Depend
             .filter(MusicLibrary.artist_folder == artist_folder.artist_folder)
             .distinct()
         )
-        return [row.album for row in query.all()]
+        return [row.album_folder for row in query.all()]
     finally:
         db.close()
 
