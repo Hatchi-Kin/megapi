@@ -98,27 +98,6 @@ def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manag
     return SimilarFullEntitiesResponse(hits=response_list)
 
 
-# @router.post("/similar_short_entity", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
-# def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
-#     """Get the 9 most similar (title, artist, album)) to the entity with the given file path."""
-#     collection_512 = get_milvus_collection()
-#     entities = collection_512.query(expr=f"path in {query.path}", output_fields=["embedding"])
-#     if not entities:
-#         raise HTTPException(status_code=404, detail="Entity not found")
-    
-#     embeddings = [[float(x) for x in entity["embedding"]] for entity in entities]
-#     entities = collection_512.search(
-#         data=embeddings,
-#         anns_field="embedding",
-#         param={"nprobe": 16},
-#         limit=9,
-#         offset=1,
-#         output_fields=["title", "album", "artist", "path"],
-#     )
-
-#     response_list = [short_hit_to_dict(hit) for hit in entities[0]]
-#     return {"entities": response_list}
-
 @router.post("/similar_short_entity", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
 def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
     """Get the 9 most similar (title, artist, album)) to the entity with the given file path."""
@@ -132,11 +111,11 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
         data=embeddings,
         anns_field="embedding",
         param={"nprobe": 16},
-        limit=50,  # Increase limit to ensure we get enough results
+        limit=30,
         offset=1,
         output_fields=["title", "album", "artist", "path"],
     )
-
+    # try to filter out already recommended artists
     recommended_artists = set()
     response_list = []
     fallback_list = []
@@ -149,7 +128,6 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
             fallback_list.append(hit_dict)
         if len(response_list) == 9:  # Stop when we have 9 results
             break
-
     # If we have less than 9 results, add from fallback_list
     if len(response_list) < 9:
         response_list.extend(fallback_list[:9-len(response_list)])
