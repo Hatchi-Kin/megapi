@@ -154,3 +154,19 @@ def list_all_albums(user=Depends(login_manager), db: Session = Depends(get_db)):
         return [{"album": row.album, "album_folder": row.album_folder} for row in query.all()]
     finally:
         db.close()
+
+
+@router.post("/album_folder_by_artist_and_album", tags=["songs"])
+def get_album_folder_by_artist_and_album(
+    query: ArtistAlbumResponse, user=Depends(login_manager), db: Session = Depends(get_db)
+):
+    """Return the album_folder for a given artist and album."""
+    artist = query.artist
+    album = query.album
+    try:
+        row = db.query(MusicLibrary.album_folder).filter(MusicLibrary.artist == artist, MusicLibrary.album == album).first()
+        if row is None:
+            raise HTTPException(status_code=404, detail="Album not found")
+        return {"album_folder": row.album_folder}
+    finally:
+        db.close()
