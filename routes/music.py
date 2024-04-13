@@ -1,5 +1,6 @@
 from random import randint
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import insert
@@ -16,7 +17,8 @@ router = APIRouter(prefix="/music_library")
 def count_rows(db: Session = Depends(get_db)):
     """Return the number of rows in the music_library table."""
     try:
-        count = db.query(MusicLibrary).count()
+        result = db.execute(text("SELECT COUNT(*) FROM music_library"))
+        count = result.scalar()
         return count
     finally:
         db.close()

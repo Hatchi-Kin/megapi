@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     pg_password: str = ""
     milvus_uri: str = ""
     milvus_api_key: str = ""
+    milvus_collection_name: str = ""
 
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
