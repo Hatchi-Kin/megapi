@@ -22,10 +22,6 @@ jobs:
     - name: Run tests
       run: |
         pytest
-    - name: Add SSH host key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PI_KEY }}" >> ~/.ssh/known_hosts
     - name: Deploy to Raspberry Pi on main branch push
       if: success()
       uses: appleboy/ssh-action@master
