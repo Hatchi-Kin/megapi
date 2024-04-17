@@ -34,6 +34,7 @@ jobs:
         username: ${{ secrets.SSH_PI_USERNAME }}
         key: ${{ secrets.SSH_PI_KEY }}
         port: ${{ secrets.SSH_PI_PORT }}
+        debug: true
         script: |
           cd /home/pi/Documents/megapi
           git pull
