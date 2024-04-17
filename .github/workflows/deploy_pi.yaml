@@ -22,16 +22,19 @@ jobs:
     - name: Run tests
       run: |
         pytest
+    - name: Add SSH host key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PI_HOST }}" >> ~/.ssh/known_hosts
     - name: Deploy to Raspberry Pi on main branch push
-      if: github.ref == 'refs/heads/main' && success()
-      uses: appleboy/ssh-action@v0.1.3
+      if: success()
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_PI_HOST }}
         username: ${{ secrets.SSH_PI_USERNAME }}
         key: ${{ secrets.SSH_PI_KEY }}
         port: ${{ secrets.SSH__PI_PORT }}
         script: |
-          set -e
           cd /home/pi/Documents/megapi
           git pull
           if docker ps | grep -q 'megapi-web-1'; then
