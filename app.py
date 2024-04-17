@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from routes.auth import router as auth_router
 from routes.music import router as music_router
@@ -12,6 +13,15 @@ app = FastAPI(
     description="Right now, a simple login system using FastAPI and FastAPI-Login... but just you wait !",
     version="0.1.0",
     openapi_tags=swagger_tags,
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[""], 
+    allow_credentials=True,
+    allow_methods=[""],  
+    allow_headers=["*"],  
 )
 
 app.include_router(auth_router)
