@@ -16,6 +16,7 @@ app = FastAPI(
 )
 
 origins = ['*']
+### TEST ###
 
 app.add_middleware(
     CORSMiddleware,
