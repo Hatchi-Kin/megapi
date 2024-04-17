@@ -25,7 +25,7 @@ jobs:
     - name: Add SSH host key
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PI_HOST_KEY }}" >> ~/.ssh/known_hosts
+        echo "${{ secrets.SSH_PI_KEY }}" >> ~/.ssh/known_hosts
     - name: Deploy to Raspberry Pi on main branch push
       if: success()
       uses: appleboy/ssh-action@master
@@ -33,7 +33,7 @@ jobs:
         host: ${{ secrets.SSH_PI_HOST }}
         username: ${{ secrets.SSH_PI_USERNAME }}
         key: ${{ secrets.SSH_PI_KEY }}
-        port: ${{ secrets.SSH__PI_PORT }}
+        port: ${{ secrets.SSH_PI_PORT }}
         script: |
           cd /home/pi/Documents/megapi
           git pull
