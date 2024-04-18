@@ -94,3 +94,17 @@ docker-compose logs -f
     ├── __init__.py
     └── test_files.py
 ```
+
+
+## GitHub SECRETS
+
+- `PI_SSH_KNOWN_HOST_KEY`: This is the SSH host key for your Raspberry Pi. It's used to verify the identity of the Raspberry Pi when establishing an SSH connection. You can find it in your `known_hosts` file on the machine you use to SSH into your Raspberry Pi. The host key is the entire line in the `known_hosts` file that corresponds to your Raspberry Pi.
+To obtain the host key, you can rename your existing `known_hosts` file to `known_hosts_BACKUP` on your local machine, then SSH into your Raspberry Pi. This will create a new `known_hosts` file. The content of this new file is the `PI_SSH_KNOWN_HOST_KEY` secret.
+
+- `PI_SSH_PRIVATE_KEY`: This is the private key of the SSH key pair that you use to connect to your Raspberry Pi. You can find it in your .ssh directory on the machine you use to SSH into your Raspberry Pi. It's typically named id_rsa, id_ed25519, or similar.
+
+- `SSH_PI_USERNAME`: This is the username that you use to SSH into your Raspberry Pi. 
+
+- `SSH_PI_HOST_LIVEBOX_IP`: This is the hostname or IP address of your Raspberry Pi. In our setup, it actually is the ip of the LIVEBOX that redirects to the raspberry's ip at `SSH_PI_PORT` usually the default for ssh is port 22
+
+- `SSH_PI_PORT`: This is the port that your Raspberry Pi listens on for SSH connections. If you're using the default SSH configuration on your Raspberry Pi, this is likely 22. If you've changed the SSH port on your Raspberry Pi, use the port you've changed it to.
