@@ -57,14 +57,15 @@ docker-compose logs -f
 ├── app.py
 ├── docker-compose.yaml
 ├── Dockerfile
+├── requirements.txt
 ├── poetry.lock
 ├── pyproject.toml
 ├── README.md
-├── requirements.txt
 │
 ├── core
-│   ├── config.py
+│   ├── __init__.py
 │   ├── database.py
+│   ├── config.py
 │   └── data
 │       └── music.db
 │
@@ -73,19 +74,23 @@ docker-compose logs -f
 │       └── index.html
 │
 ├── models
+│   ├── __init__.py
 │   ├── milvus.py
 │   ├── music.py
 │   └── users.py
 │
 ├── routes
+│   ├── __init__.py
 │   ├── auth.py
 │   ├── milvus.py
-│   └── music_library.py
+│   └── music.py
 │
 ├── services
+│   ├── __init__.py
 │   ├── auth.py
-│   └── music_service.py
+│   └── milvus.py
 │
 └── tests
+    ├── __init__.py
     └── test_files.py
 ```
