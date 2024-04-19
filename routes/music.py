@@ -146,7 +146,7 @@ def list_all_songs_from_artist_and_album(
 
 @router.get("/albums", tags=["songs"])
 def list_all_albums(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return a list of all albums for a given artist in release date order."""
+    """Return a list of all albums in release date order."""
     try:
         query = (
             db.query(MusicLibrary.album, MusicLibrary.album_folder, MusicLibrary.year)

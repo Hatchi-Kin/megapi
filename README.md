@@ -108,3 +108,17 @@ To obtain the host key, you can rename your existing `known_hosts` file to `know
 - `SSH_PI_HOST_LIVEBOX_IP`: This is the hostname or IP address of your Raspberry Pi. In our setup, it actually is the ip of the LIVEBOX that redirects to the raspberry's ip at `SSH_PI_PORT` usually the default for ssh is port 22
 
 - `SSH_PI_PORT`: This is the port that your Raspberry Pi listens on for SSH connections. If you're using the default SSH configuration on your Raspberry Pi, this is likely 22. If you've changed the SSH port on your Raspberry Pi, use the port you've changed it to.
+
+## Le workflow gh action
+
+pour que le pi puisse ssh into gh
+
+creer un fichier config dans `/home/pi/.ssh/config` avec:
+```
+Host github-megapi
+	HostName github.com 
+    AddKeysToAgent yes 
+    PreferredAuthentications publickey 
+    IdentityFile ~/.ssh/id_ed25519_gh_megapi
+```
+et une clé privée nommé `id_ed25519_gh_megapi`
