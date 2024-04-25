@@ -2,6 +2,7 @@ from fastapi_login import LoginManager
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine
 from pydantic_settings import BaseSettings
+from minio import Minio
 
 
 class Settings(BaseSettings):
@@ -17,10 +18,22 @@ class Settings(BaseSettings):
     milvus_uri: str = ""
     milvus_api_key: str = ""
     milvus_collection_name: str = ""
+    minio_root_user: str = ""
+    minio_bucket_name: str = ""
+    minio_root_password: str = ""
+    minio_endpoint: str ="",
+    minio_access_key: str = "",
+    minio_secret_key: str =""
 
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
 
+minio_client = Minio(
+    endpoint=DEFAULT_SETTINGS.minio_endpoint,
+    access_key=DEFAULT_SETTINGS.minio_access_key,
+    secret_key=DEFAULT_SETTINGS.minio_secret_key,
+    secure=False # True if you are using https, False if http
+)
 engine = create_engine(DEFAULT_SETTINGS.database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 login_manager = LoginManager(DEFAULT_SETTINGS.secret_key, "/auth/token")

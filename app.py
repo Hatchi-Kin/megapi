@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.auth import router as auth_router
 from routes.music import router as music_router
 from routes.milvus import router as milvus_router
+from routes.minio import router as minio_router
 from core.config import Base, engine, swagger_tags
 from core.database import migrate_data_from_sqlite_to_postgres, create_admin_if_none
 
@@ -25,6 +26,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(music_router)
 app.include_router(milvus_router)
+app.include_router(minio_router)
 
 
 Base.metadata.create_all(bind=engine)
