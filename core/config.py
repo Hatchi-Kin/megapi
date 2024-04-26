@@ -58,6 +58,10 @@ swagger_tags = [
         "name": "signup / login", 
         "description": "Mini front-end to test the OAuth2 fonctionnalities"
     },
+    {
+        "name": "minio",
+        "description": "Operations related to the minio database"
+    }
 ]
 
 

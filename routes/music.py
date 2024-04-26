@@ -25,7 +25,7 @@ def count_rows(db: Session = Depends(get_db)):
 
 
 @router.get("/random", tags=["songs"])
-def get_random_row(db: Session = Depends(get_db)):
+def get_random_row(user=Depends(login_manager), db: Session = Depends(get_db)):
     """Return a random row from the music_library table."""
     try:
         count = db.query(MusicLibrary).count()
@@ -83,8 +83,6 @@ def delete_row(id: int, user=Depends(login_manager), db: Session = Depends(get_d
     finally:
         db.close()
 
-
-########################## Flask ##########################
 
 @router.get("/artists", tags=["songs"])
 def list_all_artists(user=Depends(login_manager), db: Session = Depends(get_db)):

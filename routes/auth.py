@@ -11,7 +11,7 @@ import bcrypt
 
 from models.users import User, UserCreate, TokenData
 from services.auth import get_user, hash_password
-from core.config import login_manager
+from core.config import login_manager, DEFAULT_SETTINGS
 from core.database import get_db
 
 
@@ -51,7 +51,7 @@ def login(data: OAuth2PasswordRequestForm = Depends()):
         password.encode("utf-8"), user.hashed_password.encode("utf-8")
     ):
         raise InvalidCredentialsException
-    access_token_expires = timedelta(minutes=30)
+    access_token_expires = timedelta(minutes=DEFAULT_SETTINGS.access_token_expire_minutes)
     access_token = login_manager.create_access_token(
         data=dict(sub=email), expires=access_token_expires
     )
