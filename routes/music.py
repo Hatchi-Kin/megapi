@@ -37,7 +37,7 @@ def get_random_row(user=Depends(login_manager), db: Session = Depends(get_db)):
 
 
 @router.get("/song/{id}", tags=["songs"])
-def get_song_by_id(id: int, db: Session = Depends(get_db)):
+def get_song_by_id(id: int, user=Depends(login_manager), db: Session = Depends(get_db)):
     """Return a row from the music_library table by it's id."""
     try:
         row = db.query(MusicLibrary).filter(MusicLibrary.id == id).first()
