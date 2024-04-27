@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     minio_access_key: str = "",
     minio_secret_key: str =""
 
+    class Config:
+        env_file = ".env"
+        extra = "allow"  # allow extra fields
+
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
 
@@ -61,6 +65,10 @@ swagger_tags = [
     {
         "name": "miniO",
         "description": "Operations related to the minio database"
+    },
+    {
+        "name": "lyrics",
+        "description": "Operations related to the lyrics.ovh API: https://lyricsovh.docs.apiary.io/"
     }
 ]
 
