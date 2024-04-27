@@ -33,7 +33,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     return {"detail": "Successful registered"}
 
 
-@router.get("/gui", tags=["signup / login"])
+@router.get("/gui", tags=["auth gui"])
 def index():
     """Render a front-end to test signup/login page."""
     file_path = os.path.join("gui", "templates", "index.html")

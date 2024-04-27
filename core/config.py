@@ -55,11 +55,11 @@ swagger_tags = [
         "description": "Operations related to the vector Database Milvus hosted by zilliz",
     },
     {
-        "name": "signup / login", 
+        "name": "auth gui", 
         "description": "Mini front-end to test the OAuth2 fonctionnalities"
     },
     {
-        "name": "minio",
+        "name": "miniO",
         "description": "Operations related to the minio database"
     }
 ]
