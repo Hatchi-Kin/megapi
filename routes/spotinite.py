@@ -11,7 +11,7 @@ from services.spotinite import get_track_id, fetch_similar_tracks, get_track_inf
 router = APIRouter(prefix="/spotinite")
 
 
-@router.post("/similar_tracks", response_model=List[SpotiniteResponse])
+@router.post("/similar_tracks", response_model=List[SpotiniteResponse], tags=["spotinite"])
 async def similar_tracks(query: SpotiniteQuery, user=Depends(login_manager), db: Session = Depends(get_db)):
     """Return similar tracks based on the input song and artist."""
     try:
