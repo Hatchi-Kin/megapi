@@ -3,6 +3,8 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine
 from pydantic_settings import BaseSettings
 from minio import Minio
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 
 class Settings(BaseSettings):
@@ -24,6 +26,9 @@ class Settings(BaseSettings):
     minio_endpoint: str ="",
     minio_access_key: str = "",
     minio_secret_key: str =""
+    spotify_client_id: str = "",
+    spotify_client_secret: str = "",
+    cyanite_token: str = ""
 
     class Config:
         env_file = ".env"
@@ -32,17 +37,25 @@ class Settings(BaseSettings):
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
 
+engine = create_engine(DEFAULT_SETTINGS.database_url)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+login_manager = LoginManager(DEFAULT_SETTINGS.secret_key, "/auth/token")
+Base = declarative_base()
+
 minio_client = Minio(
     endpoint=DEFAULT_SETTINGS.minio_endpoint,
     access_key=DEFAULT_SETTINGS.minio_access_key,
     secret_key=DEFAULT_SETTINGS.minio_secret_key,
     secure=False # True if you are using https, False if http
 )
-engine = create_engine(DEFAULT_SETTINGS.database_url)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-login_manager = LoginManager(DEFAULT_SETTINGS.secret_key, "/auth/token")
 
-Base = declarative_base()
+# Set up Spotipy with your Spotify client credentials
+spotify_client_credentials_manager = SpotifyClientCredentials(
+    client_id=DEFAULT_SETTINGS.spotify_client_id,
+    client_secret=DEFAULT_SETTINGS.spotify_client_secret
+)
+sp= spotipy.Spotify(client_credentials_manager=spotify_client_credentials_manager)
+
 
 
 swagger_tags = [
@@ -69,6 +82,10 @@ swagger_tags = [
     {
         "name": "lyrics",
         "description": "Operations related to the lyrics.ovh API: https://lyricsovh.docs.apiary.io/"
+    }, 
+    {
+        "name": "spotinite",
+        "description": "Operations related to the spotinite API: https://cyanite.ai/docs/ leveraging spotipy and the cyanite API."
     }
 ]
 

@@ -49,5 +49,7 @@ class ArtistAlbumResponse(BaseModel):
 class ArtistFolderResponse(BaseModel):
     artist_folder: str
 
+
 class SongPath(BaseModel):
     file_path: str
+

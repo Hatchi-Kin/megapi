@@ -6,6 +6,7 @@ from routes.music import router as music_router
 from routes.milvus import router as milvus_router
 from routes.minio import router as minio_router
 from routes.lyrics import router as lyrics_router
+from routes.spotinite import router as spotinite_router
 from core.config import Base, engine, swagger_tags
 from core.database import migrate_data_from_sqlite_to_postgres, create_admin_if_none
 
@@ -29,6 +30,7 @@ app.include_router(music_router)
 app.include_router(milvus_router)
 app.include_router(minio_router)
 app.include_router(lyrics_router)
+app.include_router(spotinite_router)
 
 
 Base.metadata.create_all(bind=engine)
