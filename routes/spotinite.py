@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -20,12 +20,22 @@ async def similar_tracks(query: SpotiniteQuery, user=Depends(login_manager), db:
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+    # Fetch 15 similar tracks and return the first 3 that are not by the same artist if possible
     similar_tracks = []
+    added_artists = set()
+    backup_tracks = []
     for track_id in similar_track_ids:
         track_info = get_track_info(track_id)
-        if track_info['Artist'] != query.artist:
+        artist_lower = track_info['Artist'].lower()
+        if artist_lower != query.artist.lower() and artist_lower not in added_artists:
             similar_tracks.append(track_info)
-            if len(similar_tracks) == 3:
-                break
+            added_artists.add(artist_lower)
+        else:
+            backup_tracks.append(track_info)
+        if len(similar_tracks) == 3:
+            break
+
+    if len(similar_tracks) < 3:
+        similar_tracks.extend(backup_tracks[:3-len(similar_tracks)])
 
     return similar_tracks

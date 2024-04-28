@@ -5,3 +5,6 @@ __pycache__/
 .vscode/
 test.db
 Buckets/
+MinioData/
+MusicLibrary/
+.cache
