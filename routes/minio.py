@@ -1,13 +1,15 @@
 from typing import List
+from random import randint
 
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
 
 from core.config import login_manager, minio_client, DEFAULT_SETTINGS
 from models.minio import S3Object
-from models.music import AlbumResponse, SongPath
+from models.music import AlbumResponse, SongPath, MusicLibrary
 from services.minio import get_metadata_and_artwork
-
+from core.database import get_db
 
 router = APIRouter(prefix="/minio")
 
@@ -62,6 +64,19 @@ async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
     """Get the metadata of a given song_path from MinIO storage using music_tag."""
     try:
         metadata = get_metadata_and_artwork(DEFAULT_SETTINGS.minio_bucket_name, query.file_path)
+        return JSONResponse(content=metadata)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+
+@router.post("/random-metadata", tags=["miniO"])
+async def get_random_song_metadata(query: SongPath, user=Depends(login_manager), db: Session = Depends(get_db)):
+    """Get the metadata of a given song_path from MinIO storage using music_tag."""
+    try:
+        count = db.query(MusicLibrary).count()
+        random_id = randint(1, count)
+        row = db.query(MusicLibrary).filter(MusicLibrary.id == random_id).first()
+        metadata = get_metadata_and_artwork(DEFAULT_SETTINGS.minio_bucket_name, row.filepath)
         return JSONResponse(content=metadata)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
