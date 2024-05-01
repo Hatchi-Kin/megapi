@@ -71,7 +71,7 @@ async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
 
 @router.get("/random-metadata", tags=["miniO"])
 async def get_random_song_metadata(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Get the metadata of a given song_path from MinIO storage using music_tag."""
+    """Get a random song with metadata from MinIO storage using music_tag."""
     try:
         count = db.query(MusicLibrary).count()
         random_id = randint(1, count)
