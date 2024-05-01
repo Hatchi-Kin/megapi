@@ -12,6 +12,23 @@ def convert_artwork_to_base64(artwork):
     return None
 
 
+def get_artwork(bucket_name: str, file_name: str):
+    # Create a temporary file then download the file from MinIO
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        data = minio_client.get_object(bucket_name, file_name)
+        temp_file.write(data.read())
+
+    try:
+        # Load the file with music_tag
+        f = music_tag.load_file(temp_file.name)
+        if f['artwork'] and f['artwork'].first is not None:
+            return convert_artwork_to_base64(f['artwork'].first)
+        return None
+    finally:
+        # Delete the temporary file
+        os.unlink(temp_file.name)
+
+
 def get_metadata_and_artwork(bucket_name: str, file_name: str):
     # Create a temporary file then download the file from MinIO
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:

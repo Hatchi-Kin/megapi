@@ -80,3 +80,5 @@ async def get_random_song_metadata(user=Depends(login_manager), db: Session = De
         return JSONResponse(content=metadata)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        db.close()
