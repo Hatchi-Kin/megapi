@@ -33,6 +33,4 @@ def get_random_row_and_lyrics_and_metadata(user=Depends(login_manager), db: Sess
             raise HTTPException(status_code=404, detail="No songs found in the library.")
         lyrics = fetch_lyrics(row.artist, row.title)
         artwork = get_artwork("megasetbucket", row.filepath)
-        artwork_base64 = convert_artwork_to_base64(artwork)
-
-        return {"id": row.id, "row": row, "lyrics": lyrics, "artwork": artwork_base64}
+        return {"id": row.id, "row": row, "lyrics": lyrics, "artwork": artwork}
