@@ -69,8 +69,8 @@ async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
         raise HTTPException(status_code=400, detail=str(e))
     
 
-@router.post("/random-metadata", tags=["miniO"])
-async def get_random_song_metadata(query: SongPath, user=Depends(login_manager), db: Session = Depends(get_db)):
+@router.get("/random-metadata", tags=["miniO"])
+async def get_random_song_metadata(user=Depends(login_manager), db: Session = Depends(get_db)):
     """Get the metadata of a given song_path from MinIO storage using music_tag."""
     try:
         count = db.query(MusicLibrary).count()
