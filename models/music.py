@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from core.config import Base
 
@@ -51,5 +51,5 @@ class ArtistFolderResponse(BaseModel):
 
 
 class SongPath(BaseModel):
-    file_path: str
+    file_path: str = Field(..., example="MegaSet/No Place For Soul/2002 - Full Global Racket/04 A.I.M.mp3")
 
