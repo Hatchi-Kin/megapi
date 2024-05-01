@@ -43,6 +43,7 @@ sortedcontainers = "^2.4.0"
 sqlalchemy-stubs = "^0.4"
 tomli = "^2.0.1"
 typing-extensions = "^4.10.0"
+music-tag = "^0.4.3"
 
 
 [build-system]

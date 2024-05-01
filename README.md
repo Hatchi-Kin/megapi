@@ -48,9 +48,12 @@ docker compose up -d
 ```
 
 ```bash
-docker-compose logs -f
+docker compose build --no-cache
 ```
 
+```bash
+docker-compose logs -f
+```
 
 ```bash
 .
@@ -76,19 +79,26 @@ docker-compose logs -f
 ├── models
 │   ├── __init__.py
 │   ├── milvus.py
+│   ├── minio.py
 │   ├── music.py
+│   ├── spotinite.py
 │   └── users.py
 │
 ├── routes
 │   ├── __init__.py
 │   ├── auth.py
+│   ├── lyrics.py
 │   ├── milvus.py
-│   └── music.py
+│   ├── music.py
+│   └── spotinite.py
 │
 ├── services
 │   ├── __init__.py
 │   ├── auth.py
-│   └── milvus.py
+│   ├── lyrics.py
+│   ├── milvus.py
+│   ├── minio.py
+│   └── spotinite.py
 │
 └── tests
     ├── __init__.py

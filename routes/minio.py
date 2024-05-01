@@ -1,12 +1,12 @@
 from typing import List
 
 from fastapi import APIRouter, HTTPException, Depends
-from fastapi.responses import StreamingResponse
-from minio import Minio
+from fastapi.responses import StreamingResponse, JSONResponse
 
 from core.config import login_manager, minio_client, DEFAULT_SETTINGS
 from models.minio import S3Object
 from models.music import AlbumResponse, SongPath
+from services.minio import get_metadata_and_artwork
 
 
 router = APIRouter(prefix="/minio")
@@ -55,3 +55,13 @@ async def download_file(query: SongPath, user=Depends(login_manager)):
         return StreamingResponse(data.stream(32*1024), media_type="audio/mpeg", headers=headers)
     except Exception as e:
         raise HTTPException(status_code=404, detail="File not found")
+    
+
+@router.post("/metadata", tags=["miniO"])
+async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
+    """Get the metadata of a given song_path from MinIO storage using music_tag."""
+    try:
+        metadata = get_metadata_and_artwork(DEFAULT_SETTINGS.minio_bucket_name, query.file_path)
+        return JSONResponse(content=metadata)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

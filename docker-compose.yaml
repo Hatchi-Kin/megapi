@@ -1,7 +1,7 @@
 services:
 
-  db:
-    image: postgres:15-alpine
+  postgre:
+    image: postgres:16-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
@@ -9,15 +9,15 @@ services:
     environment:
       - POSTGRES_USER=${PG_USER}
       - POSTGRES_PASSWORD=${PG_PASSWORD}
-      - POSTGRES_DB=fastapi_db
+      - POSTGRES_DB=${POSTGRE_DB}
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d fastapi_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${POSTGRE_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  web:
+  megapi:
     build: .
     command: python app.py --host 0.0.0.0 --port 8000
     volumes:
@@ -25,7 +25,7 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      db:
+      postgre:
         condition: service_healthy
     restart: always
 

@@ -783,6 +783,33 @@ typing-extensions = "*"
 urllib3 = "*"
 
 [[package]]
+name = "music-tag"
+version = "0.4.3"
+description = "Simple interface to edit audio file metadata"
+optional = false
+python-versions = "*"
+files = [
+    {file = "music-tag-0.4.3.tar.gz", hash = "sha256:0aab6e6eeda8df0f5316ec2d2190bd74561b7e03562ab091ce8d5687cdbcfff6"},
+]
+
+[package.dependencies]
+mutagen = "*"
+
+[package.extras]
+artwork = ["Pillow"]
+
+[[package]]
+name = "mutagen"
+version = "1.47.0"
+description = "read and write audio tags for many formats"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "mutagen-1.47.0-py3-none-any.whl", hash = "sha256:edd96f50c5907a9539d8e5bba7245f62c9f520aef333d13392a79a4f70aca719"},
+    {file = "mutagen-1.47.0.tar.gz", hash = "sha256:719fadef0a978c31b4cf3c956261b3c58b6948b32023078a2117b1de09f0fc99"},
+]
+
+[[package]]
 name = "mypy"
 version = "1.9.0"
 description = "Optional static typing for Python"
@@ -1821,4 +1848,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c01f91e7808c7f2b833383b76b75050ffde53a7a0a5c0704ae5fd74571c30966"
+content-hash = "b2fda98dff4fd673e3c1b66b3fe55c0cd6742356ed5b091bf4ba8d5d5fdd9d39"
