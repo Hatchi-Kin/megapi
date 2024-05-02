@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from routes.auth import router as auth_router
 from routes.music import router as music_router
 from routes.milvus import router as milvus_router
@@ -24,6 +26,13 @@ app.add_middleware(
     allow_methods=["*"],  
     allow_headers=["*"],  
 )
+
+Instrumentator().instrument(app).expose(app)
+
+@app.get("/metricsssssss", include_in_schema=True, tags=["Prometheus Metrics"])
+async def metrics():
+    return app.dependency_overrides[app.router.routes[-1].endpoint]()
+
 
 app.include_router(auth_router)
 app.include_router(music_router)
