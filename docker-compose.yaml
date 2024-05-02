@@ -50,3 +50,7 @@ services:
 volumes:
   postgres_data:
   minio_data:
+
+networks:
+  default: 
+    name: global_network
