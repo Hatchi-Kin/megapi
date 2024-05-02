@@ -86,6 +86,14 @@ swagger_tags = [
     {
         "name": "spotinite",
         "description": "Operations related to the spotinite API: https://cyanite.ai/docs/ leveraging spotipy and the cyanite API."
+    },
+    {
+        "name": "Pi Monitoring",
+        "description": "Operations related to the monitoring of the Raspberry Pi"
+    },
+    {
+        "name": "Prometheus Metrics",
+        "description": "Operations related to the monitoring of the FastAPI application"
     }
 ]
 
