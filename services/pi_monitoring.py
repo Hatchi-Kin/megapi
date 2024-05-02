@@ -19,8 +19,8 @@ def get_pi_cpu_usage():
 def get_pi_memory_usage():
     mem = subprocess.check_output(['cat', '/proc/meminfo']).decode()
     total_memory = int(mem.split('\n')[0].split()[1]) / 1024  # Convert from KB to MB
-    free_memory = int(mem.split('\n')[1].split()[1]) / 1024  # Convert from KB to MB
-    memory_usage_percentage = ((total_memory - free_memory) / total_memory) * 100
+    available_memory = int(mem.split('\n')[2].split()[1]) / 1024  # Convert from KB to MB
+    memory_usage_percentage = ((total_memory - available_memory) / total_memory) * 100
     return round(memory_usage_percentage, 2)
 
 def get_pi_disk_usage():
