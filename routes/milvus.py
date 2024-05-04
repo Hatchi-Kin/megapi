@@ -114,60 +114,8 @@ async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
     if not entity:
         raise HTTPException(status_code=404, detail="Entity not found")
     
-    # Get the predictions, title, and artist from the queried entity
-    embeddings = entity[0]["predictions"]
-    title = entity[0]["title"]
-    artist = entity[0]["artist"]
-
-    # Open and load the JSON file containing list of classes the model can predict
-    with open('utils/mtg_jamendo_genre.json', 'r') as json_file:
-        metadata = json.load(json_file)
-
-    # Get the list of classes from the metadata
-    classes = metadata.get('classes')
-
-    # Convert the list of predictions to a NumPy array
-    embeddings = np.array(embeddings)
-
-    # Check the shape of embeddings
-    print(embeddings.shape)
-
-    # If embeddings is not a 2D array, reshape it
-    if len(embeddings.shape) == 1:
-        embeddings = embeddings.reshape(1, -1)
-
-    # Calculate average activations for each class
-    average_activations = np.mean(embeddings, axis=0)
-
-    # Convert the average activations to float32
-    average_activations_float = average_activations.astype(np.float32)
-
-    # Get sorted indices based on average activations
-    sorted_indices = np.argsort(average_activations_float)
-
-    # Get top 5 classes
-    top_5_classes = sorted_indices[-5:]
-
-    # Get corresponding average activations
-    top_5_activations = average_activations_float[top_5_classes]
-
-    # Get class names
-    class_names = np.array(metadata['classes'])[top_5_classes]
-
-    # Create bar plot
-    fig, ax = plt.subplots(figsize=(6, 2))
-    plt.barh(class_names, top_5_activations, color='#60a5fa', edgecolor='#cbd5e1')
-    plt.title(f'Genres for {title} by {artist}', color='#cbd5e1')
-    plt.tick_params(colors='#cbd5e1')
-
-    # Set plot background color
-    ax.set_facecolor('#111827')
-    fig.patch.set_facecolor('#111827')
-
-    # Convert plot to base64
-    buf = io.BytesIO()
-    fig.savefig(buf, format='png')
-    buf.seek(0)
-    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+    class_names, top_5_activations, title, artist = await extract_plot_data(entity)
+    fig = await create_plot(class_names, top_5_activations, title, artist)
+    image_base64 = await convert_plot_to_base64(fig)
 
     return Response(content=image_base64, media_type="text/plain")

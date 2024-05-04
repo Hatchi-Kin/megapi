@@ -1,6 +1,7 @@
 import io
 import base64
 from typing import List
+import json
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -73,6 +74,31 @@ def sort_entities(entities):
     return response_list
 
 
+async def extract_plot_data(entity):
+    # Get the predictions, title, and artist from the queried entity
+    embeddings = entity[0]["predictions"]
+    title = entity[0]["title"]
+    artist = entity[0]["artist"]
+
+    # Open and load the JSON file containing list of classes the model can predict
+    with open('core/data/mtg_jamendo_genre.json', 'r') as json_file:
+        metadata = json.load(json_file)
+
+    classes = metadata.get('classes')
+    embeddings = np.array(embeddings)
+    if len(embeddings.shape) == 1:
+        embeddings = embeddings.reshape(1, -1)
+
+    average_activations = np.mean(embeddings, axis=0)
+    average_activations_float = average_activations.astype(np.float32)
+    sorted_indices = np.argsort(average_activations_float)
+    top_5_classes = sorted_indices[-5:]
+    top_5_activations = average_activations[top_5_classes]
+    class_names = np.array(metadata['classes'])[top_5_classes]
+
+    return class_names, top_5_activations, title, artist
+
+
 async def create_plot(class_names: List[str], top_5_activations: List[float], title: str, artist: str):
     fig, ax = plt.subplots(figsize=(6, 2))
     plt.barh(class_names, top_5_activations, color='#60a5fa', edgecolor='#cbd5e1')
@@ -89,21 +115,3 @@ async def convert_plot_to_base64(fig):
     buf.seek(0)
     image_base64 = base64.b64encode(buf.read()).decode('utf-8')
     return image_base64
-
-
-async def extract_plot_data(entity, metadata):
-    embeddings = entity[0]["predictions"]
-    title = entity[0]["title"]
-    artist = entity[0]["artist"]
-
-    embeddings = np.array(embeddings)
-    if len(embeddings.shape) == 1:
-        embeddings = embeddings.reshape(1, -1)
-
-    average_activations = np.mean(embeddings, axis=0).astype(np.float32)
-    sorted_indices = np.argsort(average_activations)
-    top_5_classes = sorted_indices[-5:]
-    top_5_activations = average_activations[top_5_classes]
-    class_names = np.array(metadata['classes'])[top_5_classes]
-
-    return class_names, top_5_activations, title, artist
