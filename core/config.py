@@ -6,7 +6,7 @@ from minio import Minio
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-
+# Application settings, loaded from environment variables
 class Settings(BaseSettings):
     """Application settings, loaded from environment variables."""
     secret_key: str = ""  
@@ -37,19 +37,23 @@ class Settings(BaseSettings):
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
 
+# SQLAlchemy engine, sessionmaker and Base for interacting with the database
 engine = create_engine(DEFAULT_SETTINGS.database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-login_manager = LoginManager(DEFAULT_SETTINGS.secret_key, "/auth/token")
 Base = declarative_base()
 
+# FastAPI-Login manager for handling authentication
+login_manager = LoginManager(DEFAULT_SETTINGS.secret_key, "/auth/token")
+
+# Minio client for self hosted object storage
 minio_client = Minio(
     endpoint=DEFAULT_SETTINGS.minio_endpoint,
     access_key=DEFAULT_SETTINGS.minio_access_key,
     secret_key=DEFAULT_SETTINGS.minio_secret_key,
-    secure=False # True if you are using https, False if http
+    secure=True # True if you are using https, False if http
 )
 
-# Set up Spotipy with your Spotify client credentials
+# Spotipy client for metadata from Spotify API 
 spotify_client_credentials_manager = SpotifyClientCredentials(
     client_id=DEFAULT_SETTINGS.spotify_client_id,
     client_secret=DEFAULT_SETTINGS.spotify_client_secret
@@ -57,7 +61,7 @@ spotify_client_credentials_manager = SpotifyClientCredentials(
 sp= spotipy.Spotify(client_credentials_manager=spotify_client_credentials_manager)
 
 
-
+# List of tags for the Swagger UI / auto-generated documentation
 swagger_tags = [
     {
         "name": "users",
@@ -88,13 +92,9 @@ swagger_tags = [
         "description": "Operations related to the spotinite API: https://cyanite.ai/docs/ leveraging spotipy and the cyanite API."
     },
     {
-        "name": "Pi Monitoring",
-        "description": "Operations related to the monitoring of the Raspberry Pi"
+        "name": "monitoring",
+        "description": "Operations related to the monitoring different metrics of the globals solution."
     },
-    {
-        "name": "Prometheus Metrics",
-        "description": "Operations related to the monitoring of the FastAPI application"
-    }
 ]
 
 
