@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from prometheus_fastapi_instrumentator import Instrumentator
-from prometheus_client import Gauge, generate_latest
 
 from routes.auth import router as auth_router
 from routes.music import router as music_router

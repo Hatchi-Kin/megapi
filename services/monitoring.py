@@ -1,5 +1,4 @@
 import subprocess
-from prometheus_client import Gauge
 
 def get_pi_cpu_temperature():
     with open('/sys/class/thermal/thermal_zone0/temp') as f:
@@ -34,19 +33,4 @@ def get_all_pi_stats():
         "memory_usage": get_pi_memory_usage(),
         "disk_usage": get_pi_disk_usage()
     }
-
-
-# Create a Gauge object for each metric we want to expose to Prometheus
-cpu_temp_gauge = Gauge('cpu_temperature', 'CPU Temperature')
-cpu_usage_gauge = Gauge('cpu_usage', 'CPU Usage')
-memory_usage_gauge = Gauge('memory_usage', 'Memory Usage')
-
-def create_and_set_pi_gauges():
-    # Set the value of each gauge
-    cpu_temp_gauge.set(get_pi_cpu_temperature())
-    cpu_usage_gauge.set(get_pi_cpu_usage())
-    memory_usage_gauge.set(get_pi_memory_usage())
-
-    return cpu_temp_gauge, cpu_usage_gauge, memory_usage_gauge
-
 

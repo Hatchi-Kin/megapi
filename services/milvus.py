@@ -1,16 +1,31 @@
+import io
+import base64
+from typing import List
+
+import numpy as np
+import matplotlib.pyplot as plt
 from pymilvus import connections
 from pymilvus import Collection
 
 from core.config import DEFAULT_SETTINGS
 
 
-def get_milvus_collection():
+def get_milvus_512_collection():
     connections.connect(
         "default",
         uri=DEFAULT_SETTINGS.milvus_uri,
         token=DEFAULT_SETTINGS.milvus_api_key,
     )
-    return Collection(name=DEFAULT_SETTINGS.milvus_collection_name)
+    return Collection(name=DEFAULT_SETTINGS.milvus_512_collection_name)
+
+
+def get_milvus_87_collection():
+    connections.connect(
+        "default",
+        uri=DEFAULT_SETTINGS.milvus_uri,
+        token=DEFAULT_SETTINGS.milvus_api_key,
+    )
+    return Collection(name=DEFAULT_SETTINGS.milvus_87_collection_name)
 
 
 def full_hit_to_dict(hit):
@@ -56,3 +71,36 @@ def sort_entities(entities):
         response_list.extend(fallback_list[:9-len(response_list)])
 
     return response_list
+
+
+async def create_plot(class_names: List[str], top_5_activations: List[float], title: str, artist: str):
+    fig, ax = plt.subplots(figsize=(6, 2))
+    plt.barh(class_names, top_5_activations, color='#60a5fa', edgecolor='#cbd5e1')
+    plt.title(f'Genres for {title} by {artist}', color='#cbd5e1')
+    plt.tick_params(colors='#cbd5e1')
+    ax.set_facecolor('#111827')
+    fig.patch.set_facecolor('#111827')
+    return fig
+
+
+async def convert_plot_to_base64(fig):
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+    return image_base64
+
+
+async def extract_plot_data(entity, metadata):
+    embeddings = entity[0]["predictions"]
+    title = entity[0]["title"]
+    artist = entity[0]["artist"]
+
+    embeddings = np.array(embeddings).reshape(-1, 1)
+    average_activations = np.mean(embeddings, axis=0).astype(np.float32)
+    sorted_indices = np.argsort(average_activations)
+    top_5_classes = sorted_indices[-5:]
+    top_5_activations = average_activations[top_5_classes]
+    class_names = np.array(metadata['classes'])[top_5_classes]
+
+    return class_names, top_5_activations, title, artist

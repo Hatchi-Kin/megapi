@@ -27,6 +27,7 @@ idna==3.6
 iniconfig==2.0.0
 isodate==0.6.1
 marshmallow==3.21.1
+matplotlib==3.8.4 
 minio==7.2.5
 music-tag==0.4.3
 mutagen==1.47.0
