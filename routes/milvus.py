@@ -1,7 +1,6 @@
 import json
 
-from fastapi import APIRouter, HTTPException
-from fastapi import Depends
+from fastapi import APIRouter, HTTPException, Depends, Response
 
 from core.config import login_manager
 from models.milvus import EmbeddingResponse, SimilarFullEntitiesResponse, FilePathsQuery, SimilarShortEntitiesResponse
@@ -97,7 +96,7 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
     return {"entities": sorted_entities}
 
 
-@router.post("/genres_plot", tags=["milvus"])
+@router.post("/plot_genres", tags=["milvus"])
 async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
     """Get a plot of the top 5 genres of the entity with the given file path."""
     collection_87 = get_milvus_87_collection()
@@ -114,4 +113,4 @@ async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
     class_names, top_5_activations, title, artist = await extract_plot_data(entity, metadata)
     fig = await create_plot(class_names, top_5_activations, title, artist)
     image_base64 = await convert_plot_to_base64(fig)
-    return image_base64
+    return Response(content=image_base64, media_type="text/plain")
