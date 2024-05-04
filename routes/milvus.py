@@ -110,6 +110,7 @@ async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
     
     with open('core/data/mtg_jamendo_genre.json', 'r') as json_file:
         metadata = json.load(json_file)
+        
     class_names, top_5_activations, title, artist = await extract_plot_data(entity, metadata)
     fig = await create_plot(class_names, top_5_activations, title, artist)
     image_base64 = await convert_plot_to_base64(fig)

@@ -96,7 +96,10 @@ async def extract_plot_data(entity, metadata):
     title = entity[0]["title"]
     artist = entity[0]["artist"]
 
-    embeddings = np.array(embeddings).reshape(-1, 1)
+    embeddings = np.array(embeddings)
+    if len(embeddings.shape) == 1:
+        embeddings = embeddings.reshape(1, -1)
+
     average_activations = np.mean(embeddings, axis=0).astype(np.float32)
     sorted_indices = np.argsort(average_activations)
     top_5_classes = sorted_indices[-5:]
