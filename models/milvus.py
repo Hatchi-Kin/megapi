@@ -13,6 +13,7 @@ class Entity(BaseModel):
 
 class Hit(BaseModel):
     id: str
+    title: str
     distance: float
     entity: Entity
 
