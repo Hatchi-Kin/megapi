@@ -13,7 +13,7 @@ source $VENV_PATh/bin/activate
 
 ## #####
 ```bash
-docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}\t{{.Status}}\t{{.Names}}'
+docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.Status}}\t{{.Names}}'
 ```
 
 ```bash
