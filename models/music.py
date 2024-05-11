@@ -51,5 +51,4 @@ class ArtistFolderResponse(BaseModel):
 
 
 class SongPath(BaseModel):
-    file_path: str = Field(..., example="MegaSet/No Place For Soul/2002 - Full Global Racket/04 A.I.M.mp3")
-
+    file_path: str = Field(..., json_schema_extra={'example': "MegaSet/No Place For Soul/2002 - Full Global Racket/04 A.I.M.mp3"})

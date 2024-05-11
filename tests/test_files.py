@@ -5,7 +5,8 @@ import os
 files_to_test = [
     '.env_example',
     '.gitignore',
-    'core/data/music.db'
+    'core/data/music.db',
+    'core/data/mtg_jamendo_genre.json',
 ]
 
 

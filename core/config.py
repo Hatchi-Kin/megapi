@@ -31,9 +31,10 @@ class Settings(BaseSettings):
     spotify_client_secret: str = "",
     cyanite_token: str = ""
 
-    class Config:
-        env_file = ".env"
-        extra = "allow"  # allow extra fields
+    model_config = {
+        "env_file": ".env",
+        "extra": "allow"  # allow extra fields
+    }
 
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
@@ -73,6 +74,10 @@ swagger_tags = [
         "description": "Operations related to music_library table in postgres database fastapi_db",
     },
     {
+        "name": "playlist",
+        "description": "Operations related to the playlist of the users",
+    },
+    {
         "name": "milvus",
         "description": "Operations related to the vector Database Milvus hosted by zilliz",
     },
@@ -90,7 +95,7 @@ swagger_tags = [
     }, 
     {
         "name": "spotinite",
-        "description": "Operations related to the spotinite API: https://cyanite.ai/docs/ leveraging spotipy and the cyanite API."
+        "description": "Operations related to the spotinite API; leveraging spotipy and the cyanite API - https://cyanite.ai/docs/."
     },
     {
         "name": "monitoring",

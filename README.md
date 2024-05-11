@@ -15,6 +15,23 @@ source $VENV_PATh/bin/activate
 ```bash
 docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.Status}}\t{{.Names}}'
 ```
+```bash
+NAMES                           PORTS
+
+megapi-megapi-1                 8000:8000
+megapi-minio-1                  9000:9001
+megapi-postgre-1                5432:5432
+
+react-music-sim-web-1           3000:3000
+
+monitoring-stack-mlflow-1       5000:5000
+monitoring-stack-mlflowdb-1     3306/tcp
+monitoring-stack-prometheus-1   9090:9090
+grafana                         3030:3030
+
+nginx-proxy-app-1               80:81, 443:443
+portainer-portainer-1           9443:9443,8008:8000, 9009:9009
+```
 
 ```bash
 docker stop $(docker ps -a -q)
