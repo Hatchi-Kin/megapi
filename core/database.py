@@ -53,6 +53,7 @@ def create_admin_if_none():
                     email=DEFAULT_SETTINGS.pg_email,
                     username=DEFAULT_SETTINGS.pg_user,
                     hashed_password=hash_password(DEFAULT_SETTINGS.pg_password),
+                    is_admin=True,
                 )
                 db.add(admin)
                 db.commit()

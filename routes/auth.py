@@ -53,7 +53,7 @@ def login(data: OAuth2PasswordRequestForm = Depends()):
     password = data.password
     user = get_user(email)
     if not user or not bcrypt.checkpw(
-        password.encode("utf-8"), user['hashed_password'].encode("utf-8")
+        password.encode("utf-8"), user.hashed_password.encode("utf-8")
     ):
         raise InvalidCredentialsException
     access_token_expires = timedelta(minutes=DEFAULT_SETTINGS.access_token_expire_minutes)
