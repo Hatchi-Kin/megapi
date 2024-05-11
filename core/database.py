@@ -1,5 +1,4 @@
 import sqlite3
-
 from sqlalchemy.sql import exists
 
 from core.config import DEFAULT_SETTINGS, SessionLocal

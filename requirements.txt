@@ -23,6 +23,7 @@ fastapi-login==1.10.0
 greenlet==3.0.3
 grpcio==1.60.0
 h11==0.14.0
+httpx==0.27.0
 idna==3.6
 iniconfig==2.0.0
 isodate==0.6.1

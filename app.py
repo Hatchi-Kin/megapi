@@ -5,6 +5,7 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from routes.auth import router as auth_router
 from routes.music import router as music_router
+from routes.playlist import router as playlist_router
 from routes.milvus import router as milvus_router
 from routes.minio import router as minio_router
 from routes.lyrics import router as lyrics_router
@@ -34,6 +35,7 @@ Instrumentator().instrument(app).expose(app)
 
 app.include_router(auth_router)
 app.include_router(music_router)
+app.include_router(playlist_router)
 app.include_router(milvus_router)
 app.include_router(minio_router)
 app.include_router(lyrics_router)

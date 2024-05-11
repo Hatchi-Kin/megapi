@@ -94,7 +94,7 @@ async def extract_plot_data(entity):
     sorted_indices = np.argsort(average_activations_float)
     top_5_classes = sorted_indices[-5:]
     top_5_activations = average_activations[top_5_classes]
-    class_names = np.array(metadata['classes'])[top_5_classes]
+    class_names = np.array(classes)[top_5_classes]
 
     return class_names, top_5_activations, title, artist
 
