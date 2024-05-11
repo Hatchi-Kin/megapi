@@ -5,7 +5,7 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from routes.auth import router as auth_router
 from routes.music import router as music_router
-from routes.playlist import router as playlist_router
+from routes.favorites import router as playlist_router
 from routes.milvus import router as milvus_router
 from routes.minio import router as minio_router
 from routes.lyrics import router as lyrics_router

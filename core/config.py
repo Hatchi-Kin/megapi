@@ -74,8 +74,8 @@ swagger_tags = [
         "description": "Operations related to music_library table in postgres database fastapi_db",
     },
     {
-        "name": "playlist",
-        "description": "Operations related to the playlist of the users",
+        "name": "favorites",
+        "description": "Operations related to the users favorites",
     },
     {
         "name": "milvus",

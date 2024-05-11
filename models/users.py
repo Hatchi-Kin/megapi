@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from pydantic import BaseModel
 
 from core.config import Base
-from models.playlist import playlist
+from models.favorites import favorites
 
 
 class User(Base):
@@ -18,7 +18,7 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
 
     # Relationship field
-    playlist = relationship("MusicLibrary", secondary=playlist, backref="users")
+    favorites = relationship("MusicLibrary", secondary=favorites, backref="users")
 
 
 class UserCreate(BaseModel):
