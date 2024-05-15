@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -50,7 +51,9 @@ async def delete_song_from_favorites(song: SongPath, user: User = Depends(login_
     if not music_id:
         raise HTTPException(status_code=404, detail="Song not found")
     music = db.query(MusicLibrary).get(music_id)
-    if music in user.favorites:
-        user.favorites.remove(music)
-        db.commit()
-    return {"message": "Song removed from favorites"}
+    for favorite in user.favorites:
+        if favorite.id == music.id:
+            user.favorites.remove(favorite)
+            db.commit()
+            return {"message": "Song removed from favorites"}
+    raise HTTPException(status_code=404, detail="Song not found in favorites")
