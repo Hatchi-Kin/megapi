@@ -1,11 +1,12 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from routes.auth import router as auth_router
 from routes.music import router as music_router
-from routes.favorites import router as playlist_router
+from routes.favorites import router as favorites_router
 from routes.milvus import router as milvus_router
 from routes.minio import router as minio_router
 from routes.lyrics import router as lyrics_router
@@ -30,12 +31,20 @@ app.add_middleware(
     allow_headers=["*"],  
 )
 
+@app.exception_handler(500)
+async def custom_http_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=500,
+        headers={"Access-Control-Allow-Origin": "*"},
+        content={"message": "Internal Server Error"},
+    )
+
 Instrumentator().instrument(app).expose(app)
 
 
 app.include_router(auth_router)
 app.include_router(music_router)
-app.include_router(playlist_router)
+app.include_router(favorites_router)
 app.include_router(milvus_router)
 app.include_router(minio_router)
 app.include_router(lyrics_router)

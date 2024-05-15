@@ -38,6 +38,11 @@ async def add_song_to_favorites(song: SongPath, user: User = Depends(login_manag
     if not music_id:
         raise HTTPException(status_code=404, detail="Song not found")
     music = db.query(MusicLibrary).get(music_id)
+
+    # Check if the song is already in the user's favorites
+    if music in user.favorites:
+        return {"message": "Song is already in favorites"}
+
     user.favorites.append(music)
     db.commit()
     return {"message": "Song added to favorites"}
