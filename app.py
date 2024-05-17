@@ -13,6 +13,7 @@ from routes.spotinite import router as spotinite_router
 from routes.monitoring import router as monitoring_router
 from core.config import Base, engine, swagger_tags
 from core.database import migrate_data_from_sqlite_to_postgres, create_admin_if_none
+from services.auth import AuthMiddleware
 
 
 app = FastAPI(
@@ -30,8 +31,9 @@ app.add_middleware(
     allow_headers=["*"],  
 )
 
-Instrumentator().instrument(app).expose(app)
+app.add_middleware(AuthMiddleware)
 
+Instrumentator().instrument(app).expose(app)
 
 app.include_router(auth_router)
 app.include_router(music_router)
@@ -41,7 +43,6 @@ app.include_router(minio_router)
 app.include_router(lyrics_router)
 app.include_router(spotinite_router)
 app.include_router(monitoring_router)
-
 
 Base.metadata.create_all(bind=engine)
 migrate_data_from_sqlite_to_postgres("core/data/music.db")

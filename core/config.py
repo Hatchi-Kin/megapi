@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     """Application settings, loaded from environment variables."""
     secret_key: str = ""  
     algorithm: str = ""
-    access_token_expire_minutes: int = 60
+    access_token_expire_minutes: int = 15
     database_url: str = ""
     postgre_music_table: str = ""
     pg_user: str = ""

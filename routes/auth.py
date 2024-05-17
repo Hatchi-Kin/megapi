@@ -1,11 +1,10 @@
 import os
 from datetime import timedelta
 
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException, APIRouter, Depends
 from fastapi.responses import HTMLResponse
-from fastapi_login.exceptions import InvalidCredentialsException
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import APIRouter, Depends
+from fastapi_login.exceptions import InvalidCredentialsException
 from sqlalchemy.orm import Session
 import bcrypt
 
