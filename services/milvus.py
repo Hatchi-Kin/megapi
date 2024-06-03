@@ -5,21 +5,27 @@ import json
 
 import numpy as np
 import matplotlib.pyplot as plt
-from pymilvus import connections
-from pymilvus import Collection
+from pymilvus import Collection, connections
 
 from core.config import DEFAULT_SETTINGS
 
 
 def ping_milvus():
-    connections.connect(
+    try:
+        connections.connect(
         "default",
         uri=DEFAULT_SETTINGS.milvus_uri,
         token=DEFAULT_SETTINGS.milvus_api_key,
     )
-    status = connections.get_connection("default").client().status()
-    return status
-
+        embedding_512 = Collection(name=DEFAULT_SETTINGS.milvus_512_collection_name)
+        response = embedding_512.query(
+            expr="id in [0]",
+            output_fields=["artist"],
+        )
+        if response:
+            return {"status": "success", "message": "Milvus is running"}
+    except Exception as e:
+        return e
 
 def get_milvus_512_collection():
     connections.connect(
