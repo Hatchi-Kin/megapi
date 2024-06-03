@@ -13,10 +13,10 @@ from core.config import DEFAULT_SETTINGS
 def ping_milvus():
     try:
         connections.connect(
-        "default",
-        uri=DEFAULT_SETTINGS.milvus_uri,
-        token=DEFAULT_SETTINGS.milvus_api_key,
-    )
+            "default",
+            uri=DEFAULT_SETTINGS.milvus_uri,
+            token=DEFAULT_SETTINGS.milvus_api_key,
+        )
         embedding_512 = Collection(name=DEFAULT_SETTINGS.milvus_512_collection_name)
         response = embedding_512.query(
             expr="id in [0]",
@@ -25,7 +25,8 @@ def ping_milvus():
         if response:
             return {"status": "success", "message": "Milvus is running"}
     except Exception as e:
-        return e
+        return str(e)
+        
 
 def get_milvus_512_collection():
     connections.connect(
