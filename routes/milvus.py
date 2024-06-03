@@ -13,7 +13,8 @@ from services.milvus import (
     sort_entities,
     extract_plot_data,
     create_plot,
-    convert_plot_to_base64
+    convert_plot_to_base64,
+    ping_milvus,
 )
 import io
 import base64
@@ -119,3 +120,10 @@ async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
     image_base64 = await convert_plot_to_base64(fig)
 
     return Response(content=image_base64, media_type="text/plain")
+
+
+@router.post("/ping", tags=["milvus"])
+def ping_milvus():
+    """Check if Milvus is up and running."""
+    milvus_status = ping_milvus()
+    return milvus_status

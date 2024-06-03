@@ -11,6 +11,16 @@ from pymilvus import Collection
 from core.config import DEFAULT_SETTINGS
 
 
+def ping_milvus():
+    connections.connect(
+        "default",
+        uri=DEFAULT_SETTINGS.milvus_uri,
+        token=DEFAULT_SETTINGS.milvus_api_key,
+    )
+    status = connections.get_connection("default").client().status()
+    return status
+
+
 def get_milvus_512_collection():
     connections.connect(
         "default",
