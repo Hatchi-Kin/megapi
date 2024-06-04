@@ -46,7 +46,7 @@ jobs:
         script: |
           cd /home/pi/Documents/megapi
           git pull
-          if docker ps | grep -q 'megapi-web-1'; then
+          if docker ps | grep -q 'megapi-megapi-1'; then
             docker compose restart
           else
             docker compose up -d
