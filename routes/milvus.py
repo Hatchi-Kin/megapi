@@ -123,7 +123,7 @@ async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
 
 
 @router.get("/ping", tags=["milvus"])
-def ping_milvus_collection(user=Depends(login_manager)):
+def ping_milvus_collection():
     """Check if Milvus is up and running."""
     milvus_status = ping_milvus()
     return milvus_status
