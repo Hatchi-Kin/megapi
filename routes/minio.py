@@ -15,7 +15,7 @@ from core.database import get_db
 router = APIRouter(prefix="/minio")
 
 
-@router.post("/list-objects/", response_model=List[S3Object], tags=["miniO"])
+@router.post("/list-objects/", response_model=List[S3Object], tags=["MinIO"])
 def list_objects_in_album_folder(query: AlbumResponse, user=Depends(login_manager)):
     """Get a list of object in the given album_folder of megasetbucket."""
     objects = minio_client.list_objects(
@@ -36,7 +36,7 @@ def list_objects_in_album_folder(query: AlbumResponse, user=Depends(login_manage
     return response
 
 
-@router.post("/stream-song/", tags=["miniO"])
+@router.post("/stream-song/", tags=["MinIO"])
 async def get_file(query: SongPath, user=Depends(login_manager)):
     """Stream a file from MinIO storage."""
     try:
@@ -46,7 +46,7 @@ async def get_file(query: SongPath, user=Depends(login_manager)):
         raise HTTPException(status_code=404, detail="File not found")
     
 
-@router.post("/download-song/", tags=["miniO"])
+@router.post("/download-song/", tags=["MinIO"])
 async def download_file(query: SongPath, user=Depends(login_manager)):
     """Download a file from MinIO storage."""
     try:
@@ -60,7 +60,7 @@ async def download_file(query: SongPath, user=Depends(login_manager)):
         raise HTTPException(status_code=404, detail="File not found")
     
 
-@router.post("/metadata", tags=["miniO"])
+@router.post("/metadata", tags=["MinIO"])
 async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
     """Get the metadata of a given song_path from MinIO storage using music_tag."""
     try:
@@ -70,7 +70,7 @@ async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
         raise HTTPException(status_code=400, detail=str(e))
     
 
-@router.get("/random-metadata", tags=["miniO"])
+@router.get("/random-metadata", tags=["MinIO"])
 async def get_random_song_metadata(user=Depends(login_manager), db: Session = Depends(get_db)):
     """Get a random song with metadata from MinIO storage using music_tag."""
     try:
@@ -86,7 +86,7 @@ async def get_random_song_metadata(user=Depends(login_manager), db: Session = De
 
 
 @router.post("/upload-temp", tags=["MinIO"], response_model=UploadMP3Response)
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file(file: UploadFile = File(...), user=Depends(login_manager)):
     try:   # Check content type and extension
         if file.content_type != "audio/mpeg":
             raise HTTPException(status_code=400, detail="Only MP3 files are allowed.")
@@ -97,19 +97,20 @@ async def upload_file(file: UploadFile = File(...)):
         # Generate a secure filename
         secure_filename = sanitize_filename(file.filename)
 
+        # Determine the size of the uploaded file by moving the cursor to the end to get the file size
+        file.file.seek(0, os.SEEK_END)  
+        file_size = file.file.tell() 
+        file.file.seek(0)  
+
         # Stream the file directly to MinIO
-        await minio_client.put_object(
+        minio_client.put_object(
             bucket_name=DEFAULT_SETTINGS.minio_temp_bucket_name,
             object_name=secure_filename,
             data=file.file,
-            length=-1,  # Use -1 for unknown size to stream efficiently
+            length=file_size,
             content_type=file.content_type
         )
 
         return UploadMP3Response(filename=secure_filename)
-    except HTTPException:
-        # Re-raise FastAPI's HTTPException without modification
-        raise
     except Exception as e:
-        # Log the exception details here for debugging
-        raise HTTPException(status_code=500, detail="An unexpected error occurred.")
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")

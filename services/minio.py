@@ -60,10 +60,30 @@ def get_metadata_and_artwork(bucket_name: str, file_name: str):
 
 
 def sanitize_filename(filename):
-    # Define allowed characters
-    allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_."
-    # Replace spaces with underscores
-    sanitized = filename.replace(" ", "_")
-    # Remove any character not in the allowed set
+    allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
+    
+    # Create a translation table for replacing spaces with underscores and removing disallowed characters
+    trans_table = str.maketrans(" ", "_", "!@#$%^&*()[]{};:\"',.<>/?`~")
+    sanitized = filename.translate(trans_table)
+    
+    # Manually replace accented characters with their unaccented counterparts
+    replacements = {
+        "é": "e", "è": "e", "ê": "e",
+        "à": "a", "â": "a",
+        "ù": "u",
+        "ô": "o",
+        "î": "i",
+        "ç": "c",
+        "ë": "e",
+    }
+    for accented_char, unaccented_char in replacements.items():
+        sanitized = sanitized.replace(accented_char, unaccented_char)
+    
+    # Filter out any remaining disallowed characters
     sanitized = "".join(char for char in sanitized if char in allowed_chars)
+    
+    # Check for edge cases
+    if not sanitized:
+        raise ValueError("Filename cannot be empty.")
+    
     return sanitized
