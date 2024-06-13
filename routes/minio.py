@@ -1,14 +1,15 @@
+import os
 from typing import List
 from random import randint
 
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
 
 from core.config import login_manager, minio_client, DEFAULT_SETTINGS
-from models.minio import S3Object
+from models.minio import S3Object, UploadMP3Response
 from models.music import AlbumResponse, SongPath, MusicLibrary
-from services.minio import get_metadata_and_artwork
+from services.minio import get_metadata_and_artwork, sanitize_filename
 from core.database import get_db
 
 router = APIRouter(prefix="/minio")
@@ -82,3 +83,33 @@ async def get_random_song_metadata(user=Depends(login_manager), db: Session = De
         raise HTTPException(status_code=400, detail=str(e))
     finally:
         db.close()
+
+
+@router.post("/upload-temp", tags=["MinIO"], response_model=UploadMP3Response)
+async def upload_file(file: UploadFile = File(...)):
+    try:   # Check content type and extension
+        if file.content_type != "audio/mpeg":
+            raise HTTPException(status_code=400, detail="Only MP3 files are allowed.")
+        _, file_extension = os.path.splitext(file.filename)
+        if file_extension.lower() != ".mp3":
+            raise HTTPException(status_code=400, detail="The uploaded file is not an MP3 file.")
+
+        # Generate a secure filename
+        secure_filename = sanitize_filename(file.filename)
+
+        # Stream the file directly to MinIO
+        await minio_client.put_object(
+            bucket_name=DEFAULT_SETTINGS.minio_temp_bucket_name,
+            object_name=secure_filename,
+            data=file.file,
+            length=-1,  # Use -1 for unknown size to stream efficiently
+            content_type=file.content_type
+        )
+
+        return UploadMP3Response(filename=secure_filename)
+    except HTTPException:
+        # Re-raise FastAPI's HTTPException without modification
+        raise
+    except Exception as e:
+        # Log the exception details here for debugging
+        raise HTTPException(status_code=500, detail="An unexpected error occurred.")

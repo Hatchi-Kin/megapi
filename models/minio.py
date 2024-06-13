@@ -18,3 +18,7 @@ class SongMetadata(BaseModel):
     tracknumber: str = Field(..., json_schema_extra={'example': "Track Track Number"})
     genre: str = Field(..., json_schema_extra={'example': "Traack Genre"})
     artwork: str = Field(None, json_schema_extra={'example': "base64 encoded artwork"})
+
+
+class UploadMP3Response(BaseModel):
+    filename: str

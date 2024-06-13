@@ -57,3 +57,13 @@ def get_metadata_and_artwork(bucket_name: str, file_name: str):
     finally:
         # Delete the temporary file
         os.unlink(temp_file.name)
+
+
+def sanitize_filename(filename):
+    # Define allowed characters
+    allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_."
+    # Replace spaces with underscores
+    sanitized = filename.replace(" ", "_")
+    # Remove any character not in the allowed set
+    sanitized = "".join(char for char in sanitized if char in allowed_chars)
+    return sanitized

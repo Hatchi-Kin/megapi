@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     milvus_87_collection_name: str = ""
     minio_root_user: str = ""
     minio_bucket_name: str = ""
+    minio_temp_bucket_name: str = ""
     minio_root_password: str = ""
     minio_endpoint: str ="",
     minio_access_key: str = "",
