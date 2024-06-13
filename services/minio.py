@@ -61,29 +61,26 @@ def get_metadata_and_artwork(bucket_name: str, file_name: str):
 
 def sanitize_filename(filename):
     allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
-    
-    # Create a translation table for replacing spaces with underscores and removing disallowed characters
-    trans_table = str.maketrans(" ", "_", "!@#$%^&*()[]{};:\"',.<>/?`~")
-    sanitized = filename.translate(trans_table)
-    
-    # Manually replace accented characters with their unaccented counterparts
     replacements = {
-        "é": "e", "è": "e", "ê": "e",
-        "à": "a", "â": "a",
-        "ù": "u",
-        "ô": "o",
-        "î": "i",
-        "ç": "c",
-        "ë": "e",
+        " ": "_", "!": "", "@": "", "#": "", "$": "", "%": "", "^": "", "&": "", "*": "", "(": "", ")": "",
+        "[": "", "]": "", "{": "", "}": "", ";": "", ":": "", "\"": "", "'": "", ",": "", ".": "", "<": "",
+        ">": "", "/": "", "?": "", "`": "", "~": "",
+        "é": "e", "è": "e", "ê": "e", "à": "a", "â": "a", "ù": "u", "ô": "o", "î": "i", "ç": "c", "ë": "e"
     }
-    for accented_char, unaccented_char in replacements.items():
-        sanitized = sanitized.replace(accented_char, unaccented_char)
-    
-    # Filter out any remaining disallowed characters
-    sanitized = "".join(char for char in sanitized if char in allowed_chars)
-    
-    # Check for edge cases
+
+    def replace_chars(s):
+        return "".join(replacements.get(c, c) for c in s if c in allowed_chars or c == '.')
+
+    # Check if the filename ends with '.mp3' and preserve the extension if it does
+    extension = '.mp3' if filename.endswith('.mp3') else ''
+    base_name = filename[:-4] if extension else filename
+
+    sanitized_base_name = replace_chars(base_name)
+
+    # Reconstruct the filename with the sanitized base name and extension, if any
+    sanitized = sanitized_base_name + extension
+
     if not sanitized:
         raise ValueError("Filename cannot be empty.")
-    
+
     return sanitized

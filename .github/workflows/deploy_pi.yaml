@@ -45,9 +45,8 @@ jobs:
         port: ${{ secrets.SSH_PI_PORT }}
         script: |
           cd /home/pi/Documents/megapi
-          git pull
-          if docker ps | grep -q 'megapi-megapi-1'; then
-            docker compose restart
-          else
-            docker compose up -d
-          fi
+          git fetch origin main
+          git reset --hard origin/main
+          echo "Rebuilding and restarting services..."
+          docker compose build
+          docker compose up -d
