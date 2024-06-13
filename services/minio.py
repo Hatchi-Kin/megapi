@@ -60,26 +60,29 @@ def get_metadata_and_artwork(bucket_name: str, file_name: str):
 
 
 def sanitize_filename(filename):
-    allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
     replacements = {
-        " ": "_", "!": "", "@": "", "#": "", "$": "", "%": "", "^": "", "&": "", "*": "", "(": "", ")": "",
-        "[": "", "]": "", "{": "", "}": "", ";": "", ":": "", "\"": "", "'": "", ",": "", ".": "", "<": "",
+        "!": "", "@": "", "#": "", "$": "", "%": "", "^": "", "&": "", "*": "", "(": "", ")": "",
+        "[": "", "]": "", "{": "", "}": "", ";": "", ":": "", "\"": "", "'": "", ",": "", "<": "",
         ">": "", "/": "", "?": "", "`": "", "~": "",
         "é": "e", "è": "e", "ê": "e", "à": "a", "â": "a", "ù": "u", "ô": "o", "î": "i", "ç": "c", "ë": "e"
     }
 
-    def replace_chars(s):
-        return "".join(replacements.get(c, c) for c in s if c in allowed_chars or c == '.')
+    has_mp3_extension = filename.lower().endswith('.mp3')
+    if has_mp3_extension:
+        # Separate the extension and the rest of the filename
+        base_name, extension = filename[:-4], filename[-4:]
+    else:
+        base_name, extension = filename, ''
 
-    # Check if the filename ends with '.mp3' and preserve the extension if it does
-    extension = '.mp3' if filename.endswith('.mp3') else ''
-    base_name = filename[:-4] if extension else filename
+    # Remove sequences of dots and slashes, remove spaces and replace disallowed characters
+    base_name = base_name.replace("..", "").replace("//", "")
+    sanitized_base_name = "".join(replacements.get(c, c) for c in base_name if c not in [' '] and (c.isalnum() or c in replacements))
 
-    sanitized_base_name = replace_chars(base_name)
+    # Ensure only the last dot is kept in filenames ending with .mp3
+    if has_mp3_extension:
+        sanitized_base_name = sanitized_base_name.rstrip(".")
 
-    # Reconstruct the filename with the sanitized base name and extension, if any
     sanitized = sanitized_base_name + extension
-
     if not sanitized:
         raise ValueError("Filename cannot be empty.")
 
