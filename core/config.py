@@ -79,6 +79,10 @@ swagger_tags = [
         "description": "Operations related to the users favorites",
     },
     {
+        "name": "user_uploads",
+        "description": "Operations related to the user_uploads table in postgres database fastapi_db",
+    },
+    {
         "name": "milvus",
         "description": "Operations related to the vector Database Milvus hosted by zilliz",
     },

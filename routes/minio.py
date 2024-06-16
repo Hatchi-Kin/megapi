@@ -7,10 +7,12 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
 
 from core.config import login_manager, minio_client, DEFAULT_SETTINGS
-from models.minio import S3Object, UploadMP3Response
+from core.database import get_db
+from models.minio import S3Object, UploadMP3ResponseList, UploadDetail
 from models.music import AlbumResponse, SongPath, MusicLibrary
 from services.minio import get_metadata_and_artwork, sanitize_filename
-from core.database import get_db
+from services.uploaded import store_upload_info, get_user_uploads
+
 
 router = APIRouter(prefix="/minio")
 
@@ -33,6 +35,16 @@ def list_objects_in_album_folder(query: AlbumResponse, user=Depends(login_manage
         }
         response.append(s3_object)
 
+    return response
+
+
+@router.post("/list-uploaded-objects", response_model=UploadMP3ResponseList, tags=["MinIO"])
+def list_uploaded_objects(user=Depends(login_manager), db: Session = Depends(get_db)):
+    """Get a list of uploaded objects by the user."""
+    objects = minio_client.list_objects(DEFAULT_SETTINGS.minio_temp_bucket_name)
+    # Adjusting the response to match the expected structure
+    uploads = [UploadDetail(filename=obj.object_name) for obj in objects]
+    response = UploadMP3ResponseList(uploads=uploads)
     return response
 
 
@@ -85,8 +97,8 @@ async def get_random_song_metadata(user=Depends(login_manager), db: Session = De
         db.close()
 
 
-@router.post("/upload-temp", tags=["MinIO"], response_model=UploadMP3Response)
-async def upload_file(file: UploadFile = File(...), user=Depends(login_manager)):
+@router.post("/upload-temp", tags=["MinIO"], response_model=UploadMP3ResponseList)
+async def upload_file(file: UploadFile = File(...), user=Depends(login_manager), db: Session = Depends(get_db)):
     try:   # Check content type and extension
         if file.content_type != "audio/mpeg":
             raise HTTPException(status_code=400, detail="Only MP3 files are allowed.")
@@ -111,6 +123,13 @@ async def upload_file(file: UploadFile = File(...), user=Depends(login_manager))
             content_type=file.content_type
         )
 
-        return UploadMP3Response(filename=secure_filename)
+        # Store upload information in the database and return the updated list of uploaded songs by the user
+        # song_path_in_minio = f"{DEFAULT_SETTINGS.minio_temp_bucket_name}/{secure_filename}"
+        store_upload_info(db, user.id, secure_filename)
+        uploaded_songs = get_user_uploads(db, user.id)
+
+        return UploadMP3ResponseList(uploads=uploaded_songs)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")
+    
+
