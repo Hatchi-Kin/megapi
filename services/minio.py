@@ -3,7 +3,29 @@ import tempfile
 import base64
 import music_tag
 
-from core.config import minio_client
+from core.extract_openl3_embeddings import EmbeddingsOpenL3
+from core.config import minio_client, DEFAULT_SETTINGS
+
+
+def load_model_from_minio():
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        response = minio_client.get_object(DEFAULT_SETTINGS.minio_openl3_bucket_name, DEFAULT_SETTINGS.minio_openl3_file_name)
+        temp_file.write(response.read())
+        temp_file.flush()
+        # Load the model from the temporary file
+        embedding_512_model = EmbeddingsOpenL3(graph_path=temp_file.name)
+    return embedding_512_model
+
+
+def get_temp_file_from_minio(file_name: str):
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        response = minio_client.get_object(DEFAULT_SETTINGS.minio_temp_bucket_name, file_name)
+        temp_file.write(response.read())
+    return temp_file.name
+
+
+def delete_temp_file(temp_file_path: str):
+    os.unlink(temp_file_path)
 
 
 def convert_artwork_to_base64(artwork):

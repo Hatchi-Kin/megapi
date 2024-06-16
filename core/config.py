@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     minio_root_user: str = ""
     minio_bucket_name: str = ""
     minio_temp_bucket_name: str = ""
+    minio_openl3_bucket_name: str = ""
+    minio_openl3_file_name: str = ""
     minio_root_password: str = ""
     minio_endpoint: str ="",
     minio_access_key: str = "",
@@ -83,6 +85,10 @@ swagger_tags = [
         "description": "Operations related to the user_uploads table in postgres database fastapi_db",
     },
     {
+        "name": "OpenL3",
+        "description": "Operations related to the OpenL3 embeddings extractor model"
+    },
+    {
         "name": "milvus",
         "description": "Operations related to the vector Database Milvus hosted by zilliz",
     },
@@ -100,15 +106,11 @@ swagger_tags = [
     }, 
     {
         "name": "spotinite",
-        "description": "Operations related to the spotinite API; leveraging spotipy and the cyanite API - https://cyanite.ai/docs/."
+        "description": "Operations leveraging spotipy and the cyanite API - https://cyanite.ai/docs/."
     },
     {
         "name": "monitoring",
         "description": "Operations related to the monitoring different metrics of the globals solution."
     },
 ]
-
-
-
-
 
