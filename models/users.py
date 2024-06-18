@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from core.config import Base
 from models.favorites import favorites
-
+from models.uploaded import UserUploaded
 
 class User(Base):
     __tablename__ = "users"
@@ -19,6 +19,7 @@ class User(Base):
 
     # Relationship field
     favorites = relationship("MusicLibrary", secondary=favorites, backref="users")
+    uploaded_files = relationship("UserUploaded", order_by=UserUploaded.id, back_populates="user")
 
 
 class UserCreate(BaseModel):

@@ -7,11 +7,13 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from routes.auth import router as auth_router
 from routes.music import router as music_router
 from routes.favorites import router as favorites_router
+from routes.uploaded import router as uploaded_router
 from routes.milvus import router as milvus_router
 from routes.minio import router as minio_router
 from routes.lyrics import router as lyrics_router
 from routes.spotinite import router as spotinite_router
 from routes.monitoring import router as monitoring_router
+from routes.openl3 import router as openl3_router
 from core.config import Base, engine, swagger_tags
 from core.database import migrate_data_from_sqlite_to_postgres, create_admin_if_none
 
@@ -45,11 +47,13 @@ Instrumentator().instrument(app).expose(app)
 app.include_router(auth_router)
 app.include_router(music_router)
 app.include_router(favorites_router)
+app.include_router(uploaded_router)
 app.include_router(milvus_router)
 app.include_router(minio_router)
 app.include_router(lyrics_router)
 app.include_router(spotinite_router)
 app.include_router(monitoring_router)
+app.include_router(openl3_router)
 
 
 Base.metadata.create_all(bind=engine)

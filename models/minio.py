@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List
 
 
 class S3Object(BaseModel):
@@ -20,5 +21,8 @@ class SongMetadata(BaseModel):
     artwork: str = Field(None, json_schema_extra={'example': "base64 encoded artwork"})
 
 
-class UploadMP3Response(BaseModel):
+class UploadDetail(BaseModel):
     filename: str
+
+class UploadMP3ResponseList(BaseModel):
+    uploads: List[UploadDetail]
