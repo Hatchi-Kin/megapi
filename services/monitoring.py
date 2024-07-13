@@ -1,5 +1,6 @@
 import subprocess
 
+
 def get_pi_cpu_temperature():
     """
     Gets the current CPU temperature of the Raspberry Pi.
@@ -10,6 +11,7 @@ def get_pi_cpu_temperature():
     with open('/sys/class/thermal/thermal_zone0/temp') as f:
         temp = f.read()
     return round(float(temp) / 1000, 2)
+
 
 def get_pi_cpu_usage():
     """
@@ -26,6 +28,7 @@ def get_pi_cpu_usage():
     usage = ((total - idle) / total) * 100
     return round(usage, 2)
 
+
 def get_pi_memory_usage():
     """
     Calculates the current memory usage of the Raspberry Pi.
@@ -39,6 +42,7 @@ def get_pi_memory_usage():
     memory_usage_percentage = ((total_memory - available_memory) / total_memory) * 100
     return round(memory_usage_percentage, 2)
 
+
 def get_pi_disk_usage():
     """
     Calculates the current disk usage of the Raspberry Pi.
@@ -49,6 +53,7 @@ def get_pi_disk_usage():
     disk = subprocess.check_output(['df', '-h', '/']).decode()
     disk_usage_percentage = disk.split('\n')[1].split()[4]
     return float(disk_usage_percentage.rstrip('%'))
+
 
 def get_all_pi_stats():
     """

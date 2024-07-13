@@ -1,16 +1,3 @@
-"""core/database.py
-
-This module offers a suite of database operations essential for the application's functionality. 
-It includes:
-
-- `migrate_data_from_sqlite_to_postgres(sqlite_path: str)`: Handles the migration of data from a SQLite database to a PostgreSQL database during the initial setup of the application.
-
-- `create_admin_if_none()`: Ensures the presence of an admin user in the database upon startup. 
-
-- `get_db()`: Implements a generator that yields a database session, enabling efficient and manageable database interactions across various components of the application. This function ensures that each session is properly closed after use, promoting resource management and stability.
-
-"""
-
 import sqlite3
 from sqlalchemy.sql import exists
 

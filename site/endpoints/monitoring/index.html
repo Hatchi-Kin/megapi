@@ -156,12 +156,106 @@
     
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#documentation-for-endpointsmonitoringpy" class="nav-link">Documentation for endpoints/monitoring.py</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#routes.monitoring" class="nav-link">monitoring</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#routes.monitoring.get_all_pi" class="nav-link">get_all_pi</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
         </ul>
     </div>
 </div></div>
                     <div class="col-md-9" role="main">
 
+<h1 id="documentation-for-endpointsmonitoringpy">Documentation for <code>endpoints/monitoring.py</code></h1>
+<p>This module contains endpoint to retrives various system statistics on a Linux machine,
+including CPU temperature, CPU usage, memory usage, and disk usage.</p>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="routes.monitoring"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="routes.monitoring.get_all_pi" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_all_pi</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">))</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Retrieves comprehensive monitoring statistics for a Linux host machine.</p>
+<p>These statistics include CPU usage, memory usage, disk space, temperature readings.</p>
+<ul>
+<li><strong>user</strong>: User - The authenticated user making the request, verified through the <code>login_manager</code>.</li>
+<li><strong>return</strong>: A JSON response containing the linux host's monitoring statistics.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/monitoring.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/pi&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;monitoring&quot;</span><span class="p">])</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_pi</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves comprehensive monitoring statistics for a Linux host machine.</span>
+
+<span class="sd">    These statistics include CPU usage, memory usage, disk space, temperature readings.</span>
+
+<span class="sd">    - **user**: User - The authenticated user making the request, verified through the `login_manager`.</span>
+<span class="sd">    - **return**: A JSON response containing the linux host&#39;s monitoring statistics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_all_pi_stats</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
 </div>
+
+
+
+  </div>
+
+    </div>
+
+</div></div>
             </div>
         </div>
 

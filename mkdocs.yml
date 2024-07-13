@@ -1,6 +1,5 @@
 site_name: Megapi
 nav:
-
   - Services: 
     - Auth: services/auth.md
     - Favorites: services/favorites.md
@@ -22,7 +21,6 @@ nav:
     - OpenL3: endpoints/openl3.md
     - Spotinite: endpoints/spotinite.md
     - Uploaded: endpoints/uploaded.md
-
 
 plugins:
   - search

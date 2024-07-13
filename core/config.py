@@ -1,20 +1,3 @@
-"""core/config.py
-
-This module configures the application settings and initializes key components for the FastAPI application.
-
-It includes the definition of application settings loaded from environment variables, using Pydantic models for validation. These settings configure various aspects of the application, such as database connections, authentication parameters, and external service credentials (e.g., MinIO, Spotify).
-
-Additionally, the module sets up SQLAlchemy for database interactions, FastAPI-Login for authentication management, a Minio client for object storage, and a Spotipy client for accessing the Spotify Web API.
-
-Usage:
-    Import the `Settings` class to access application settings throughout your FastAPI application.
-    Use the initialized `engine`, `SessionLocal`, and `Base` for SQLAlchemy operations.
-    The `login_manager`, `minio_client`, and `sp` (Spotipy client) are ready to use for their respective purposes.
-
-Note:
-    Ensure that all required environment variables are set before running the application, as they are crucial for the proper configuration of the settings.
-"""
-
 from fastapi_login import LoginManager
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine
@@ -22,7 +5,6 @@ from pydantic_settings import BaseSettings
 from minio import Minio
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-
 
 
 class Settings(BaseSettings):
@@ -87,44 +69,22 @@ class Settings(BaseSettings):
 
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
-"""
-The default settings instance, loaded from the .env file.
-"""
 
 # SQLAlchemy engine, sessionmaker and Base for interacting with the database
 engine = create_engine(DEFAULT_SETTINGS.database_url)
-"""
-Creates a SQLAlchemy engine instance connected to the database specified by database_url.
-This engine is used to execute SQL queries.
-"""
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-"""
-Generates new Session objects when called, bound to the engine.
-These sessions are not committing automatically and do not flush to the database unless explicitly instructed.
-"""
 Base = declarative_base()
-"""
-Acts as a base class for model classes to declare mappings between Python classes and database tables.
-"""
 
 # FastAPI-Login manager for handling authentication
 login_manager = LoginManager(DEFAULT_SETTINGS.secret_key, "/auth/token")
-"""
-Initializes the login manager with the application's secret key and the token URL.
-This manager handles user authentication and token management.
-"""
 
 # Minio client for self hosted object storage
 minio_client = Minio(
     endpoint=DEFAULT_SETTINGS.minio_endpoint,
     access_key=DEFAULT_SETTINGS.minio_access_key,
     secret_key=DEFAULT_SETTINGS.minio_secret_key,
-    secure=True # True if you are using https, False if http
+    secure=False # True if you are using https, False if http
 )
-"""
-Configures the Minio client for interacting with MinIO object storage.
-It uses credentials and endpoint from the application settings and establishes a secure connection.
-"""
 
 # Spotipy client for metadata from Spotify API 
 spotify_client_credentials_manager = SpotifyClientCredentials(
@@ -132,10 +92,6 @@ spotify_client_credentials_manager = SpotifyClientCredentials(
     client_secret=DEFAULT_SETTINGS.spotify_client_secret
 )
 sp= spotipy.Spotify(client_credentials_manager=spotify_client_credentials_manager)
-"""
-Creates a Spotipy client with SpotifyClientCredentials for accessing Spotify's Web API.
-This client is used to fetch music metadata.
-"""
 
 # List of tags for the Swagger UI / auto-generated documentation
 swagger_tags = [

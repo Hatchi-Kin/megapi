@@ -5,8 +5,9 @@ import base64
 import music_tag
 from minio.error import S3Error
 
-# from core.extract_openl3_embeddings import EmbeddingsOpenL3
+from core.extract_openl3_embeddings import EmbeddingsOpenL3
 from core.config import minio_client, DEFAULT_SETTINGS
+
 
 def load_model_from_minio():
     """
@@ -21,6 +22,7 @@ def load_model_from_minio():
         temp_file.flush()
         embedding_512_model = EmbeddingsOpenL3(graph_path=temp_file.name)
     return embedding_512_model
+
 
 def get_temp_file_from_minio(file_name: str):
     """
@@ -37,6 +39,7 @@ def get_temp_file_from_minio(file_name: str):
         temp_file.write(response.read())
     return temp_file.name
 
+
 def delete_temp_file(temp_file_path: str):
     """
     Deletes a temporary file.
@@ -45,6 +48,7 @@ def delete_temp_file(temp_file_path: str):
         temp_file_path (str): The path to the temporary file to delete.
     """
     os.unlink(temp_file_path)
+
 
 def convert_artwork_to_base64(artwork):
     """
@@ -59,6 +63,7 @@ def convert_artwork_to_base64(artwork):
     if artwork is not None:
         return base64.b64encode(artwork.data).decode('utf-8')
     return None
+
 
 def get_artwork(bucket_name: str, file_name: str):
     """
@@ -88,6 +93,7 @@ def get_artwork(bucket_name: str, file_name: str):
         return None
     finally:
         os.unlink(temp_file.name)
+
 
 def get_metadata_and_artwork(bucket_name: str, file_name: str):
     """
@@ -121,6 +127,7 @@ def get_metadata_and_artwork(bucket_name: str, file_name: str):
         return metadata
     finally:
         os.unlink(temp_file.name)
+
 
 def sanitize_filename(filename):
     """

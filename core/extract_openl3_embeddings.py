@@ -1,15 +1,3 @@
-"""
-extract_openl3_embeddings.py
-
-This script defines classes and functions for extracting mel spectrograms and embeddings from audio files using the Essentia library and a TensorFlow model. The primary focus is on the MelSpectrogramOpenL3 class, which computes mel spectrograms with specific parameters tailored for OpenL3 embeddings extraction.
-
-Classes:
-    MelSpectrogramOpenL3: Computes mel spectrograms from audio files.
-
-Usage:
-    To use this script, instantiate the MelSpectrogramOpenL3 class with the desired hop time and call its compute method with the path to an audio file. This will return the mel spectrogram of the audio file, which can then be used for further processing or embeddings extraction.
-"""
-
 from pathlib import Path
 import essentia.standard as es
 import numpy as np

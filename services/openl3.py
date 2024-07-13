@@ -3,8 +3,7 @@ import tensorflow as tf
 from core.config import DEFAULT_SETTINGS
 from services.minio import load_model_from_minio, get_temp_file_from_minio
 
-# Disable GPU usage and suppress TensorFlow logging
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+# Suppress TensorFlow logging
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # Enable eager execution for debugging
