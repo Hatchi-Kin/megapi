@@ -18,7 +18,7 @@ from core.database import get_db
 router = APIRouter(prefix="/auth")
 
 
-@router.get("/users/me", tags=["users"], response_model=User)
+@router.get("/users/me", tags=["users"])
 async def read_users_me(user: User = Depends(login_manager)):
     """
     Get the current authenticated user.
