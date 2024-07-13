@@ -20,7 +20,12 @@ megapi-minio-1                  9000:9001
 megapi-postgre-1                5432:5432
 ```
 
-## Project Structure
+## Project layout
+
+    mkdocs.yml    # The configuration file.
+    docs/
+        index.md  # The documentation homepage.
+        ...       # Other markdown pages, images and other files.
 
 ```bash
 .
@@ -96,5 +101,12 @@ megapi-postgre-1                5432:5432
     ├── test_milvus.py
     └── test_minio.py
 ```
+
+# MkDocs Commands
+
+* `mkdocs new [dir-name]` - Create a new project.
+* `mkdocs serve` - Start the live-reloading docs server.
+* `mkdocs build` - Build the documentation site.
+* `mkdocs -h` - Print help message and exit.
 
 

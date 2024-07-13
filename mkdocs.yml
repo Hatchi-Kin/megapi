@@ -1,5 +1,6 @@
 site_name: Megapi
 nav:
+
   - Services: 
     - Auth: services/auth.md
     - Favorites: services/favorites.md
