@@ -1,17 +1,6 @@
-## install poetry
+## Docs https://hatchi-kin.github.io/megapi/
 
-```bash
-python3 -m venv $VENV_PATH
-$VENV_PATH/bin/pip install -U pip setuptools
-$VENV_PATH/bin/pip install poetry
-```
-
-## activate virtual env
-```bash
-source $VENV_PATh/bin/activate
-```
-
-## #####
+##
 ```bash
 docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.Status}}\t{{.Names}}'
 ```
