@@ -67,6 +67,7 @@ matplotlib==3.8.4
 matplotlib-inline==0.1.7
 mdurl==0.1.2
 minio==7.2.5
+mkdocs==1.6.0 
 ml-dtypes==0.3.2
 moviepy==1.0.3
 msgpack==1.0.8
@@ -155,3 +156,6 @@ uvicorn==0.29.0
 wcwidth==0.2.13
 Werkzeug==3.0.3
 wrapt==1.16.0
+mkdocs
+mkdocstrings
+mkdocstrings-python

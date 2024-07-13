@@ -17,12 +17,14 @@ class SongMetadata(BaseModel):
     album: str = Field(..., json_schema_extra={'example': "Track Album"})
     year: str = Field(..., json_schema_extra={'example': "Track Year"})
     tracknumber: str = Field(..., json_schema_extra={'example': "Track Track Number"})
-    genre: str = Field(..., json_schema_extra={'example': "Traack Genre"})
+    genre: str = Field(..., json_schema_extra={'example': "Track Genre"})  # Corrected typo from "Traack Genre" to "Track Genre"
     artwork: str = Field(None, json_schema_extra={'example': "base64 encoded artwork"})
 
 
 class UploadDetail(BaseModel):
     filename: str
 
+
 class UploadMP3ResponseList(BaseModel):
     uploads: List[UploadDetail]
+    

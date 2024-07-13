@@ -3,7 +3,6 @@ from pydantic import BaseModel, Field
 
 from core.config import Base
 
-
 class MusicLibrary(Base):
     __tablename__ = "music_library"
 

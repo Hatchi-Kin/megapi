@@ -2,7 +2,17 @@ import requests
 import urllib.parse
 
 
-def fetch_lyrics(artist: str, title: str):
+def fetch_lyrics(artist: str, title: str) -> str:
+    """
+    Fetches the lyrics for a given song by artist and title.
+
+    Args:
+        artist (str): The name of the artist.
+        title (str): The title of the song.
+
+    Returns:
+        str: The lyrics of the song if found, otherwise a message indicating no lyrics were found.
+    """
     encoded_artist = urllib.parse.quote(artist)
     encoded_song = urllib.parse.quote(title)
     try:

@@ -19,7 +19,13 @@ router = APIRouter(prefix="/minio")
 
 @router.post("/list-objects/", response_model=List[S3Object], tags=["MinIO"])
 def list_objects_in_album_folder(query: AlbumResponse, user=Depends(login_manager)):
-    """Get a list of object in the given album_folder of megasetbucket."""
+    """
+    Retrieves a list of objects within a specified album folder in the MinIO bucket.
+
+    - **query**: AlbumResponse - The album folder to list objects from.
+    - **user**: User - The authenticated user making the request.
+    - **return**: List[S3Object] - A list of objects found in the specified album folder.
+    """
     objects = minio_client.list_objects(
         DEFAULT_SETTINGS.minio_bucket_name,
         prefix=query.album_folder,
@@ -40,7 +46,13 @@ def list_objects_in_album_folder(query: AlbumResponse, user=Depends(login_manage
 
 @router.post("/list-uploaded-objects", response_model=UploadMP3ResponseList, tags=["MinIO"])
 def list_uploaded_objects(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Get a list of uploaded objects by the user."""
+    """
+    Lists objects uploaded by the authenticated user.
+
+    - **user**: User - The authenticated user making the request.
+    - **db**: Session - Database session dependency.
+    - **return**: UploadMP3ResponseList - A list of uploaded objects by the user.
+    """
     objects = minio_client.list_objects(DEFAULT_SETTINGS.minio_temp_bucket_name)
     # Adjusting the response to match the expected structure
     uploads = [UploadDetail(filename=obj.object_name) for obj in objects]
@@ -50,7 +62,13 @@ def list_uploaded_objects(user=Depends(login_manager), db: Session = Depends(get
 
 @router.post("/stream-song/", tags=["MinIO"])
 async def get_file(query: SongPath, user=Depends(login_manager)):
-    """Stream a file from MinIO storage."""
+    """
+    Streams a song file from MinIO storage.
+
+    - **query**: SongPath - The path to the song file in MinIO storage.
+    - **user**: User - The authenticated user making the request.
+    - **return**: StreamingResponse - A streaming response of the song file.
+    """
     try:
         data = minio_client.get_object(DEFAULT_SETTINGS.minio_bucket_name, query.file_path)
         return StreamingResponse(data.stream(32*1024), media_type="audio/mpeg")
@@ -60,7 +78,13 @@ async def get_file(query: SongPath, user=Depends(login_manager)):
 
 @router.post("/download-song/", tags=["MinIO"])
 async def download_file(query: SongPath, user=Depends(login_manager)):
-    """Download a file from MinIO storage."""
+    """
+    Downloads a song file from MinIO storage.
+
+    - **query**: SongPath - The path to the song file in MinIO storage.
+    - **user**: User - The authenticated user making the request.
+    - **return**: StreamingResponse - A streaming response for downloading the song file.
+    """
     try:
         data = minio_client.get_object(DEFAULT_SETTINGS.minio_bucket_name, query.file_path)
         filename = query.file_path.split('/')[-1]  # Get the filename from the file_path
@@ -74,7 +98,13 @@ async def download_file(query: SongPath, user=Depends(login_manager)):
 
 @router.post("/metadata", tags=["MinIO"])
 async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
-    """Get the metadata of a given song_path from MinIO storage using music_tag."""
+    """
+    Retrieves metadata for a specified song from MinIO storage using the music-tag library.
+
+    - **query**: SongPath - The path to the song file in MinIO storage.
+    - **user**: User - The authenticated user making the request.
+    - **return**: JSONResponse - The metadata of the specified song.
+    """
     try:
         metadata = get_metadata_and_artwork(DEFAULT_SETTINGS.minio_bucket_name, query.file_path)
         return JSONResponse(content=metadata)
@@ -84,7 +114,13 @@ async def get_song_metadata(query: SongPath, user=Depends(login_manager)):
 
 @router.get("/random-metadata", tags=["MinIO"])
 async def get_random_song_metadata(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Get a random song with metadata from MinIO storage using music_tag."""
+    """
+    Retrieves metadata for a random song from MinIO storage using the music-tag library.
+
+    - **user**: User - The authenticated user making the request.
+    - **db**: Session - Database session dependency.
+    - **return**: JSONResponse - The metadata of a random song.
+    """
     try:
         count = db.query(MusicLibrary).count()
         random_id = randint(1, count)
@@ -99,6 +135,14 @@ async def get_random_song_metadata(user=Depends(login_manager), db: Session = De
 
 @router.post("/upload-temp", tags=["MinIO"], response_model=UploadMP3ResponseList)
 async def upload_file(file: UploadFile = File(...), user=Depends(login_manager), db: Session = Depends(get_db)):
+    """
+    Uploads a MP3 file to MinIO storage using a temporary bucket.
+
+    - **file**: UploadFile - The MP3 file to upload.
+    - **user**: User - The authenticated user making the request.
+    - **db**: Session - Database session dependency.
+    - **return**: UploadMP3ResponseList - A list of uploaded MP3 files by the user.
+    """
     try:   # Check content type and extension
         if file.content_type != "audio/mpeg":
             raise HTTPException(status_code=400, detail="Only MP3 files are allowed.")
@@ -132,4 +176,3 @@ async def upload_file(file: UploadFile = File(...), user=Depends(login_manager),
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")
     
-

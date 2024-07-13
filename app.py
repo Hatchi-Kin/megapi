@@ -16,6 +16,7 @@ from routes.monitoring import router as monitoring_router
 from routes.openl3 import router as openl3_router
 from core.config import Base, engine, swagger_tags
 from core.database import migrate_data_from_sqlite_to_postgres, create_admin_if_none
+from services.auth import AuthMiddleware
 
 
 app = FastAPI(
@@ -32,6 +33,8 @@ app.add_middleware(
     allow_methods=["*"],  
     allow_headers=["*"],  
 )
+
+app.add_middleware(AuthMiddleware)
 
 @app.exception_handler(500)
 async def custom_http_exception_handler(request, exc):

@@ -17,15 +17,12 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
 
-    # Relationship field
     favorites = relationship("MusicLibrary", secondary=favorites, backref="users")
     uploaded_files = relationship("UserUploaded", order_by=UserUploaded.id, back_populates="user")
-
 
 class UserCreate(BaseModel):
     email: str
     password: str
-
 
 class TokenData(BaseModel):
     access_token: str

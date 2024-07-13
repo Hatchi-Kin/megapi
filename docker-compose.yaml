@@ -28,6 +28,9 @@ services:
       postgre:
         condition: service_healthy
     restart: always
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+    runtime: nvidia
 
   minio:
     image: minio/minio:latest

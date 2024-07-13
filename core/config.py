@@ -6,12 +6,40 @@ from minio import Minio
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-# Application settings, loaded from environment variables
+
 class Settings(BaseSettings):
-    """Application settings, loaded from environment variables."""
+    """
+    Application settings loaded from environment variables.
+
+    Attributes:
+        secret_key (str): Secret key for cryptographic operations.
+        algorithm (str): Algorithm used for encoding JWT tokens.
+        access_token_expire_minutes (int): Expiration time for access tokens in minutes.
+        database_url (str): URL for the database connection.
+        postgre_music_table (str): Name of the music table in PostgreSQL.
+        pg_user (str): PostgreSQL username.
+        pg_email (str): Email associated with the PostgreSQL user.
+        pg_password (str): Password for the PostgreSQL user.
+        milvus_uri (str): URI for the Milvus vector database.
+        milvus_api_key (str): API key for accessing Milvus.
+        milvus_512_collection_name (str): Collection name in Milvus for 512-dimensional vectors.
+        milvus_87_collection_name (str): Collection name in Milvus for 87-dimensional vectors.
+        minio_root_user (str): Root user for MinIO object storage.
+        minio_bucket_name (str): Name of the primary bucket in MinIO.
+        minio_temp_bucket_name (str): Name of the temporary bucket in MinIO.
+        minio_openl3_bucket_name (str): Name of the bucket for OpenL3 files in MinIO.
+        minio_openl3_file_name (str): Name of the OpenL3 file in MinIO.
+        minio_root_password (str): Root password for MinIO.
+        minio_endpoint (str): Endpoint URL for MinIO.
+        minio_access_key (str): Access key for MinIO.
+        minio_secret_key (str): Secret key for MinIO.
+        spotify_client_id (str): Client ID for Spotify API.
+        spotify_client_secret (str): Client secret for Spotify API.
+        cyanite_token (str): Token for accessing Cyanite API.
+    """
     secret_key: str = ""  
     algorithm: str = ""
-    access_token_expire_minutes: int = 180
+    access_token_expire_minutes: int = 20
     database_url: str = ""
     postgre_music_table: str = ""
     pg_user: str = ""
@@ -55,7 +83,7 @@ minio_client = Minio(
     endpoint=DEFAULT_SETTINGS.minio_endpoint,
     access_key=DEFAULT_SETTINGS.minio_access_key,
     secret_key=DEFAULT_SETTINGS.minio_secret_key,
-    secure=True # True if you are using https, False if http
+    secure=False # True if you are using https, False if http
 )
 
 # Spotipy client for metadata from Spotify API 
@@ -65,9 +93,10 @@ spotify_client_credentials_manager = SpotifyClientCredentials(
 )
 sp= spotipy.Spotify(client_credentials_manager=spotify_client_credentials_manager)
 
-
 # List of tags for the Swagger UI / auto-generated documentation
 swagger_tags = [
+    # Each dictionary in this list represents a tag used in the Swagger UI.
+    # Tags help organize the API endpoints in the documentation for better readability and navigation.
     {
         "name": "users",
         "description": "Operations related to authentication",

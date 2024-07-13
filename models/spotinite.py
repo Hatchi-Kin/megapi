@@ -12,5 +12,3 @@ class SpotiniteResponse(BaseModel):
     Album: str
     URI: str
     Cover_Image: str = Field(..., alias="Cover Image")
-
-
