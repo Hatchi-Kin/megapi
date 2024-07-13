@@ -1,11 +1,3 @@
-"""services/openl3.py
-
-This module is designed to extract audio embeddings using the OpenL3 model. It includes functionality to
-disable GPU usage, suppress TensorFlow logging, and handle the extraction of embeddings from audio files
-stored in MinIO.
-
-"""
-
 import os
 import tensorflow as tf
 from core.config import DEFAULT_SETTINGS

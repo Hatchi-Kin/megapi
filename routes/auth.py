@@ -18,14 +18,26 @@ from core.database import get_db
 router = APIRouter(prefix="/auth")
 
 
-@router.get("/users/me", tags=["users"])
+@router.get("/users/me", tags=["users"], response_model=User)
 async def read_users_me(user: User = Depends(login_manager)):
+    """
+    Get the current authenticated user.
+
+    - **user**: User - The current authenticated user from the session.
+    - **return**: Returns the user object of the currently authenticated user.
+    """
     return user
 
 
-@router.post("/register", tags=["users"])
+@router.post("/register", tags=["users"], response_model=dict)
 def register(user: UserCreate, db: Session = Depends(get_db)):
-    """Register a new user."""
+    """
+    Register a new user with the provided email and password.
+
+    - **user**: UserCreate - A user creation object containing the email and password.
+    - **db**: Session - The database session dependency.
+    - **return**: Returns a dictionary with a detail message on successful registration.
+    """
     db_user = get_user(user.email)
     if db_user:
         raise HTTPException(
@@ -35,12 +47,16 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(email=user.email, hashed_password=hashed_password)
     db.add(db_user)
     db.commit()
-    return {"detail": "Successful registered"}
+    return {"detail": "Successfully registered"}
 
 
-@router.get("/gui", tags=["auth gui"])
+@router.get("/gui", tags=["auth gui"], response_class=HTMLResponse)
 def index():
-    """Render a front-end to test signup/login page."""
+    """
+    Render a front-end GUI for testing signup/login functionality.
+
+    - **return**: Returns an HTMLResponse containing the content of the index.html page.
+    """
     file_path = os.path.join("gui", "templates", "index.html")
     with open(file_path, "r") as f:
         return HTMLResponse(content=f.read())
@@ -48,7 +64,12 @@ def index():
 
 @router.post("/token", tags=["users"], response_model=TokenData)
 def login(data: OAuth2PasswordRequestForm = Depends()):
-    """Authenticate a user and return an access token."""
+    """
+    Authenticate a user and return an access token.
+
+    - **data**: OAuth2PasswordRequestForm - A form data model including username (email) and password.
+    - **return**: Returns a TokenData object containing the access token and token type.
+    """
     email = data.username
     password = data.password
     user = get_user(email)
@@ -63,11 +84,18 @@ def login(data: OAuth2PasswordRequestForm = Depends()):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.delete("/users/{user_id}", tags=["users"])
+@router.delete("/users/{user_id}", tags=["users"], response_model=dict)
 def delete_user(
     user_id: int, current_user=Depends(login_manager), db: Session = Depends(get_db)
 ):
-    """Delete a user."""
+    """
+    Delete a user by their user ID.
+
+    - **user_id**: int - The ID of the user to delete.
+    - **current_user**: User - The current authenticated user attempting the deletion.
+    - **db**: Session - The database session dependency.
+    - **return**: Returns a dictionary with a detail message on successful deletion.
+    """
     if not current_user:
         raise InvalidCredentialsException(detail="Invalid credentials")
     if current_user.id != 1:
@@ -77,22 +105,29 @@ def delete_user(
         raise HTTPException(status_code=404, detail="User not found")
     db.delete(user)
     db.commit()
-    return {"detail": "User deleted"} @ router.get(
-        "/private",
-        tags=["users"],
-        summary="A private route that requires authentication.",
-    )
+    return {"detail": "User deleted"}
 
 
-@router.get("/private", tags=["users"], summary="A private route that requires authentication.")
+@router.get("/private", tags=["users"], summary="A private route that requires authentication.", response_model=dict)
 def private_route(user=Depends(login_manager)):
-    """A private route that requires authentication."""
+    """
+    A private route that requires authentication.
+
+    - **user**: User - The current authenticated user.
+    - **return**: Returns a dictionary with a welcome message for the authenticated user.
+    """
     return {"detail": f"Welcome {user.email}, you are authenticated"}
 
 
-@router.get("/users", tags=["users"])
+@router.get("/users", tags=["users"], response_model=list)
 def list_users(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """List all users."""
+    """
+    List all users.
+
+    - **user**: User - The current authenticated user (unused in this function).
+    - **db**: Session - The database session dependency.
+    - **return**: Returns a list of dictionaries, each representing a user with their id and email.
+    """
     users = db.query(User).all()
     users = [{"id": user.id, "email": user.email} for user in users]
     return users

@@ -81,48 +81,73 @@ docker-compose logs -f
 ├── docker-compose.yaml
 ├── Dockerfile
 ├── requirements.txt
-├── poetry.lock
-├── pyproject.toml
+├── mkdocs.yml
 ├── README.md
 │
 ├── core
-│   ├── __init__.py
-│   ├── database.py
-│   ├── config.py
-│   └── data
-│       └── music.db
+│   ├── data
+│   │   ├── mtg_jamendo_genre.json
+│   │   └── music.db
+│   ├── __init__.py
+│   ├── database.py
+│   ├── extract_openl3_embeddings.py
+│   ├── config.py
+│   └── extract_openl3_embeddings.py
+│
+├── docs
+│   ├── endpoints
+│   ├── index.md
+│   └── services
 │
 ├── gui
-│   └── templates
-│       └── index.html
+│   └── templates
+│       └── index.html
 │
 ├── models
-│   ├── __init__.py
-│   ├── milvus.py
-│   ├── minio.py
-│   ├── music.py
-│   ├── spotinite.py
-│   └── users.py
+│   ├── favorites.py
+│   ├── __init__.py
+│   ├── milvus.py
+│   ├── minio.py
+│   ├── music.py
+│   ├── openl3.py
+│   ├── spotinite.py
+│   ├── uploaded.py
+│   └── users.py
 │
 ├── routes
-│   ├── __init__.py
-│   ├── auth.py
-│   ├── lyrics.py
-│   ├── milvus.py
-│   ├── music.py
-│   └── spotinite.py
+│   ├── auth.py
+│   ├── favorites.py
+│   ├── __init__.py
+│   ├── lyrics.py
+│   ├── milvus.py
+│   ├── minio.py
+│   ├── monitoring.py
+│   ├── music.py
+│   ├── openl3.py
+│   ├── spotinite.py
+│   └── uploaded.py
 │
 ├── services
-│   ├── __init__.py
-│   ├── auth.py
-│   ├── lyrics.py
-│   ├── milvus.py
-│   ├── minio.py
-│   └── spotinite.py
+│   ├── auth.py
+│   ├── favorites.py
+│   ├── __init__.py
+│   ├── lyrics.py
+│   ├── milvus.py
+│   ├── minio.py
+│   ├── monitoring.py
+│   ├── openl3.py
+│   ├── spotinite.py
+│   └── uploaded.py
+│
+├── site
+│   └── ...
 │
 └── tests
-    ├── __init__.py
-    └── test_files.py
+    ├── __init__.py
+    ├── test_auth.py
+    ├── test_files.py
+    ├── test_milvus.py
+    └── test_minio.py
 ```
 
 

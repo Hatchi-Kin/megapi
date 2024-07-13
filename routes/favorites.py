@@ -14,6 +14,13 @@ router = APIRouter(prefix="/favorites")
 
 @router.get("/", tags=["favorites"])
 async def get_favorites(user=Depends(login_manager), db: Session = Depends(get_db)):
+    """
+    Retrieve the list of favorite songs for the authenticated user.
+
+    - **user**: User - The authenticated user whose favorites are to be retrieved.
+    - **db**: Session - The database session for querying the database.
+    - **return**: Returns a list of the user's favorite songs.
+    """
     # The merge() function is used to merge a detached object back into the session.
     # It returns a new instance that represents the existing row in the DB.
     # This is necessary because the 'user' object might have been created in a different session and we want to associate it with the current session.
@@ -27,6 +34,14 @@ async def get_favorites(user=Depends(login_manager), db: Session = Depends(get_d
 
 @router.post("/add", tags=["favorites"])
 async def add_song_to_favorites(song: SongPath, user: User = Depends(login_manager), db: Session = Depends(get_db)):
+    """
+    Add a song to the authenticated user's list of favorites.
+
+    - **song**: SongPath - The path of the song to be added to favorites.
+    - **user**: User - The authenticated user who is adding the song to favorites.
+    - **db**: Session - The database session for querying and updating the database.
+    - **return**: Returns a message indicating the song was successfully added to favorites or if it was already in favorites.
+    """
     user = db.merge(user)
     db.refresh(user)
 
@@ -50,6 +65,14 @@ async def add_song_to_favorites(song: SongPath, user: User = Depends(login_manag
 
 @router.delete("/delete", tags=["favorites"])
 async def delete_song_from_favorites(song: SongPath, user: User = Depends(login_manager), db: Session = Depends(get_db)):
+    """
+    Remove a song from the authenticated user's list of favorites.
+
+    - **song**: SongPath - The path of the song to be removed from favorites.
+    - **user**: User - The authenticated user who is removing the song from favorites.
+    - **db**: Session - The database session for querying and updating the database.
+    - **return**: Returns a message indicating the song was successfully removed from favorites or if the song was not found in favorites.
+    """
     user = db.merge(user)
     db.refresh(user)
     music_id = get_song_id_by_filepath(db, song.file_path)

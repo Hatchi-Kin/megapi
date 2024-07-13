@@ -15,7 +15,12 @@ router = APIRouter(prefix="/music_library")
 
 @router.get("/count", tags=["songs"])
 def count_rows(db: Session = Depends(get_db)):
-    """Return the number of rows in the music_library table."""
+    """
+    Returns the total number of rows in the music_library table.
+
+    - **Parameters**: None
+    - **Returns**: An integer representing the total number of rows in the music_library table.
+    """
     try:
         result = db.execute(text("SELECT COUNT(*) FROM music_library"))
         count = result.scalar()
@@ -26,7 +31,13 @@ def count_rows(db: Session = Depends(get_db)):
 
 @router.get("/random", tags=["songs"])
 def get_random_row(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return a random row from the music_library table."""
+    """
+    Retrieves a random song from the music_library table.
+
+    - **Parameters**:
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A dictionary containing the ID of the randomly selected song and the song's row data.
+    """
     try:
         count = db.query(MusicLibrary).count()
         random_id = randint(1, count)
@@ -38,7 +49,14 @@ def get_random_row(user=Depends(login_manager), db: Session = Depends(get_db)):
 
 @router.get("/song/{id}", tags=["songs"])
 def get_song_by_id(id: int, user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return a row from the music_library table by it's id."""
+    """
+    Fetches a specific song from the music_library table by its ID.
+
+    - **Parameters**:
+        - **id**: Integer, the ID of the song to retrieve.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A dictionary containing the ID of the song and the song's row data. Raises a 404 HTTPException if the song is not found.
+    """
     try:
         row = db.query(MusicLibrary).filter(MusicLibrary.id == id).first()
         if row is None:
@@ -50,7 +68,14 @@ def get_song_by_id(id: int, user=Depends(login_manager), db: Session = Depends(g
 
 @router.post("/add", tags=["songs"])
 def add_row(query: AddSongToMusicLibrary, user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Add a row to the music_library table."""
+    """
+    Adds a new song to the music_library table.
+
+    - **Parameters**:
+        - **query**: AddSongToMusicLibrary object containing the song details to be added.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A message indicating successful addition of the song.
+    """
     try:
         max_id = db.query(func.max(MusicLibrary.id)).scalar()  # Get the maximum id from the music_library table
         if max_id is None: max_id = 0  # If the table is empty, set max_id to 0
@@ -72,7 +97,14 @@ def add_row(query: AddSongToMusicLibrary, user=Depends(login_manager), db: Sessi
 
 @router.delete("/delete/{id}", tags=["songs"])
 def delete_row(id: int, user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Delete a row from the music_library table by it's id."""
+    """
+    Deletes a specific song from the music_library table by its ID.
+
+    - **Parameters**:
+        - **id**: Integer, the ID of the song to delete.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A message indicating successful deletion of the song. Raises a 404 HTTPException if the song is not found.
+    """
     try:
         row = db.query(MusicLibrary).get(id)
         if row is None:
@@ -86,7 +118,12 @@ def delete_row(id: int, user=Depends(login_manager), db: Session = Depends(get_d
 
 @router.get("/artists", tags=["songs"])
 def list_all_artists(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return a list of all artists in alphabetical order."""
+    """
+    Lists all artists in the music_library table in alphabetical order.
+
+    - **Parameters**: None
+    - **Returns**: A list of artist names in alphabetical order.
+    """
     try:
         query = (db.query(MusicLibrary.artist_folder).distinct().order_by(MusicLibrary.artist_folder.asc()))
         return [row.artist_folder for row in query.all()]
@@ -96,7 +133,14 @@ def list_all_artists(user=Depends(login_manager), db: Session = Depends(get_db))
 
 @router.post("/albums", tags=["songs"])
 def list_all_albums_from_artist(artist_folder: ArtistFolderResponse, user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return a list of all albums for a given artist in release date order."""
+    """
+    Lists all albums by a specific artist in the music_library table, ordered by release date.
+
+    - **Parameters**:
+        - **artist_folder**: ArtistFolderResponse object containing the artist's folder name.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A list of album names for the given artist, ordered by release date.
+    """
     if artist_folder is None or artist_folder.artist_folder is None:
         raise HTTPException(status_code=400, detail="Missing artist_folder parameter")
     try:
@@ -112,7 +156,14 @@ def list_all_albums_from_artist(artist_folder: ArtistFolderResponse, user=Depend
 
 @router.post("/songs", tags=["songs"])
 def list_all_songs_from_album(album_folder: AlbumResponse = None, user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return a list of all songs for a given album."""
+    """
+    Lists all songs from a specific album in the music_library table.
+
+    - **Parameters**:
+        - **album_folder**: AlbumResponse object containing the album's folder name.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A list of dictionaries, each containing the track number and title of a song from the specified album.
+    """
     if album_folder is None or album_folder.album_folder is None:
         raise HTTPException(status_code=400, detail="Missing album_folder parameter")
     try:
@@ -129,7 +180,14 @@ def list_all_songs_from_album(album_folder: AlbumResponse = None, user=Depends(l
 def list_all_songs_from_artist_and_album(
     query: ArtistAlbumResponse, user=Depends(login_manager), db: Session = Depends(get_db)
 ):
-    """Return a list of all songs for a given artist and album."""
+    """
+    Lists all songs by a specific artist and from a specific album in the music_library table.
+
+    - **Parameters**:
+        - **query**: ArtistAlbumResponse object containing the artist's name and album title.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A list of dictionaries, each containing the track number, file path, and title of a song from the specified artist and album.
+    """
     artist = query.artist
     album = query.album
     try:
@@ -144,7 +202,12 @@ def list_all_songs_from_artist_and_album(
 
 @router.get("/albums", tags=["songs"])
 def list_all_albums(user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return a list of all albums in release date order."""
+    """
+    Lists all albums in the music_library table, ordered by release date.
+
+    - **Parameters**: None
+    - **Returns**: A list of dictionaries, each containing the album name, album folder, and release year, ordered by release year.
+    """
     try:
         query = (
             db.query(MusicLibrary.album, MusicLibrary.album_folder, MusicLibrary.year)
@@ -160,7 +223,14 @@ def list_all_albums(user=Depends(login_manager), db: Session = Depends(get_db)):
 def get_album_folder_by_artist_and_album(
     query: ArtistAlbumResponse, user=Depends(login_manager), db: Session = Depends(get_db)
 ):
-    """Return the album_folder for a given artist and album."""
+    """
+    Retrieves the album folder for a specific artist and album combination in the music_library table.
+
+    - **Parameters**:
+        - **query**: ArtistAlbumResponse object containing the artist's name and album title.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A dictionary containing the album folder name. Raises a 404 HTTPException if the album is not found.
+    """
     artist = query.artist
     album = query.album
     try:
@@ -170,3 +240,4 @@ def get_album_folder_by_artist_and_album(
         return {"album_folder": row.album_folder}
     finally:
         db.close()
+        

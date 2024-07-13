@@ -27,7 +27,13 @@ router = APIRouter(prefix="/milvus")
 
 @router.get("/entity/{id}", response_model=EmbeddingResponse, tags=["milvus"])
 def get_entity_by_id(id: str, user=Depends(login_manager)):
-    """Get the embedding of an entity by it's id."""
+    """
+    Retrieves the embedding vector of a specific entity by its ID.
+
+    - **id**: str - The unique identifier of the entity.
+    - **user**: User - The authenticated user making the request.
+    - **return**: EmbeddingResponse - The embedding vector of the entity.
+    """
     collection_512 = get_milvus_512_collection()
     entities = collection_512.query(expr=f"id in [{id}]", output_fields=["embedding"])
     if not entities:
@@ -39,7 +45,13 @@ def get_entity_by_id(id: str, user=Depends(login_manager)):
 
 @router.get("/similar/{id}", tags=["milvus"], response_model=SimilarFullEntitiesResponse)
 def get_similar_entities(id: str, user=Depends(login_manager)):
-    """Get the most 3 similar entities to the entity with the given id."""
+    """
+    Retrieves the top 3 most similar entities to a given entity ID.
+
+    - **id**: str - The unique identifier of the entity to compare.
+    - **user**: User - The authenticated user making the request.
+    - **return**: SimilarFullEntitiesResponse - A list of the most similar entities.
+    """
     collection_512 = get_milvus_512_collection()
     entities = collection_512.query(expr=f"id in [{id}]", output_fields=["embedding"])
     if not entities:
@@ -61,7 +73,13 @@ def get_similar_entities(id: str, user=Depends(login_manager)):
 
 @router.post("/similar_full_entity", tags=["milvus"], response_model=SimilarFullEntitiesResponse)
 def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
-    """Get the most 3 similar entities (with embeddings_512) to the entity with the given file path."""
+    """
+    Retrieves the top 3 most similar entities based on the file path of an entity.
+
+    - **query**: FilePathsQuery - The query containing the file path(s) of the entity.
+    - **user**: User - The authenticated user making the request.
+    - **return**: SimilarFullEntitiesResponse - A list of the most similar entities with full details.
+    """
     collection_512 = get_milvus_512_collection()
     entities = collection_512.query(expr=f"path in {query.path}", output_fields=["embedding"])
     if not entities:
@@ -83,7 +101,13 @@ def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manag
 
 @router.post("/similar_short_entity", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
 def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_manager)):
-    """Get the 9 most similar (title, artist, album)) to the entity with the given file path."""
+    """
+    Retrieves the 9 most similar entities (by title, artist, album) based on the file path of an entity.
+
+    - **query**: FilePathsQuery - The query containing the file path(s) of the entity.
+    - **user**: User - The authenticated user making the request.
+    - **return**: A list of the 9 most similar entities with short details.
+    """
     collection_512 = get_milvus_512_collection()
     entities = collection_512.query(expr=f"path in {query.path}", output_fields=["embedding"])
     if not entities:
@@ -105,7 +129,13 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
 
 @router.post("/plot_genres", tags=["milvus"])
 async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
-    """Get a plot of the top 5 genres of the entity with the given file path."""
+    """
+    Generates a plot of the top 5 genres for a given entity based on its file path.
+
+    - **query**: SongPath - The query containing the file path of the entity.
+    - **user**: User - The authenticated user making the request.
+    - **return**: A base64 encoded string of the plot image.
+    """
     collection_87 = get_milvus_87_collection()
     entity = collection_87.query(
         expr=f"path == '{query.file_path}'",
@@ -124,6 +154,10 @@ async def get_genres_plot(query: SongPath, user=Depends(login_manager)):
 
 @router.get("/ping", tags=["milvus"])
 def ping_milvus_collection():
-    """Check if Milvus is up and running."""
+    """
+    Checks the connectivity with the Milvus vector database. Mostly used to make prometheus ping milvus everyday, so milvus doesn't get idle for 7 days and shutdown.
+
+    - **return**: The status of the Milvus service.
+    """
     milvus_status = ping_milvus()
     return milvus_status

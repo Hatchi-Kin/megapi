@@ -16,21 +16,6 @@ from models.favorites import favorites
 from models.uploaded import UserUploaded
 
 class User(Base):
-    """
-    Represents a user in the database, with fields for identification, authentication, and relationships to other entities.
-    
-    Attributes:
-        __tablename__ (str): The name of the table in the database.
-        id (Column): The primary key, uniquely identifying each user.
-        email (Column): The user's email address, unique across the table.
-        username (Column): The user's chosen username, unique across the table.
-        registered_at (Column): The date and time when the user registered.
-        hashed_password (Column): The user's password, stored in a hashed format for security.
-        is_active (Column): A boolean indicating if the user's account is active.
-        is_admin (Column): A boolean indicating if the user has administrative privileges.
-        favorites (relationship): A relationship to the MusicLibrary model, representing the user's favorite music.
-        uploaded_files (relationship): A relationship to the UserUploaded model, representing files uploaded by the user.
-    """
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -45,23 +30,9 @@ class User(Base):
     uploaded_files = relationship("UserUploaded", order_by=UserUploaded.id, back_populates="user")
 
 class UserCreate(BaseModel):
-    """
-    A Pydantic model for validating user data during account creation.
-    
-    Attributes:
-        email (str): The user's email address.
-        password (str): The user's chosen password.
-    """
     email: str
     password: str
 
 class TokenData(BaseModel):
-    """
-    A Pydantic model for token validation, encapsulating the access token and its type.
-    
-    Attributes:
-        access_token (str): The JWT access token.
-        token_type (str): The type of the token, typically "bearer".
-    """
     access_token: str
     token_type: str

@@ -1,9 +1,3 @@
-"""services/uploaded.py
-
-This module provides functionalities to interact with a database for storing and retrieving user upload information using SQLAlchemy ORM. It defines two main functions: one for storing new upload information if it does not already exist in the database, and another for retrieving all upload records associated with a specific user.
-
-"""
-
 from sqlalchemy.orm import Session
 from models.uploaded import UserUploaded
 

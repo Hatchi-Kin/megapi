@@ -1,0 +1,32 @@
+site_name: Megapi
+nav:
+  - Services: 
+    - Auth: services/auth.md
+    - Favorites: services/favorites.md
+    - Lyrics: services/lyrics.md
+    - Milvus: services/milvus.md
+    - MinIO: services/minio.md
+    - Monitoring: services/monitoring.md
+    - OpenL3: services/openl3.md
+    - Spotinite: services/spotinite.md
+    - Uploaded: services/uploaded.md
+  - Endpoints:
+    - Auth: endpoints/auth.md
+    - Favorites: endpoints/favorites.md
+    - Lyrics: endpoints/lyrics.md
+    - Milvus: endpoints/milvus.md
+    - MinIO: endpoints/minio.md
+    - Monitoring: endpoints/monitoring.md
+    - Music: endpoints/music.md
+    - OpenL3: endpoints/openl3.md
+    - Spotinite: endpoints/spotinite.md
+    - Uploaded: endpoints/uploaded.md
+
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          rendering:
+            show_source: true

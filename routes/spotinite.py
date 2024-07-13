@@ -13,7 +13,23 @@ router = APIRouter(prefix="/spotinite")
 
 @router.post("/similar_tracks", response_model=List[SpotiniteResponse], tags=["spotinite"])
 async def similar_tracks(query: SpotiniteQuery, user=Depends(login_manager), db: Session = Depends(get_db)):
-    """Return similar tracks based on the input song and artist."""
+    """
+    Fetches and returns a list of tracks similar to the specified song and artist.
+
+    This endpoint takes a song title and artist as input, retrieves a Spotify ID for the song,
+    and then fetches a list of similar tracks based on that ID. It aims to return 3 similar tracks
+    that are not by the same artist as the input song, if possible. If not enough non-artist matches
+    are found, it will include tracks by the same artist in the response.
+
+    Parameters:
+    - query (SpotiniteQuery): The query object containing the title and artist of the song.
+    - user: The current user object, automatically provided by the login_manager dependency.
+    - db: The database session, automatically provided by the get_db dependency.
+
+    Returns:
+    - List[SpotiniteResponse]: A list of similar tracks, each represented by a SpotiniteResponse object.
+
+    """
     try:
         spotify_id = get_track_id(query.title, query.artist)
         similar_track_ids = fetch_similar_tracks(spotify_id)
