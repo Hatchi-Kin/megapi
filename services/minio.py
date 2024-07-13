@@ -1,9 +1,11 @@
 import os
 import tempfile
 import base64
-import music_tag
 
-from core.extract_openl3_embeddings import EmbeddingsOpenL3
+import music_tag
+from minio.error import S3Error
+
+# from core.extract_openl3_embeddings import EmbeddingsOpenL3
 from core.config import minio_client, DEFAULT_SETTINGS
 
 
@@ -35,12 +37,19 @@ def convert_artwork_to_base64(artwork):
 
 
 def get_artwork(bucket_name: str, file_name: str):
-    # Create a temporary file then download the file from MinIO
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        data = minio_client.get_object(bucket_name, file_name)
-        temp_file.write(data.read())
-
     try:
+        # Create a temporary file then download the file from MinIO
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            try:
+                data = minio_client.get_object(bucket_name, file_name)
+                temp_file.write(data.read())
+            except S3Error as e:
+                if e.code == 'NoSuchKey':
+                    print(f"File {file_name} not found in bucket {bucket_name}.")
+                    return None
+                else:
+                    raise
+
         # Load the file with music_tag
         f = music_tag.load_file(temp_file.name)
         if f['artwork'] and f['artwork'].first is not None:

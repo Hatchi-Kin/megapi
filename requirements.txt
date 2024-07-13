@@ -67,6 +67,7 @@ matplotlib==3.8.4
 matplotlib-inline==0.1.7
 mdurl==0.1.2
 minio==7.2.5
+mkdocs==1.6.0 
 ml-dtypes==0.3.2
 moviepy==1.0.3
 msgpack==1.0.8
