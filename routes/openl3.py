@@ -48,3 +48,4 @@ def get_embeddings(file_path: str, user=Depends(login_manager), db: Session = De
     except Exception as e:
         print(f"Failed to get embeddings for file: {file_path}. Error: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to process the request: {e}")
+  

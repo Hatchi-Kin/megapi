@@ -1,5 +1,16 @@
 FROM python:3.10-slim-buster
 
+RUN apt-get update && apt-get install -y \
+    libsndfile1 \
+    libssl-dev \
+    libffi-dev \
+    ffmpeg \
+    python3-dev \
+    gcc \
+    build-essential \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /api
 
 ADD . /api

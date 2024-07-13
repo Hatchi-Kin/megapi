@@ -142,3 +142,4 @@ swagger_tags = [
         "description": "Operations related to the monitoring different metrics of the globals solution."
     },
 ]
+

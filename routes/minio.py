@@ -176,4 +176,3 @@ async def upload_file(file: UploadFile = File(...), user=Depends(login_manager),
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")
     
-
