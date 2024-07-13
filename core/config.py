@@ -1,3 +1,20 @@
+"""core/config.py
+
+This module configures the application settings and initializes key components for the FastAPI application.
+
+It includes the definition of application settings loaded from environment variables, using Pydantic models for validation. These settings configure various aspects of the application, such as database connections, authentication parameters, and external service credentials (e.g., MinIO, Spotify).
+
+Additionally, the module sets up SQLAlchemy for database interactions, FastAPI-Login for authentication management, a Minio client for object storage, and a Spotipy client for accessing the Spotify Web API.
+
+Usage:
+    Import the `Settings` class to access application settings throughout your FastAPI application.
+    Use the initialized `engine`, `SessionLocal`, and `Base` for SQLAlchemy operations.
+    The `login_manager`, `minio_client`, and `sp` (Spotipy client) are ready to use for their respective purposes.
+
+Note:
+    Ensure that all required environment variables are set before running the application, as they are crucial for the proper configuration of the settings.
+"""
+
 from fastapi_login import LoginManager
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine
@@ -6,9 +23,38 @@ from minio import Minio
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-# Application settings, loaded from environment variables
+
+
 class Settings(BaseSettings):
-    """Application settings, loaded from environment variables."""
+    """
+    Application settings loaded from environment variables.
+
+    Attributes:
+        secret_key (str): Secret key for cryptographic operations.
+        algorithm (str): Algorithm used for encoding JWT tokens.
+        access_token_expire_minutes (int): Expiration time for access tokens in minutes.
+        database_url (str): URL for the database connection.
+        postgre_music_table (str): Name of the music table in PostgreSQL.
+        pg_user (str): PostgreSQL username.
+        pg_email (str): Email associated with the PostgreSQL user.
+        pg_password (str): Password for the PostgreSQL user.
+        milvus_uri (str): URI for the Milvus vector database.
+        milvus_api_key (str): API key for accessing Milvus.
+        milvus_512_collection_name (str): Collection name in Milvus for 512-dimensional vectors.
+        milvus_87_collection_name (str): Collection name in Milvus for 87-dimensional vectors.
+        minio_root_user (str): Root user for MinIO object storage.
+        minio_bucket_name (str): Name of the primary bucket in MinIO.
+        minio_temp_bucket_name (str): Name of the temporary bucket in MinIO.
+        minio_openl3_bucket_name (str): Name of the bucket for OpenL3 files in MinIO.
+        minio_openl3_file_name (str): Name of the OpenL3 file in MinIO.
+        minio_root_password (str): Root password for MinIO.
+        minio_endpoint (str): Endpoint URL for MinIO.
+        minio_access_key (str): Access key for MinIO.
+        minio_secret_key (str): Secret key for MinIO.
+        spotify_client_id (str): Client ID for Spotify API.
+        spotify_client_secret (str): Client secret for Spotify API.
+        cyanite_token (str): Token for accessing Cyanite API.
+    """
     secret_key: str = ""  
     algorithm: str = ""
     access_token_expire_minutes: int = 180
@@ -41,14 +87,32 @@ class Settings(BaseSettings):
 
 
 DEFAULT_SETTINGS = Settings(_env_file=".env") 
+"""
+The default settings instance, loaded from the .env file.
+"""
 
 # SQLAlchemy engine, sessionmaker and Base for interacting with the database
 engine = create_engine(DEFAULT_SETTINGS.database_url)
+"""
+Creates a SQLAlchemy engine instance connected to the database specified by database_url.
+This engine is used to execute SQL queries.
+"""
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+"""
+Generates new Session objects when called, bound to the engine.
+These sessions are not committing automatically and do not flush to the database unless explicitly instructed.
+"""
 Base = declarative_base()
+"""
+Acts as a base class for model classes to declare mappings between Python classes and database tables.
+"""
 
 # FastAPI-Login manager for handling authentication
 login_manager = LoginManager(DEFAULT_SETTINGS.secret_key, "/auth/token")
+"""
+Initializes the login manager with the application's secret key and the token URL.
+This manager handles user authentication and token management.
+"""
 
 # Minio client for self hosted object storage
 minio_client = Minio(
@@ -57,6 +121,10 @@ minio_client = Minio(
     secret_key=DEFAULT_SETTINGS.minio_secret_key,
     secure=True # True if you are using https, False if http
 )
+"""
+Configures the Minio client for interacting with MinIO object storage.
+It uses credentials and endpoint from the application settings and establishes a secure connection.
+"""
 
 # Spotipy client for metadata from Spotify API 
 spotify_client_credentials_manager = SpotifyClientCredentials(
@@ -64,10 +132,15 @@ spotify_client_credentials_manager = SpotifyClientCredentials(
     client_secret=DEFAULT_SETTINGS.spotify_client_secret
 )
 sp= spotipy.Spotify(client_credentials_manager=spotify_client_credentials_manager)
-
+"""
+Creates a Spotipy client with SpotifyClientCredentials for accessing Spotify's Web API.
+This client is used to fetch music metadata.
+"""
 
 # List of tags for the Swagger UI / auto-generated documentation
 swagger_tags = [
+    # Each dictionary in this list represents a tag used in the Swagger UI.
+    # Tags help organize the API endpoints in the documentation for better readability and navigation.
     {
         "name": "users",
         "description": "Operations related to authentication",
@@ -113,4 +186,3 @@ swagger_tags = [
         "description": "Operations related to the monitoring different metrics of the globals solution."
     },
 ]
-

@@ -1,9 +1,25 @@
+"""services/uploaded.py
+
+This module provides functionalities to interact with a database for storing and retrieving user upload information using SQLAlchemy ORM. It defines two main functions: one for storing new upload information if it does not already exist in the database, and another for retrieving all upload records associated with a specific user.
+
+"""
+
 from sqlalchemy.orm import Session
 from models.uploaded import UserUploaded
 
 
 def store_upload_info(db: Session, user_id: int, filename: str):
-    # Check if the entry already exists
+    """
+    Stores information about a file uploaded by a user in the database if it does not already exist.
+
+    Args:
+        db (Session): The SQLAlchemy session object.
+        user_id (int): The ID of the user who uploaded the file.
+        filename (str): The name of the uploaded file.
+
+    This function checks if an entry with the given user ID and filename already exists in the database.
+    If not, it creates a new entry and commits it to the database.
+    """
     existing_entry = db.query(UserUploaded).filter_by(user_id=user_id, filename=filename).first()
     
     if not existing_entry:
@@ -13,5 +29,15 @@ def store_upload_info(db: Session, user_id: int, filename: str):
 
 
 def get_user_uploads(db: Session, user_id: int):
+    """
+    Retrieves all files uploaded by a specific user.
+
+    Args:
+        db (Session): The SQLAlchemy session object.
+        user_id (int): The ID of the user whose uploads are to be retrieved.
+
+    Returns:
+        list[dict]: A list of dictionaries, each containing the filename of an uploaded file.
+    """
     uploaded_files = db.query(UserUploaded).filter(UserUploaded.user_id == user_id).all()
     return [{"filename": file.filename} for file in uploaded_files]
