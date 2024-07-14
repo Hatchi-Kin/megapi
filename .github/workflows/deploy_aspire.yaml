@@ -41,10 +41,8 @@ jobs:
         port: ${{ secrets.SSH_PI_PORT }}
         script: |
           cd /home/hatchi/Projets/megapi
-          # Use the PAT directly in the HTTPS URL for authentication
-          git fetch https://$GH_PAT_ASPIRE:x-oauth-basic@github.com/Hatchi-Kin/megapi.git main
-          git reset --hard FETCH_HEAD
-          echo "Rebuilding and restarting services..."
-          # Clean up
-          unset GIT_ASKPASS
-          rm git-askpass-helper.sh
+          git config --global credential.helper '!f() { echo username=GH_USERNAME; echo password=$GH_PAT_ASPIRE; }; f'
+          git fetch origin main
+          git reset --hard origin/main
+          docker compose build
+          docker compose up -d
