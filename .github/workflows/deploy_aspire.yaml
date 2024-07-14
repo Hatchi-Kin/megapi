@@ -41,8 +41,10 @@ jobs:
         port: ${{ secrets.SSH_PI_PORT }}
         script: |
           cd /home/hatchi/Projets/megapi
+          git config --global credential.helper store
+          echo https://$GH_PAT_ASPIRE@github.com > ~/.git-credentials
           git fetch origin main
           git reset --hard origin/main
           echo "Rebuilding and restarting services..."
-          docker compose build
-          docker compose up -d
+          git config --global --unset credential.helper
+          rm ~/.git-credentials
