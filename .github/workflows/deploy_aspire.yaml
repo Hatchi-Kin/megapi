@@ -41,13 +41,9 @@ jobs:
         port: ${{ secrets.SSH_PI_PORT }}
         script: |
           cd /home/hatchi/Projets/megapi
-          # Set up GIT_ASKPASS to use the GitHub PAT for authentication
-          echo "echo $GH_PAT_ASPIRE" > git-askpass-helper.sh
-          chmod +x git-askpass-helper.sh
-          export GIT_ASKPASS=$(pwd)/git-askpass-helper.sh
-          # Ensure Git uses the custom script for credentials
-          git -c credential.helper= fetch origin main
-          git reset --hard origin/main
+          # Use the PAT directly in the HTTPS URL for authentication
+          git fetch https://$GH_PAT_ASPIRE:x-oauth-basic@github.com/Hatchi-Kin/megapi.git main
+          git reset --hard FETCH_HEAD
           echo "Rebuilding and restarting services..."
           # Clean up
           unset GIT_ASKPASS
