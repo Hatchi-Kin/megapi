@@ -41,10 +41,14 @@ jobs:
         port: ${{ secrets.SSH_PI_PORT }}
         script: |
           cd /home/hatchi/Projets/megapi
-          git config --global credential.helper store
-          echo https://$GH_PAT_ASPIRE@github.com > ~/.git-credentials
-          git fetch origin main
+          # Set up GIT_ASKPASS to use the GitHub PAT for authentication
+          echo "echo $GH_PAT_ASPIRE" > git-askpass-helper.sh
+          chmod +x git-askpass-helper.sh
+          export GIT_ASKPASS=$(pwd)/git-askpass-helper.sh
+          # Ensure Git uses the custom script for credentials
+          git -c credential.helper= fetch origin main
           git reset --hard origin/main
           echo "Rebuilding and restarting services..."
-          git config --global --unset credential.helper
-          rm ~/.git-credentials
+          # Clean up
+          unset GIT_ASKPASS
+          rm git-askpass-helper.sh
