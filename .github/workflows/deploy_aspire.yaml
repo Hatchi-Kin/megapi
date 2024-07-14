@@ -41,7 +41,7 @@ jobs:
         port: ${{ secrets.SSH_PI_PORT }}
         script: |
           cd /home/hatchi/Projets/megapi
-          git config --global credential.helper '!f() { echo username=GH_USERNAME; echo password=$GH_PAT_ASPIRE; }; f'
+          git config --global credential.helper '!f() { echo username=${{ secrets.GH_USERNAME }}; echo password=${{ secrets.GH_PAT_ASPIRE }}; }; f'
           git fetch origin main
           git reset --hard origin/main
           docker compose build
