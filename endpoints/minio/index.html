@@ -1,242 +1,1517 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        
-        
-        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../milvus/">
+      
+      
+        <link rel="next" href="../monitoring/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
         <title>MinIO - Megapi</title>
-        <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/fontawesome.min.css" rel="stylesheet">
-        <link href="../../css/brands.min.css" rel="stylesheet">
-        <link href="../../css/solid.min.css" rel="stylesheet">
-        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
-        <link href="../../css/base.css" rel="stylesheet">
-        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
-        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
-        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script> 
-    </head>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
 
-    <body>
-        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-            <div class="container">
-                <a class="navbar-brand" href="../..">Megapi</a>
-                <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Expanded navigation -->
-                <div id="navbar-collapse" class="navbar-collapse collapse">
-                        <!-- Main navigation -->
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Services</a>
-                                <ul class="dropdown-menu">
-                                    
-<li>
-    <a href="../../services/auth/" class="dropdown-item">Auth</a>
-</li>
-                                    
-<li>
-    <a href="../../services/favorites/" class="dropdown-item">Favorites</a>
-</li>
-                                    
-<li>
-    <a href="../../services/lyrics/" class="dropdown-item">Lyrics</a>
-</li>
-                                    
-<li>
-    <a href="../../services/milvus/" class="dropdown-item">Milvus</a>
-</li>
-                                    
-<li>
-    <a href="../../services/minio/" class="dropdown-item">MinIO</a>
-</li>
-                                    
-<li>
-    <a href="../../services/monitoring/" class="dropdown-item">Monitoring</a>
-</li>
-                                    
-<li>
-    <a href="../../services/openl3/" class="dropdown-item">OpenL3</a>
-</li>
-                                    
-<li>
-    <a href="../../services/spotinite/" class="dropdown-item">Spotinite</a>
-</li>
-                                    
-<li>
-    <a href="../../services/uploaded/" class="dropdown-item">Uploaded</a>
-</li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Endpoints</a>
-                                <ul class="dropdown-menu">
-                                    
-<li>
-    <a href="../auth/" class="dropdown-item">Auth</a>
-</li>
-                                    
-<li>
-    <a href="../favorites/" class="dropdown-item">Favorites</a>
-</li>
-                                    
-<li>
-    <a href="../lyrics/" class="dropdown-item">Lyrics</a>
-</li>
-                                    
-<li>
-    <a href="../milvus/" class="dropdown-item">Milvus</a>
-</li>
-                                    
-<li>
-    <a href="./" class="dropdown-item active" aria-current="page">MinIO</a>
-</li>
-                                    
-<li>
-    <a href="../monitoring/" class="dropdown-item">Monitoring</a>
-</li>
-                                    
-<li>
-    <a href="../music/" class="dropdown-item">Music</a>
-</li>
-                                    
-<li>
-    <a href="../openl3/" class="dropdown-item">OpenL3</a>
-</li>
-                                    
-<li>
-    <a href="../spotinite/" class="dropdown-item">Spotinite</a>
-</li>
-                                    
-<li>
-    <a href="../uploaded/" class="dropdown-item">Uploaded</a>
-</li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                    <ul class="nav navbar-nav ms-md-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
-                                <i class="fa fa-search"></i> Search
-                            </a>
-                        </li>
-                            <li class="nav-item">
-                                <a rel="prev" href="../milvus/" class="nav-link">
-                                    <i class="fa fa-arrow-left"></i> Previous
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" href="../monitoring/" class="nav-link">
-                                    Next <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
-            <span class="fa fa-angle-down"></span>
-        </button>
-    </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
-        <ul class="nav flex-column">
-        </ul>
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#documentation-for-routesminiopy" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
-</div></div>
-                    <div class="col-md-9" role="main">
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Megapi" class="md-header__button md-logo" aria-label="Megapi" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Megapi
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MinIO
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Megapi" class="md-nav__button md-logo" aria-label="Megapi" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Megapi
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Services
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Services
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/auth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auth
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/favorites/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Favorites
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/lyrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lyrics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/milvus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Milvus
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/minio/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MinIO
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/monitoring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/openl3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenL3
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/spotinite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spotinite
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../services/uploaded/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Uploaded
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Endpoints
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Endpoints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auth
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../favorites/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Favorites
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lyrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lyrics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../milvus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Milvus
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    MinIO
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    MinIO
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio" class="md-nav__link">
+    <span class="md-ellipsis">
+      minio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.download_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      download_file
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.get_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_file
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.get_random_song_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_random_song_metadata
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.get_song_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_song_metadata
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.list_objects_in_album_folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_objects_in_album_folder
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.list_uploaded_objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_uploaded_objects
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.upload_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      upload_file
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Music
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openl3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenL3
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spotinite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spotinite
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uploaded/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Uploaded
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio" class="md-nav__link">
+    <span class="md-ellipsis">
+      minio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.download_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      download_file
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.get_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_file
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.get_random_song_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_random_song_metadata
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.get_song_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_song_metadata
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.list_objects_in_album_folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_objects_in_album_folder
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.list_uploaded_objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_uploaded_objects
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes.minio.upload_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      upload_file
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="documentation-for-routesminiopy">Documentation for <code>routes/minio.py</code></h1>
+<p>This module contains the endpoints for the MiniO service. 
+It provides endpoints for storing and retriveing objects from MiniO buckets.</p>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="routes.minio"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="routes.minio.download_file" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">download_file</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">))</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Downloads a song file from MinIO storage.</p>
+<ul>
+<li><strong>query</strong>: SongPath - The path to the song file in MinIO storage.</li>
+<li><strong>user</strong>: User - The authenticated user making the request.</li>
+<li><strong>return</strong>: StreamingResponse - A streaming response for downloading the song file.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/minio.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/download-song/&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MinIO&quot;</span><span class="p">])</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">SongPath</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads a song file from MinIO storage.</span>
+
+<span class="sd">    - **query**: SongPath - The path to the song file in MinIO storage.</span>
+<span class="sd">    - **user**: User - The authenticated user making the request.</span>
+<span class="sd">    - **return**: StreamingResponse - A streaming response for downloading the song file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">minio_client</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">minio_bucket_name</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">file_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Get the filename from the file_path</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Content-Disposition&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;attachment; filename=</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">StreamingResponse</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="mi">32</span><span class="o">*</span><span class="mi">1024</span><span class="p">),</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">&quot;audio/mpeg&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;File not found&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
 
 </div>
-            </div>
-        </div>
 
-        <footer class="col-md-12">
-            <hr>
-            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
-        </footer>
-        <script src="../../js/bootstrap.bundle.min.js"></script>
-        <script>
-            var base_url = "../..",
-                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
-        </script>
-        <script src="../../js/base.js"></script>
-        <script src="../../search/main.js"></script>
+<div class="doc doc-object doc-function">
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>From here you can search these documents. Enter your search terms below.</p>
-                <form>
-                    <div class="form-group">
-                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
-                    </div>
-                </form>
-                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
+
+<h2 id="routes.minio.get_file" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_file</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">))</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Streams a song file from MinIO storage.</p>
+<ul>
+<li><strong>query</strong>: SongPath - The path to the song file in MinIO storage.</li>
+<li><strong>user</strong>: User - The authenticated user making the request.</li>
+<li><strong>return</strong>: StreamingResponse - A streaming response of the song file.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/minio.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/stream-song/&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MinIO&quot;</span><span class="p">])</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_file</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">SongPath</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Streams a song file from MinIO storage.</span>
+
+<span class="sd">    - **query**: SongPath - The path to the song file in MinIO storage.</span>
+<span class="sd">    - **user**: User - The authenticated user making the request.</span>
+<span class="sd">    - **return**: StreamingResponse - A streaming response of the song file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">minio_client</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">minio_bucket_name</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">StreamingResponse</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="mi">32</span><span class="o">*</span><span class="mi">1024</span><span class="p">),</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">&quot;audio/mpeg&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;File not found&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">Keys</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="help shortcut"><kbd>?</kbd></td>
-                    <td>Open this help</td>
-                  </tr>
-                  <tr>
-                    <td class="next shortcut"><kbd>n</kbd></td>
-                    <td>Next page</td>
-                  </tr>
-                  <tr>
-                    <td class="prev shortcut"><kbd>p</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td class="search shortcut"><kbd>s</kbd></td>
-                    <td>Search</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
+
 </div>
 
-    </body>
+<div class="doc doc-object doc-function">
+
+
+<h2 id="routes.minio.get_random_song_metadata" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_random_song_metadata</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">),</span> <span class="n">db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">))</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Retrieves metadata for a random song from MinIO storage using the music-tag library.</p>
+<ul>
+<li><strong>user</strong>: User - The authenticated user making the request.</li>
+<li><strong>db</strong>: Session - Database session dependency.</li>
+<li><strong>return</strong>: JSONResponse - The metadata of a random song.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/minio.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/random-metadata&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MinIO&quot;</span><span class="p">])</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_random_song_metadata</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">),</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves metadata for a random song from MinIO storage using the music-tag library.</span>
+
+<span class="sd">    - **user**: User - The authenticated user making the request.</span>
+<span class="sd">    - **db**: Session - Database session dependency.</span>
+<span class="sd">    - **return**: JSONResponse - The metadata of a random song.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">MusicLibrary</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">random_id</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">MusicLibrary</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">MusicLibrary</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">random_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">get_metadata_and_artwork</span><span class="p">(</span><span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">minio_bucket_name</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="routes.minio.get_song_metadata" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_song_metadata</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">))</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Retrieves metadata for a specified song from MinIO storage using the music-tag library.</p>
+<ul>
+<li><strong>query</strong>: SongPath - The path to the song file in MinIO storage.</li>
+<li><strong>user</strong>: User - The authenticated user making the request.</li>
+<li><strong>return</strong>: JSONResponse - The metadata of the specified song.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/minio.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/metadata&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MinIO&quot;</span><span class="p">])</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_song_metadata</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">SongPath</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves metadata for a specified song from MinIO storage using the music-tag library.</span>
+
+<span class="sd">    - **query**: SongPath - The path to the song file in MinIO storage.</span>
+<span class="sd">    - **user**: User - The authenticated user making the request.</span>
+<span class="sd">    - **return**: JSONResponse - The metadata of the specified song.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">get_metadata_and_artwork</span><span class="p">(</span><span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">minio_bucket_name</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="routes.minio.list_objects_in_album_folder" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">list_objects_in_album_folder</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">))</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Retrieves a list of objects within a specified album folder in the MinIO bucket.</p>
+<ul>
+<li><strong>query</strong>: AlbumResponse - The album folder to list objects from.</li>
+<li><strong>user</strong>: User - The authenticated user making the request.</li>
+<li><strong>return</strong>: List[S3Object] - A list of objects found in the specified album folder.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/minio.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/list-objects/&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="n">S3Object</span><span class="p">],</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MinIO&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">list_objects_in_album_folder</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">AlbumResponse</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves a list of objects within a specified album folder in the MinIO bucket.</span>
+
+<span class="sd">    - **query**: AlbumResponse - The album folder to list objects from.</span>
+<span class="sd">    - **user**: User - The authenticated user making the request.</span>
+<span class="sd">    - **return**: List[S3Object] - A list of objects found in the specified album folder.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">minio_client</span><span class="o">.</span><span class="n">list_objects</span><span class="p">(</span>
+        <span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">minio_bucket_name</span><span class="p">,</span>
+        <span class="n">prefix</span><span class="o">=</span><span class="n">query</span><span class="o">.</span><span class="n">album_folder</span><span class="p">,</span>
+        <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+        <span class="n">s3_object</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+            <span class="s2">&quot;etag&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">etag</span><span class="p">,</span>
+            <span class="s2">&quot;last_modified&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">last_modified</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s3_object</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="routes.minio.list_uploaded_objects" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">list_uploaded_objects</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">),</span> <span class="n">db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">))</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Lists objects uploaded by the authenticated user.</p>
+<ul>
+<li><strong>user</strong>: User - The authenticated user making the request.</li>
+<li><strong>db</strong>: Session - Database session dependency.</li>
+<li><strong>return</strong>: UploadMP3ResponseList - A list of uploaded objects by the user.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/minio.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/list-uploaded-objects&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">UploadMP3ResponseList</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MinIO&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">list_uploaded_objects</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">),</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lists objects uploaded by the authenticated user.</span>
+
+<span class="sd">    - **user**: User - The authenticated user making the request.</span>
+<span class="sd">    - **db**: Session - Database session dependency.</span>
+<span class="sd">    - **return**: UploadMP3ResponseList - A list of uploaded objects by the user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">minio_client</span><span class="o">.</span><span class="n">list_objects</span><span class="p">(</span><span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">minio_temp_bucket_name</span><span class="p">)</span>
+    <span class="c1"># Adjusting the response to match the expected structure</span>
+    <span class="n">uploads</span> <span class="o">=</span> <span class="p">[</span><span class="n">UploadDetail</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">object_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">UploadMP3ResponseList</span><span class="p">(</span><span class="n">uploads</span><span class="o">=</span><span class="n">uploads</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="routes.minio.upload_file" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">upload_file</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">File</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">),</span> <span class="n">db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">))</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Uploads a MP3 file to MinIO storage using a temporary bucket.</p>
+<ul>
+<li><strong>file</strong>: UploadFile - The MP3 file to upload.</li>
+<li><strong>user</strong>: User - The authenticated user making the request.</li>
+<li><strong>db</strong>: Session - Database session dependency.</li>
+<li><strong>return</strong>: UploadMP3ResponseList - A list of uploaded MP3 files by the user.</li>
+</ul>
+
+            <details class="quote">
+              <summary>Source code in <code>routes/minio.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/upload-temp&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MinIO&quot;</span><span class="p">],</span> <span class="n">response_model</span><span class="o">=</span><span class="n">UploadMP3ResponseList</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">UploadFile</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">login_manager</span><span class="p">),</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uploads a MP3 file to MinIO storage using a temporary bucket.</span>
+
+<span class="sd">    - **file**: UploadFile - The MP3 file to upload.</span>
+<span class="sd">    - **user**: User - The authenticated user making the request.</span>
+<span class="sd">    - **db**: Session - Database session dependency.</span>
+<span class="sd">    - **return**: UploadMP3ResponseList - A list of uploaded MP3 files by the user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>   <span class="c1"># Check content type and extension</span>
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">content_type</span> <span class="o">!=</span> <span class="s2">&quot;audio/mpeg&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Only MP3 files are allowed.&quot;</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_extension</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;.mp3&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;The uploaded file is not an MP3 file.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Generate a secure filename</span>
+        <span class="n">secure_filename</span> <span class="o">=</span> <span class="n">sanitize_filename</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># Determine the size of the uploaded file by moving the cursor to the end to get the file size</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>  
+        <span class="n">file_size</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> 
+        <span class="n">file</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  
+
+        <span class="c1"># Stream the file directly to MinIO</span>
+        <span class="n">minio_client</span><span class="o">.</span><span class="n">put_object</span><span class="p">(</span>
+            <span class="n">bucket_name</span><span class="o">=</span><span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">minio_temp_bucket_name</span><span class="p">,</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="n">secure_filename</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">file</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="n">file_size</span><span class="p">,</span>
+            <span class="n">content_type</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">content_type</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Store upload information in the database and return the updated list of uploaded songs by the user</span>
+        <span class="c1"># song_path_in_minio = f&quot;{DEFAULT_SETTINGS.minio_temp_bucket_name}/{secure_filename}&quot;</span>
+        <span class="n">store_upload_info</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">secure_filename</span><span class="p">)</span>
+        <span class="n">uploaded_songs</span> <span class="o">=</span> <span class="n">get_user_uploads</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">UploadMP3ResponseList</span><span class="p">(</span><span class="n">uploads</span><span class="o">=</span><span class="n">uploaded_songs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred. </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+    
+  </body>
 </html>
