@@ -108,5 +108,6 @@ megapi-postgre-1                5432:5432
 * `mkdocs serve` - Start the live-reloading docs server.
 * `mkdocs build` - Build the documentation site.
 * `mkdocs -h` - Print help message and exit.
+* `mkdocs gh-deploy` - Deploy the documentation to GitHub pages.
 
 

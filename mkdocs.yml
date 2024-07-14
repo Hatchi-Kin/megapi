@@ -29,3 +29,19 @@ plugins:
         python:
           rendering:
             show_source: true
+
+theme:
+  name: material
+  palette:
+    # Explicitly set the theme based on the system preference
+    - media: "(prefers-color-scheme: dark)"
+      scheme: default
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+    - media: "(prefers-color-scheme: light)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
