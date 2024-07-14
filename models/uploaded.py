@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from core.config import Base  # Base is assumed to be the declarative base class for SQLAlchemy models.
+from core.config import Base 
 
 
 class UserUploaded(Base):

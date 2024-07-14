@@ -1,5 +1,6 @@
 import os
 import tempfile
+import pickle
 import base64
 
 import music_tag
@@ -158,3 +159,59 @@ def sanitize_filename(filename):
     if not sanitized:
         raise ValueError("Filename cannot be empty.")
     return sanitized
+
+
+def get_embedding_pkl(filename):
+    """
+    Retrieves the embeddings for a specified audio file from MinIO. If the pkl containing the embeddings exists,
+    it returns the content of the pkl file (a list of floats). If the pkl file does not exist, it returns False.
+
+    Args:
+        filename (str): The name of the audio file.
+
+    Returns:
+        list or False: The content of the pkl file (a list of floats) if exists, otherwise False.
+    """
+    pkl_filename = filename.replace(".mp3", ".pkl")
+    try:
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            data = minio_client.get_object(DEFAULT_SETTINGS.minio_embeddings_bucket_name, pkl_filename)
+            temp_file.write(data.read())
+            temp_file.seek(0)
+            embeddings = pickle.load(temp_file)
+        return embeddings
+    except S3Error as e:
+        if e.code == 'NoSuchKey':
+            return False
+        else:
+            raise
+
+
+
+def save_embedding_pkl(bucket_name, object_name, file_path):
+    """
+    Saves an object to MinIO.
+
+    Args:
+        bucket_name (str): The name of the bucket where the object will be saved.
+        object_name (str): The name of the object to be saved in the bucket.
+        file_path (str): The local path to the file to be uploaded.
+
+    Returns:
+        bool: True if the file was successfully uploaded, False otherwise.
+    """
+
+    try:
+        # Open the file in binary read mode and upload it
+        with open(file_path, "rb") as file_data:
+            minio_client.put_object(
+                bucket_name,
+                object_name,
+                file_data,
+                length=-1,  # -1 lets the client determine the length
+                content_type="application/octet-stream"
+            )
+        return True
+    except S3Error as e:
+        print(f"Failed to upload to MinIO: {e}")
+        return False
