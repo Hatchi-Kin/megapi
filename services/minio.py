@@ -187,13 +187,11 @@ def get_embedding_pkl(filename):
             raise
 
 
-
 def save_embedding_pkl(object_name, file_path):
     """
     Saves an object to MinIO.
 
     Args:
-        bucket_name (str): The name of the bucket where the object will be saved.
         object_name (str): The name of the object to be saved in the bucket.
         file_path (str): The local path to the file to be uploaded.
 
@@ -202,13 +200,19 @@ def save_embedding_pkl(object_name, file_path):
     """
     bucket_name = DEFAULT_SETTINGS.minio_temp_bucket_name
     try:
-        # Open the file in binary read mode and upload it
+        # Open the file in binary read mode
         with open(file_path, "rb") as file_data:
+            # Get the position of the cursor, i.e., the file size
+            file_data.seek(0, 2)
+            file_length = file_data.tell() 
+            file_data.seek(0)  
+
+            # Upload the file
             minio_client.put_object(
                 bucket_name,
                 object_name,
                 file_data,
-                length=-1,  # -1 lets the client determine the length
+                length=file_length,
                 content_type="application/octet-stream"
             )
         return True
