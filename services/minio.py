@@ -175,7 +175,7 @@ def get_embedding_pkl(filename):
     pkl_filename = filename.replace(".mp3", ".pkl")
     try:
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            data = minio_client.get_object(DEFAULT_SETTINGS.minio_embeddings_bucket_name, pkl_filename)
+            data = minio_client.get_object(DEFAULT_SETTINGS.minio_temp_bucket_name, pkl_filename)
             temp_file.write(data.read())
             temp_file.seek(0)
             embeddings = pickle.load(temp_file)
@@ -188,7 +188,7 @@ def get_embedding_pkl(filename):
 
 
 
-def save_embedding_pkl(bucket_name, object_name, file_path):
+def save_embedding_pkl(object_name, file_path):
     """
     Saves an object to MinIO.
 
@@ -200,7 +200,7 @@ def save_embedding_pkl(bucket_name, object_name, file_path):
     Returns:
         bool: True if the file was successfully uploaded, False otherwise.
     """
-
+    bucket_name = DEFAULT_SETTINGS.minio_temp_bucket_name
     try:
         # Open the file in binary read mode and upload it
         with open(file_path, "rb") as file_data:
