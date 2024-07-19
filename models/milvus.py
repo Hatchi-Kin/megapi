@@ -40,3 +40,6 @@ class EmbeddingResponse(BaseModel):
 
 class FilePathsQuery(BaseModel):
     path: List[str]
+
+class SanitizedFilePathsQuery(BaseModel):
+    filepath: str

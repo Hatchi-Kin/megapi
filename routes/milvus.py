@@ -3,7 +3,7 @@ import json
 from fastapi import APIRouter, HTTPException, Depends, Response
 
 from core.config import login_manager
-from models.milvus import EmbeddingResponse, SimilarFullEntitiesResponse, FilePathsQuery, SimilarShortEntitiesResponse
+from models.milvus import EmbeddingResponse, SimilarFullEntitiesResponse, FilePathsQuery, SimilarShortEntitiesResponse, SanitizedFilePathsQuery
 from models.music import SongPath
 from services.milvus import (
     get_milvus_512_collection,
@@ -16,8 +16,7 @@ from services.milvus import (
     convert_plot_to_base64,
     ping_milvus,
 )
-import io
-import base64
+from services.minio import get_embedding_pkl
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -125,6 +124,34 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
     
     sorted_entities = sort_entities(entities)
     return {"entities": sorted_entities}
+
+
+
+@router.post("/similar_short_entity_to_temp", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
+def get_similar_9_entities_by_path(query: SanitizedFilePathsQuery, user=Depends(login_manager)):
+    """
+    Retrieves the 9 most similar entities (by title, artist, album) based on the file path of an entity.
+    This version reads the query embedding from a pkl in the temp bucket.
+
+    - **query**: SanitizedFilePathsQuery - The query containing the file path(s) of the entity.
+    - **user**: User - The authenticated user making the request.
+    - **return**: A list of the 9 most similar entities with short details.
+    """
+    embeddings = get_embedding_pkl(query.filepath)
+
+    collection_512 = get_milvus_512_collection()
+    entities = collection_512.search(
+        data=embeddings,
+        anns_field="embedding",
+        param={"nprobe": 16},
+        limit=30,
+        offset=1,
+        output_fields=["title", "album", "artist", "path"],
+    )
+    
+    sorted_entities = sort_entities(entities)
+    return {"entities": sorted_entities}
+
 
 
 @router.post("/plot_genres", tags=["milvus"])
