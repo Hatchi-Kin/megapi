@@ -128,7 +128,7 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
 
 
 @router.post("/similar_short_entity_to_temp", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
-def get_similar_9_entities_by_path(query: SanitizedFilePathsQuery, user=Depends(login_manager)):
+def get_similar_9_entities_by_user_uploaded_filename(query: SanitizedFilePathsQuery, user=Depends(login_manager)):
     """
     Retrieves the 9 most similar entities (by title, artist, album) based on the file path of an entity.
     This version reads the query embedding from a pkl in the temp bucket.
