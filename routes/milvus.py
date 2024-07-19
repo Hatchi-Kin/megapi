@@ -137,20 +137,26 @@ def get_similar_9_entities_by_user_uploaded_filename(query: SanitizedFilePathsQu
     - **user**: User - The authenticated user making the request.
     - **return**: A list of the 9 most similar entities with short details.
     """
-    embeddings = get_embedding_pkl(query.filepath)
-
-    collection_512 = get_milvus_512_collection()
-    entities = collection_512.search(
-        data=embeddings,
-        anns_field="embedding",
-        param={"nprobe": 16},
-        limit=30,
-        offset=1,
-        output_fields=["title", "album", "artist", "path"],
-    )
+    try:
+        embeddings = get_embedding_pkl(query.filepath)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="embedding not found")
     
-    sorted_entities = sort_entities(entities)
-    return {"entities": sorted_entities}
+    try:
+        collection_512 = get_milvus_512_collection()
+        entities = collection_512.search(
+            data=[embeddings],
+            anns_field="embedding",
+            param={"nprobe": 16},
+            limit=30,
+            offset=1,
+            output_fields=["title", "album", "artist", "path"],
+        )
+        
+        sorted_entities = sort_entities(entities)
+        return {"entities": sorted_entities}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="Entity not found")
 
 
 
