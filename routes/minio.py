@@ -11,7 +11,7 @@ from core.database import get_db
 from models.minio import S3Object, UploadMP3ResponseList, UploadDetail
 from models.music import AlbumResponse, SongPath, MusicLibrary
 from services.minio import get_metadata_and_artwork, sanitize_filename
-from services.uploaded import store_upload_info, get_user_uploads
+from services.uploaded import store_upload_info, get_user_uploads, delete_user_upload_from_db
 
 
 router = APIRouter(prefix="/minio")
@@ -176,3 +176,24 @@ async def upload_file(file: UploadFile = File(...), user=Depends(login_manager),
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")
     
+
+@router.post("/delete-temp", tags=["MinIO"], response_model=UploadMP3ResponseList)
+async def delete_temp_file(query: SongPath, user=Depends(login_manager), db: Session = Depends(get_db)):
+    """
+    Deletes a MP3 file from MinIO bucket.
+
+    - **query**: SongPath - The path to the MP3 file in MinIO storage.
+    - **user**: User - The authenticated user making the request.
+    - **db**: Session - Database session dependency.
+    - **return**: UploadMP3ResponseList - A list of uploaded MP3 files by the user.
+    """
+    try:
+        minio_client.remove_object(DEFAULT_SETTINGS.minio_temp_bucket_name, query.file_path)
+        # Also delete the upload information from the database and return the updated list of uploaded songs by the user
+        delete_user_upload_from_db(db, user.id, query.file_path)
+
+        uploaded_songs = get_user_uploads(db, user.id)
+        return UploadMP3ResponseList(uploads=uploaded_songs)
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")

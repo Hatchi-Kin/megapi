@@ -35,3 +35,19 @@ def get_user_uploads(db: Session, user_id: int):
     """
     uploaded_files = db.query(UserUploaded).filter(UserUploaded.user_id == user_id).all()
     return [{"filename": file.filename} for file in uploaded_files]
+
+
+def delete_user_upload_from_db(db: Session, user_id: int, filename: str):
+    """
+    Deletes an entry from the database for a file uploaded by a user.
+
+    Args:
+        db (Session): The SQLAlchemy session object.
+        user_id (int): The ID of the user who uploaded the file.
+        filename (str): The name of the uploaded file.
+
+    This function deletes the entry corresponding to the user ID and filename from the database.
+    """
+    db.query(UserUploaded).filter_by(user_id=user_id, filename=filename).delete()
+    db.commit()
+    
