@@ -5,6 +5,7 @@ from random import randint
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
+from minio.error import S3Error
 
 from core.config import login_manager, minio_client, DEFAULT_SETTINGS
 from core.database import get_db
@@ -197,3 +198,30 @@ async def delete_temp_file(query: SongPath, user=Depends(login_manager), db: Ses
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")
+    
+
+@router.get("/minio/emb_extracted/{filename}")
+async def check_embeddings_extracted(filename: str):
+    """
+    Checks if embeddings have been extracted for a given filename in MinIO.
+
+    - **filename**: str - The filename to check for embeddings extraction.
+    - **return**: dict - A dictionary containing the status of embeddings extraction.
+    """
+    try:
+        pkl_file = filename.rsplit(".", 1)[0] + ".pkl"  # More robust split by last period
+        # Attempt to access the object in MinIO
+        minio_client.get_object(DEFAULT_SETTINGS.minio_temp_bucket_name, pkl_file)
+        embeddings_extracted = True
+    except S3Error as e:
+        # Specifically catch MinIO/S3 errors
+        if e.code == "NoSuchKey":
+            embeddings_extracted = False
+        else:
+            raise HTTPException(status_code=500, detail="Unexpected server error")
+    except Exception as e:
+        # Catch any other unexpected errors
+        print(f"Unexpected error when checking embeddings for {filename}: {e}")
+        embeddings_extracted = False
+
+    return {"extracted": embeddings_extracted}
