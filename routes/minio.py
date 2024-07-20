@@ -199,7 +199,7 @@ async def delete_temp_file(query: SongPath, user=Depends(login_manager), db: Ses
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")
     
 
-@router.get("/minio/emb_extracted/{filename}")
+@router.get("/emb_extracted/{filename}", tags=["MinIO"])
 async def check_embeddings_extracted(filename: str):
     """
     Checks if embeddings have been extracted for a given filename in MinIO.
