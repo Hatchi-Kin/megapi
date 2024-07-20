@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import sqlite3
 from sqlalchemy.sql import exists
 
@@ -73,6 +75,7 @@ def create_admin_if_none():
                 email=DEFAULT_SETTINGS.pg_email,
                 username=DEFAULT_SETTINGS.pg_user,
                 hashed_password=hash_password(DEFAULT_SETTINGS.pg_password),
+                registered_at=datetime.now(),
                 is_admin=True,
             )
             db.add(admin)

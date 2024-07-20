@@ -84,7 +84,6 @@ def get_artwork(bucket_name: str, file_name: str):
                 temp_file.write(data.read())
             except S3Error as e:
                 if e.code == 'NoSuchKey':
-                    print(f"File {file_name} not found in bucket {bucket_name}.")
                     return None
                 else:
                     raise
@@ -217,5 +216,4 @@ def save_embedding_pkl(object_name, file_path):
             )
         return True
     except S3Error as e:
-        print(f"Failed to upload to MinIO: {e}")
         return False

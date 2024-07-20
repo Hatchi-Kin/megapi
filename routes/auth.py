@@ -1,5 +1,5 @@
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from fastapi import Depends, HTTPException
 from fastapi.responses import HTMLResponse
@@ -44,7 +44,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
             status_code=400, detail="A user with this email already exists"
         )
     hashed_password = hash_password(user.password)
-    db_user = User(email=user.email, hashed_password=hashed_password)
+    db_user = User(email=user.email, hashed_password=hashed_password, registered_at=datetime.now())
     db.add(db_user)
     db.commit()
     return {"detail": "Successfully registered"}
