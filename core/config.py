@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     """
     secret_key: str = ""  
     algorithm: str = ""
-    access_token_expire_minutes: int = 20
+    access_token_expire_minutes: int = 40
     database_url: str = ""
     postgre_music_table: str = ""
     pg_user: str = ""

@@ -144,14 +144,13 @@ async def upload_file(file: UploadFile = File(...), user=Depends(login_manager),
     - **db**: Session - Database session dependency.
     - **return**: UploadMP3ResponseList - A list of uploaded MP3 files by the user.
     """
-    try:   # Check content type and extension
+    try: 
         if file.content_type != "audio/mpeg":
             raise HTTPException(status_code=400, detail="Only MP3 files are allowed.")
         _, file_extension = os.path.splitext(file.filename)
         if file_extension.lower() != ".mp3":
             raise HTTPException(status_code=400, detail="The uploaded file is not an MP3 file.")
 
-        # Generate a secure filename
         secure_filename = sanitize_filename(file.filename)
 
         # Determine the size of the uploaded file by moving the cursor to the end to get the file size
@@ -209,18 +208,15 @@ async def check_embeddings_extracted(filename: str):
     - **return**: dict - A dictionary containing the status of embeddings extraction.
     """
     try:
-        pkl_file = filename.rsplit(".", 1)[0] + ".pkl"  # More robust split by last period
-        # Attempt to access the object in MinIO
+        pkl_file = filename.rsplit(".", 1)[0] + ".pkl"
         minio_client.get_object(DEFAULT_SETTINGS.minio_temp_bucket_name, pkl_file)
         embeddings_extracted = True
     except S3Error as e:
-        # Specifically catch MinIO/S3 errors
         if e.code == "NoSuchKey":
             embeddings_extracted = False
         else:
             raise HTTPException(status_code=500, detail="Unexpected server error")
     except Exception as e:
-        # Catch any other unexpected errors
         print(f"Unexpected error when checking embeddings for {filename}: {e}")
         embeddings_extracted = False
 
