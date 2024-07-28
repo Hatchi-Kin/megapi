@@ -78,12 +78,12 @@ def full_hit_to_dict(hit):
         "id": str(hit.id),
         "distance": hit.distance,
         "entity": {
-            "path": hit.entity.path,
-            "title": hit.entity.title,
-            "album": hit.entity.album,
-            "artist": hit.entity.artist,
-            "top_5_genres": ",".join(hit.entity.top_5_genres),
-            "embedding": ",".join(map(str, hit.entity.embedding)),
+            "path": getattr(hit.entity, 'path', ''),
+            "title": getattr(hit.entity, 'title', 'Unknown Title'),
+            "album": getattr(hit.entity, 'album', 'Unknown Album'),
+            "artist": getattr(hit.entity, 'artist', 'Unknown Artist'),
+            "top_5_genres": ",".join(getattr(hit.entity, 'top_5_genres', [])),
+            "embedding": ",".join(map(str, getattr(hit.entity, 'embedding', []))),
         },
     }
 
