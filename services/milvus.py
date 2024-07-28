@@ -74,16 +74,17 @@ def full_hit_to_dict(hit):
     Returns:
         A dictionary containing detailed information about the query hit.
     """
+    entity = hit.entity
     return {
         "id": str(hit.id),
         "distance": hit.distance,
+        "title": getattr(entity, 'title', 'Unknown Title'),
         "entity": {
-            "path": getattr(hit.entity, 'path', ''),
-            "title": getattr(hit.entity, 'title', 'Unknown Title'),
-            "album": getattr(hit.entity, 'album', 'Unknown Album'),
-            "artist": getattr(hit.entity, 'artist', 'Unknown Artist'),
-            "top_5_genres": ",".join(getattr(hit.entity, 'top_5_genres', [])),
-            "embedding": ",".join(map(str, getattr(hit.entity, 'embedding', []))),
+            "path": getattr(entity, 'path', ''),
+            "album": getattr(entity, 'album', 'Unknown Album'),
+            "artist": getattr(entity, 'artist', 'Unknown Artist'),
+            "top_5_genres": ",".join(getattr(entity, 'top_5_genres', [])),
+            "embedding": ",".join(map(str, getattr(entity, 'embedding', []))),
         },
     }
 
