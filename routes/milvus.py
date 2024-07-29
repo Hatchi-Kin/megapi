@@ -9,7 +9,6 @@ from services.milvus import (
     get_milvus_512_collection,
     get_milvus_87_collection,
     full_hit_to_dict,
-    short_hit_to_dict,
     sort_entities,
     extract_plot_data,
     create_plot,
@@ -79,23 +78,31 @@ def get_similar_entities_by_path(query: FilePathsQuery, user=Depends(login_manag
     - **user**: User - The authenticated user making the request.
     - **return**: SimilarFullEntitiesResponse - A list of the most similar entities with full details.
     """
-    collection_512 = get_milvus_512_collection()
-    entities = collection_512.query(expr=f"path in {query.path}", output_fields=["embedding"])
-    if not entities:
-        raise HTTPException(status_code=404, detail="Entity not found")
-    
-    embeddings = [[float(x) for x in entity["embedding"]] for entity in entities]
-    entities = collection_512.search(
-        data=embeddings,
-        anns_field="embedding",
-        param={"nprobe": 16},
-        limit=3,
-        offset=1,
-        output_fields=["*"],
-    )
+    try:
+        collection_512 = get_milvus_512_collection()
+        entities = collection_512.query(expr=f"path in {query.path}", output_fields=["embedding"])
+        embeddings = [[float(x) for x in entity["embedding"]] for entity in entities]
 
-    response_list = [short_hit_to_dict(hit) for hit in entities[0]]
-    return SimilarFullEntitiesResponse(hits=response_list)
+        try:
+            entities = collection_512.search(
+                data=embeddings,
+                anns_field="embedding",
+                param={"nprobe": 16},
+                limit=3,
+                offset=1,
+                output_fields=["*"],
+            )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail="Internal server error: SEARCH_ERROR")
+
+        try:
+            response_list = [full_hit_to_dict(hit) for hit in entities[0]]
+        except Exception as e:
+            raise HTTPException(status_code=500, detail="Internal server error: RESULT_PROCESS_ERROR")
+
+        return SimilarFullEntitiesResponse(hits=response_list)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error: UNEXPECTED_ERROR")
 
 
 @router.post("/similar_short_entity", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
@@ -124,7 +131,6 @@ def get_similar_9_entities_by_path(query: FilePathsQuery, user=Depends(login_man
     
     sorted_entities = sort_entities(entities)
     return {"entities": sorted_entities}
-
 
 
 @router.post("/similar_short_entity_to_temp", tags=["milvus"], response_model=SimilarShortEntitiesResponse)
@@ -157,7 +163,6 @@ def get_similar_9_entities_by_user_uploaded_filename(query: SanitizedFilePathsQu
         return {"entities": sorted_entities}
     except Exception as e:
         raise HTTPException(status_code=404, detail="Entity not found")
-
 
 
 @router.post("/plot_genres", tags=["milvus"])
