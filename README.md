@@ -1,3 +1,17 @@
+# MegaPi (FastAPI)
+
+Megapi is a FastAPI complete backend for the music-sim project. It provides a RESTful API for the frontend to interact with. It also serve a ML model to predict music genres. It connects to a PostgreSQL database to store user data and music metadata. It uses MinIO to store music files and Milvus to store music embeddings. It also uses Cyanite API to compare music recommendation services. As well as another api to fetch music lyrics when available. The project is containerized using Docker and can be deployed using docker compose.
+
+
+## Technologies Used
+
+- FastAPI
+- PostgreSQL
+- MinIO
+- Milvus (cloud hosted by Zilliz)
+- Cyanite API
+- OpenL3
+
 ## Docs https://hatchi-kin.github.io/megapi/
 
 ##
