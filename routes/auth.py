@@ -126,8 +126,8 @@ def list_users(user=Depends(login_manager), db: Session = Depends(get_db)):
 
     - **user**: User - The current authenticated user (unused in this function).
     - **db**: Session - The database session dependency.
-    - **return**: Returns a list of dictionaries, each representing a user with their id and email.
+    - **return**: Returns a list of dictionaries, each representing a user with their id, email, and is_admin status.
     """
     users = db.query(User).all()
-    users = [{"id": user.id, "email": user.email} for user in users]
+    users = [{"id": user.id, "email": user.email, "is_admin": user.is_admin} for user in users]
     return users
