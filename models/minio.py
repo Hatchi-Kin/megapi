@@ -27,4 +27,7 @@ class UploadDetail(BaseModel):
 
 class UploadMP3ResponseList(BaseModel):
     uploads: List[UploadDetail]
-    
+
+
+class TempPath(BaseModel):
+    file_path: str = Field(..., json_schema_extra={'example': "KavinskyAngeleNightcall.pkl"})

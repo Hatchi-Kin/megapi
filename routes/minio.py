@@ -9,7 +9,7 @@ from minio.error import S3Error
 
 from core.config import login_manager, minio_client, DEFAULT_SETTINGS
 from core.database import get_db
-from models.minio import S3Object, UploadMP3ResponseList, UploadDetail
+from models.minio import S3Object, UploadMP3ResponseList, UploadDetail, TempPath
 from models.music import AlbumResponse, SongPath, MusicLibrary
 from services.minio import get_metadata_and_artwork, sanitize_filename
 from services.uploaded import store_upload_info, get_user_uploads, delete_user_upload_from_db
@@ -178,7 +178,7 @@ async def upload_file(file: UploadFile = File(...), user=Depends(login_manager),
     
 
 @router.post("/delete-temp", tags=["MinIO"], response_model=UploadMP3ResponseList)
-async def delete_temp_file(query: SongPath, user=Depends(login_manager), db: Session = Depends(get_db)):
+async def delete_temp_file(query: TempPath, user=Depends(login_manager), db: Session = Depends(get_db)):
     """
     Deletes a MP3 file from MinIO bucket.
 
