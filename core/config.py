@@ -52,6 +52,7 @@ class Settings(BaseSettings):
     minio_root_user: str = ""
     minio_bucket_name: str = ""
     minio_temp_bucket_name: str = ""
+    minio_music_net_bucket_name: str = ""
     minio_openl3_bucket_name: str = ""
     minio_openl3_file_name: str = ""
     minio_root_password: str = ""
