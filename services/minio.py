@@ -25,7 +25,7 @@ def load_model_from_minio():
     return embedding_512_model
 
 
-def get_temp_file_from_minio(file_name: str):
+def get_temp_file_from_minio(file_name: str) -> str:
     """
     Retrieves a file from MinIO and writes it to a temporary file.
 
@@ -35,10 +35,21 @@ def get_temp_file_from_minio(file_name: str):
     Returns:
         str: The path to the temporary file.
     """
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        response = minio_client.get_object(DEFAULT_SETTINGS.minio_temp_bucket_name, file_name)
-        temp_file.write(response.read())
-    return temp_file.name
+    try:
+        # Determine the bucket name based on the file name
+        bucket_name = DEFAULT_SETTINGS.minio_bucket_name if file_name.startswith("MegaSet/") else DEFAULT_SETTINGS.minio_temp_bucket_name
+        # Retrieve the file from MinIO
+        response = minio_client.get_object(bucket_name, file_name)
+
+        # Write the file to a temporary file
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(response.read())
+
+        return temp_file
+    
+    except Exception as e:
+        print(f"Error retrieving file from MinIO: {e}")
+        raise
 
 
 def delete_temp_file(temp_file_path: str):
