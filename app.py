@@ -15,6 +15,7 @@ from routes.spotinite import router as spotinite_router
 from routes.monitoring import router as monitoring_router
 from routes.openl3 import router as openl3_router
 from routes.music_net import router as music_net_router
+from routes.elo import router as elo_router
 from core.config import Base, engine, swagger_tags
 from core.database import migrate_data_from_sqlite_to_postgres, create_admin_if_none
 from services.auth import AuthMiddleware
@@ -60,6 +61,7 @@ app.include_router(spotinite_router)
 app.include_router(monitoring_router)
 app.include_router(openl3_router)
 app.include_router(music_net_router)
+app.include_router(elo_router)
 
 
 Base.metadata.create_all(bind=engine)

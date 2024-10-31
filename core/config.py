@@ -146,5 +146,9 @@ swagger_tags = [
         "name": "monitoring",
         "description": "Operations related to the monitoring different metrics of the globals solution."
     },
+    {
+        "name": "elo",
+        "description": "Operations related to comparing our models and the Elo ranking system."
+    }
 ]
 
