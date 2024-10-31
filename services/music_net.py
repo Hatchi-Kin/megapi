@@ -62,18 +62,18 @@ def get_production_model():
 
     os.environ["AWS_ACCESS_KEY_ID"] = DEFAULT_SETTINGS.minio_access_key
     os.environ["AWS_SECRET_ACCESS_KEY"] = DEFAULT_SETTINGS.minio_secret_key
-    os.environ["MLFLOW_S3_ENDPOINT_URL"] = f"https://{DEFAULT_SETTINGS.minio_endpoint}"
+    os.environ["MLFLOW_S3_ENDPOINT_URL"] = f"http://{DEFAULT_SETTINGS.minio_endpoint}" 
 
-    return mlflow.pytorch.load_model(minio_url)
-
-
-def predicted_item_to_class_name(predicted_item):
-    class_names = ['class1', 'class2', 'class3', 'class4', 'class5']
-    return class_names[predicted_item]
+    # Check if CUDA is available
+    if torch.cuda.is_available():
+        return mlflow.pytorch.load_model(minio_url)
+    else:
+        return mlflow.pytorch.load_model(minio_url, map_location=torch.device('cpu'))
 
 
 def predict_with_production_music_net(model, img_tensor):
-    img_tensor = img_tensor.to('cuda')
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    img_tensor = img_tensor.to(device)
     model.eval()
     with torch.no_grad():
         output = model(img_tensor)

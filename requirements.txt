@@ -163,3 +163,4 @@ torch==2.4.1
 torchaudio==2.4.1
 torchvision==0.19.1
 mlflow==2.12.1
+boto3==1.35.52

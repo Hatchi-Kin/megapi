@@ -1,8 +1,11 @@
+import os
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 import torch
+
 from core.config import login_manager
-from services.music_net import create_preprocessed_spectrogram, get_production_model, predict_with_production_music_net, MAPPING_DICT_MUSIC_NET
+from services.minio import get_temp_file_from_minio
+from services.music_net import create_preprocessed_spectrogram, get_production_model, predict_with_production_music_net
 
 router = APIRouter(prefix="/music_net")
 
@@ -15,10 +18,8 @@ def predict_genre(audio_path: str, user=Depends(login_manager)):
     """
     Predicts the genre of a music segment using a pre-trained MusicNet model.
 
-    - **audio_path**: str - The path to the audio file.
-    - **start_time**: int - The start time of the segment.
-    - **segment_duration**: int - The duration of the segment.
-    - **return**: dict - A dictionary containing the predicted genre and the corresponding probability.
+    - **audio_path**: str - The path to the audio file in the MinIO bucket.
+    - **return**: dict - A dictionary containing the predicted genre.
     """
     try:
         # Load the production model
@@ -29,8 +30,11 @@ def predict_genre(audio_path: str, user=Depends(login_manager)):
         raise HTTPException(status_code=500, detail=f"Error loading model: {e}")
 
     try:
+        # Retrieve the MP3 file from MinIO and write it to a temporary file
+        temp_file_path = get_temp_file_from_minio(audio_path)
+
         # Create a preprocessed spectrogram
-        img_tensor = create_preprocessed_spectrogram(audio_path)
+        img_tensor = create_preprocessed_spectrogram(temp_file_path)
         if img_tensor is None:
             raise HTTPException(status_code=500, detail="Failed to create the preprocessed spectrogram.")
     except Exception as e:
@@ -41,5 +45,8 @@ def predict_genre(audio_path: str, user=Depends(login_manager)):
         genre = predict_with_production_music_net(model, img_tensor)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error predicting genre: {e}")
+    finally:
+        # Clean up the temporary file
+        os.remove(temp_file_path)
 
     return {"genre": genre}
