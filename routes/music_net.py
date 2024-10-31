@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+from pydantic import BaseModel
 import torch
 from core.config import login_manager
 from services.music_net import create_preprocessed_spectrogram, get_production_model, predict_with_production_music_net, MAPPING_DICT_MUSIC_NET
@@ -6,9 +7,8 @@ from services.music_net import create_preprocessed_spectrogram, get_production_m
 router = APIRouter(prefix="/music_net")
 
 
-GenrePredictionResponse = {
-    "genre": str,
-}
+class GenrePredictionResponse(BaseModel):
+    genre: str
 
 @router.post("/predict-genre/", response_model=GenrePredictionResponse, tags=["music_net"])
 def predict_genre(audio_path: str, user=Depends(login_manager)):
