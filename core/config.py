@@ -119,6 +119,10 @@ swagger_tags = [
         "description": "Operations related to the OpenL3 embeddings extractor model"
     },
     {
+        "name": "music_net",
+        "description": "Operations related to the Custom MusicNet model"
+    },
+    {
         "name": "milvus",
         "description": "Operations related to the vector Database Milvus hosted by zilliz",
     },
