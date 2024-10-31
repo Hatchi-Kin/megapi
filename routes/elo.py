@@ -32,19 +32,21 @@ async def get_mlflow_model_predictions(file_path: str):
 
 async def get_essentia_predictions(file_path: str):
     if file_path.startswith("MegaSet/"):
-        collection_87 = get_milvus_87_collection()
-        entity = collection_87.query(
-            expr=f"path == '{file_path}'",
-            output_fields=["predictions", "title", "artist"], 
-            limit=1
-        )
-        if not entity:
-            raise HTTPException(status_code=404, detail="Entity not found")
-        
-        class_names, top_5_activations, title, artist = await extract_plot_data(entity)
-        fig = await create_plot(class_names, top_5_activations, title, artist)
-        predictions_plot = await convert_plot_to_base64(fig)
-
+        try:
+            collection_87 = get_milvus_87_collection()
+            entity = collection_87.query(
+                expr=f"path in ['{file_path}']",
+                output_fields=["predictions", "title", "artist"], 
+                limit=1
+            )
+            if not entity:
+                raise HTTPException(status_code=404, detail="Entity not found")
+            
+            class_names, top_5_activations, title, artist = await extract_plot_data(entity)
+            fig = await create_plot(class_names, top_5_activations, title, artist)
+            predictions_plot = await convert_plot_to_base64(fig)
+        except:
+            predictions_plot = None
     else:
         predictions_plot = None
     
