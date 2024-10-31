@@ -43,9 +43,9 @@ def get_temp_file_from_minio(file_name: str) -> str:
 
         # Write the file to a temporary file
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            temp_file.write(response.read())
-
-        return temp_file
+            for data in response.stream(32 * 1024):
+                temp_file.write(data)
+        return temp_file.name
     
     except Exception as e:
         print(f"Error retrieving file from MinIO: {e}")
