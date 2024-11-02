@@ -2,6 +2,7 @@ import os
 import tempfile
 import pickle
 import base64
+import zipfile
 
 import music_tag
 from minio.error import S3Error
@@ -228,3 +229,58 @@ def save_embedding_pkl(object_name, file_path):
         return True
     except S3Error as e:
         return False
+
+
+def delete_file_background_task(file_path: str):
+    """
+    Deletes the specified file from the filesystem. To be used as a cleanup function after the file has been sent.
+    FastAPI will call this function after the file has been sent. (See: https://fastapi.tiangolo.com/tutorial/background-tasks/)
+
+    Args:
+        file_path (str): The path to the file to delete.
+    """
+    try:
+        os.remove(file_path)
+    except Exception as e:
+        print(f"Error deleting file {file_path}: {e}")
+
+
+
+def create_zip_from_minio_paths(paths, zip_name="genre.zip"):
+    """
+    Creates a ZIP file containing MP3 files from the given paths in the MinIO bucket.
+
+    Args:
+        paths (list): List of paths to the MP3 files in the MinIO bucket.
+        zip_name (str): The name of the output ZIP file.
+
+    Returns:
+        str: The path to the created ZIP file.
+    """
+    temp_dir = "/tmp/minio_downloads"
+
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)
+
+    try:
+        with zipfile.ZipFile(zip_name, 'w') as zipf:
+            for path in paths:
+                try:
+                    file_data = minio_client.get_object(DEFAULT_SETTINGS.minio_bucket_name, path)
+                    local_file_path = os.path.join(temp_dir, os.path.basename(path))
+
+                    with open(local_file_path, 'wb') as local_file:
+                        for d in file_data.stream(32*1024):
+                            local_file.write(d)
+
+                    zipf.write(local_file_path, os.path.basename(path))
+
+                except S3Error as e:
+                    print(f"Error downloading {path}: {e}")
+
+        return zip_name
+
+    finally:
+        for file in os.listdir(temp_dir):
+            os.remove(os.path.join(temp_dir, file))
+        os.rmdir(temp_dir)

@@ -3,15 +3,15 @@ from typing import List
 from random import randint
 
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
-from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi import APIRouter, HTTPException, UploadFile, BackgroundTasks, File, Depends
+from fastapi.responses import StreamingResponse, JSONResponse, FileResponse
 from minio.error import S3Error
 
 from core.config import login_manager, minio_client, DEFAULT_SETTINGS
 from core.database import get_db
-from models.minio import S3Object, UploadMP3ResponseList, UploadDetail, TempPath
+from models.minio import S3Object, UploadMP3ResponseList, UploadDetail, TempPath, PathsRequest
 from models.music import AlbumResponse, SongPath, MusicLibrary
-from services.minio import get_metadata_and_artwork, sanitize_filename
+from services.minio import get_metadata_and_artwork, sanitize_filename, create_zip_from_minio_paths, delete_file_background_task
 from services.uploaded import store_upload_info, get_user_uploads, delete_user_upload_from_db
 
 
@@ -221,3 +221,22 @@ async def check_embeddings_extracted(filename: str):
         embeddings_extracted = False
 
     return {"extracted": embeddings_extracted}
+
+
+@router.post("/download-zip", tags=["MinIO"])
+async def download_zip(request: PathsRequest, background_tasks: BackgroundTasks, user=Depends(login_manager)):
+    """
+    Creates a ZIP file containing MP3 files from the given paths in the MinIO bucket and returns it.
+
+    - **request**: PathsRequest - A list of paths to the MP3 files in the MinIO bucket.
+    - **background_tasks**: BackgroundTasks - FastAPI background tasks to handle file deletion.
+    - **user**: User - The authenticated user making the request.
+    - **return**: FileResponse - A response containing the ZIP file.
+    """
+    try:
+        zip_name = request.zip_name if request.zip_name else "songs.zip"
+        zip_path = create_zip_from_minio_paths(request.paths, zip_name)
+        background_tasks.add_task(delete_file_background_task, zip_path)
+        return FileResponse(zip_path, media_type='application/zip', filename=zip_name)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred. {str(e)}")

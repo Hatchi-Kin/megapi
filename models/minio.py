@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 
 class S3Object(BaseModel):
@@ -31,3 +31,9 @@ class UploadMP3ResponseList(BaseModel):
 
 class TempPath(BaseModel):
     file_path: str = Field(..., json_schema_extra={'example': "KavinskyAngeleNightcall.pkl"})
+
+
+class PathsRequest(BaseModel):
+    paths: List[str]
+    zip_name: Optional[str] = Field(None, example="custom_songs.zip")
+    

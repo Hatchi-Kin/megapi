@@ -1,11 +1,14 @@
 from random import randint
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import insert
 
-from models.music import MusicLibrary, AddSongToMusicLibrary, AlbumResponse, ArtistFolderResponse, ArtistAlbumResponse
+from models.music import MusicLibrary, AddSongToMusicLibrary, AlbumResponse, ArtistFolderResponse, ArtistAlbumResponse, GenreRequest, MusicResponse
+from services.music import get_n_random_examples_of_specified_genre
 from core.config import login_manager
 from core.database import get_db
 
@@ -241,3 +244,19 @@ def get_album_folder_by_artist_and_album(
     finally:
         db.close()
         
+
+@router.post("/random-genre-examples/", response_model=List[MusicResponse], tags=["songs"])
+def random_genre_examples(request: GenreRequest, user=Depends(login_manager), db: Session = Depends(get_db)):
+    """
+    Get a random selection of rows that have the specified genre.
+
+    - **Parameters**:
+        - **request**: GenreRequest object containing the genre and the number of examples wanted.
+        - **user**: User object, automatically provided by the login_manager dependency.
+    - **Returns**: A list of rows with the specified genre.
+    """
+    try:
+        rows = get_n_random_examples_of_specified_genre(db, request.genre, request.num_examples)
+        return rows
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
