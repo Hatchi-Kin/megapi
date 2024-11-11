@@ -60,8 +60,8 @@ def get_production_model():
     # load the model using mlflow
     minio_url = F"s3://{DEFAULT_SETTINGS.minio_music_net_bucket_name}/data/"
 
-    os.environ["AWS_ACCESS_KEY_ID"] = DEFAULT_SETTINGS.minio_access_key
-    os.environ["AWS_SECRET_ACCESS_KEY"] = DEFAULT_SETTINGS.minio_secret_key
+    os.environ["AWS_ACCESS_KEY_ID"] = DEFAULT_SETTINGS.minio_root_user
+    os.environ["AWS_SECRET_ACCESS_KEY"] = DEFAULT_SETTINGS.minio_root_password
     os.environ["MLFLOW_S3_ENDPOINT_URL"] = f"http://{DEFAULT_SETTINGS.minio_endpoint}" 
 
     # Check if CUDA is available
