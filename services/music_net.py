@@ -58,7 +58,7 @@ def create_preprocessed_spectrogram(audio_path, sr=22050, n_mels=128, fmax=8000,
 
 def get_production_model():
     # load the model using mlflow
-    minio_url = F"s3://{DEFAULT_SETTINGS.minio_music_net_bucket_name}/data/"
+    minio_url = F"s3://{DEFAULT_SETTINGS.minio_music_net_bucket_name}/data/model/"
 
     os.environ["AWS_ACCESS_KEY_ID"] = DEFAULT_SETTINGS.minio_root_user
     os.environ["AWS_SECRET_ACCESS_KEY"] = DEFAULT_SETTINGS.minio_root_password
