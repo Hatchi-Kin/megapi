@@ -17,7 +17,7 @@ router = APIRouter(prefix="/openl3")
 
 
 @router.post("/embeddings/", response_model=EmbeddingResponse, tags=["OpenL3"])
-def get_embeddings(file_path: PathForEmbedding, user=Depends(login_manager), db: Session = Depends(get_db)):
+def get_embeddings(query: PathForEmbedding, user=Depends(login_manager), db: Session = Depends(get_db)):
     """
     Retrieves or computes the embeddings for a specified audio file.
 
@@ -36,19 +36,19 @@ def get_embeddings(file_path: PathForEmbedding, user=Depends(login_manager), db:
     """
     start_time = time.time()
     try:
-        existing_embeddings = get_embedding_pkl(file_path)
+        existing_embeddings = get_embedding_pkl(query.file_path)
         if existing_embeddings:
-            return EmbeddingResponse(file_name=file_path, embedding=existing_embeddings)
+            return EmbeddingResponse(file_name=query.file_path, embedding=existing_embeddings)
 
         embedding_512_model = load_model_from_minio()
-        temp_file_path = get_temp_file_from_minio(file_path)
+        temp_file_path = get_temp_file_from_minio(query.file_path)
         vector = embedding_512_model.compute(temp_file_path)
         embedding = vector.mean(axis=0)
         
         with tempfile.NamedTemporaryFile(delete=False) as temp_pkl:
             pickle.dump(embedding.tolist(), temp_pkl)
             temp_pkl.seek(0)
-            save_embedding_pkl(file_path.replace(".mp3", ".pkl"), temp_pkl.name)
+            save_embedding_pkl(query.file_path.replace(".mp3", ".pkl"), temp_pkl.name)
         
         os.unlink(temp_file_path)
 
@@ -57,14 +57,14 @@ def get_embeddings(file_path: PathForEmbedding, user=Depends(login_manager), db:
         log_entry = OpenL3ComputationLog(
             user_id=user.id,
             datetime=datetime.now(),
-            file_path=file_path,
+            file_path=query.file_path,
             model_version="V1", # Hardcoded model version for now
             response_time_ms=computation_time_ms
         )
         db.add(log_entry)
         db.commit()
 
-        return EmbeddingResponse(file_name=file_path, embedding=embedding.tolist())
+        return EmbeddingResponse(file_name=query.file_path, embedding=embedding.tolist())
     except Exception as e:
         error_message = str(e)
         db.rollback()
@@ -72,7 +72,7 @@ def get_embeddings(file_path: PathForEmbedding, user=Depends(login_manager), db:
         log_entry = OpenL3ComputationLog(
             user_id=user.id,
             datetime=datetime.now(),
-            file_path=file_path,
+            file_path=query.file_path,
             model_version="V1",  # 
             response_time_ms=0,  # Set to 0 since the computation failed
             error_message=error_message 
