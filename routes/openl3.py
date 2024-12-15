@@ -9,8 +9,7 @@ from sqlalchemy.orm import Session
 
 from core.config import login_manager
 from core.database import get_db
-from models.openl3 import EmbeddingResponse
-from models.openl3 import OpenL3ComputationLog
+from models.openl3 import EmbeddingResponse, OpenL3ComputationLog, PathForEmbedding
 from services.minio import load_model_from_minio, get_temp_file_from_minio, get_embedding_pkl, save_embedding_pkl
 
 
@@ -18,7 +17,7 @@ router = APIRouter(prefix="/openl3")
 
 
 @router.post("/embeddings/", response_model=EmbeddingResponse, tags=["OpenL3"])
-def get_embeddings(file_path: str, user=Depends(login_manager), db: Session = Depends(get_db)):
+def get_embeddings(file_path: PathForEmbedding, user=Depends(login_manager), db: Session = Depends(get_db)):
     """
     Retrieves or computes the embeddings for a specified audio file.
 

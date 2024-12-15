@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Float, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -27,3 +27,6 @@ class SongList(BaseModel):
 class EmbeddingResponse(BaseModel):
     file_name: str
     embedding: list
+
+class PathForEmbedding(BaseModel):
+    file_path: str = Field(..., json_schema_extra={'example': "MegaSet/Soweto String Quartet/Soweto String Quartet -1994 Zebra Crossing-/04 Kwela.mp3"})
